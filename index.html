@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>F-hoone — Restoran & Kohvik Telliskivis, Tallinn</title>
+  <meta name="description" content="F-hoone on Tallinna südames asuv restoran ja kohvik Telliskivi Loomelinnakus. Avatud iga päev. Broneeri laud online." />
+  <meta name="keywords" content="F-hoone, fhoone, restoran Tallinn, kohvik Telliskivi, Telliskivi Loomelinnak, broneering, menüü" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://fhoone.ee" />
+
+  <!-- Open Graph (jagamine sotsiaalmeedias) -->
+  <meta property="og:title" content="F-hoone — Restoran & Kohvik Telliskivis" />
+  <meta property="og:description" content="Tallinna kõige elujõulisem restoran Telliskivi Loomelinnakus. Maitsev toit, kokteilid, sündmused." />
+  <meta property="og:type" content="restaurant" />
+  <meta property="og:url" content="https://fhoone.ee" />
+  <meta property="og:locale" content="et_EE" />
+
+  <!-- Struktureeritud andmed (Google rich results) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "F-hoone",
+    "url": "https://fhoone.ee",
+    "telephone": "+3725322685",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Telliskivi 60a",
+      "addressLocality": "Tallinn",
+      "postalCode": "10412",
+      "addressCountry": "EE"
+    },
+    "openingHours": ["Mo-Th 10:00-23:00", "Fr-Sa 10:00-00:00", "Su 10:00-22:00"],
+    "servesCuisine": ["International", "European"],
+    "priceRange": "€€",
+    "description": "Restoran ja kohvik Tallinna Telliskivi Loomelinnakus, endises tööstushoones."
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --coal: #1a1714;
+      --dark: #221f1b;
+      --mid: #2e2926;
+      --amber: #c8854a;
+      --amber-light: #e0a76a;
+      --cream: #f0e8da;
+      --cream-dim: #b5a899;
+      --white: #faf7f3;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'Inter', system-ui, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--coal);
+      color: var(--cream);
+      font-family: var(--sans);
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 3rem;
+      transition: background 0.4s, padding 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(26,23,20,0.96);
+      backdrop-filter: blur(8px);
+      padding: 1rem 3rem;
+      border-bottom: 1px solid rgba(200,133,74,0.15);
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      letter-spacing: 0.12em;
+      color: var(--cream);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--amber); }
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+      list-style: none;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--cream-dim);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--amber-light); }
+    .lang-btn {
+      background: none;
+      border: 1px solid rgba(200,133,74,0.4);
+      color: var(--cream-dim);
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      padding: 0.35rem 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+    .lang-btn:hover, .lang-btn.active {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+
+    /* hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px; height: 1.5px;
+      background: var(--cream);
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 3rem 5rem;
+      position: relative;
+      overflow: hidden;
+      background: var(--coal);
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 60% 40%, rgba(200,133,74,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 80% at 90% 80%, rgba(200,133,74,0.05) 0%, transparent 60%);
+    }
+    .hero-line {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 38%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(200,133,74,0.25) 30%, rgba(200,133,74,0.25) 70%, transparent);
+    }
+    .hero-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1.2rem;
+      position: relative;
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(4rem, 11vw, 10rem);
+      line-height: 0.92;
+      font-weight: 400;
+      position: relative;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--amber-light);
+    }
+    .hero-sub {
+      position: absolute;
+      right: 3rem;
+      bottom: 5rem;
+      text-align: right;
+      max-width: 280px;
+    }
+    .hero-sub p {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--cream-dim);
+    }
+    .hero-sub .cta {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.8rem 2rem;
+      border: 1px solid var(--amber);
+      color: var(--amber);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+    .hero-sub .cta:hover {
+      background: var(--amber);
+      color: var(--coal);
+    }
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0.4;
+    }
+    .scroll-hint span { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; }
+    .scroll-hint::after {
+      content: '';
+      width: 1px; height: 40px;
+      background: var(--amber);
+      animation: scrollline 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollline {
+      0% { transform: scaleY(0); transform-origin: top; }
+      50% { transform: scaleY(1); transform-origin: top; }
+      51% { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 7rem 3rem; }
+    .section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 2rem;
+    }
+    .divider {
+      width: 60px; height: 1px;
+      background: var(--amber);
+      margin-bottom: 3rem;
+    }
+
+    /* ── MEIST ── */
+    #meist {
+      background: var(--dark);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+    .meist-text p {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: var(--cream-dim);
+      margin-bottom: 1.2rem;
+    }
+    .meist-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+      padding-top: 3rem;
+      border-top: 1px solid rgba(200,133,74,0.15);
+    }
+    .stat-num {
+      font-family: var(--serif);
+      font-size: 2.5rem;
+      color: var(--amber);
+      font-weight: 400;
+    }
+    .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      margin-top: 0.3rem;
+    }
+    .meist-visual {
+      position: relative;
+    }
+    .visual-box {
+      aspect-ratio: 3/4;
+      background: var(--mid);
+      border: 1px solid rgba(200,133,74,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .visual-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 40% 30%, rgba(200,133,74,0.15), transparent 60%);
+    }
+    .visual-placeholder {
+      font-family: var(--serif);
+      font-size: 5rem;
+      color: rgba(200,133,74,0.2);
+      font-style: italic;
+      position: relative;
+    }
+    .visual-corner {
+      position: absolute;
+      bottom: -1.5rem; right: -1.5rem;
+      width: 140px; height: 140px;
+      border: 1px solid rgba(200,133,74,0.25);
+    }
+
+    /* ── MENU ── */
+    #menu { background: var(--coal); }
+    .menu-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 3.5rem;
+      border-bottom: 1px solid rgba(200,133,74,0.15);
+    }
+    .menu-tab {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      padding: 0.8rem 1.8rem;
+      color: var(--cream-dim);
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .menu-tab.active {
+      color: var(--amber);
+      border-bottom-color: var(--amber);
+    }
+    .menu-tab:hover { color: var(--amber-light); }
+    .menu-panel { display: none; }
+    .menu-panel.active { display: block; }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 0;
+    }
+    .menu-item {
+      padding: 1.6rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+    }
+    .menu-item:nth-child(even) { padding-left: 2rem; }
+    .menu-item-left { flex: 1; }
+    .menu-item-name {
+      font-size: 1rem;
+      color: var(--cream);
+      margin-bottom: 0.25rem;
+    }
+    .menu-item-desc {
+      font-size: 0.8rem;
+      color: var(--cream-dim);
+      line-height: 1.5;
+    }
+    .menu-item-tags {
+      display: flex;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+    }
+    .tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.5rem;
+      border: 1px solid rgba(200,133,74,0.3);
+      color: var(--amber);
+    }
+    .menu-item-price {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      color: var(--amber);
+      white-space: nowrap;
+    }
+
+    /* ── EVENTS ── */
+    #events { background: var(--dark); }
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .event-card {
+      border: 1px solid rgba(200,133,74,0.15);
+      padding: 2rem;
+      position: relative;
+      transition: border-color 0.3s;
+      cursor: pointer;
+    }
+    .event-card:hover { border-color: rgba(200,133,74,0.4); }
+    .event-date-box {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      margin-bottom: 1.2rem;
+    }
+    .event-day {
+      font-family: var(--serif);
+      font-size: 3rem;
+      line-height: 1;
+      color: var(--amber);
+    }
+    .event-month {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+    }
+    .event-title {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      margin-bottom: 0.6rem;
+    }
+    .event-desc {
+      font-size: 0.85rem;
+      color: var(--cream-dim);
+      line-height: 1.6;
+    }
+    .event-time {
+      margin-top: 1.2rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+    .no-events {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 4rem;
+      color: var(--cream-dim);
+      font-style: italic;
+      font-family: var(--serif);
+      font-size: 1.2rem;
+    }
+
+    /* ── BRONEERING ── */
+    #broneering {
+      background: var(--coal);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+    .broneering-info p {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--cream-dim);
+      margin-bottom: 2rem;
+    }
+    .hours-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.6rem 2rem;
+      margin-top: 1rem;
+    }
+    .hours-day {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+    }
+    .hours-time {
+      font-size: 0.88rem;
+      color: var(--cream);
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+    }
+    input, select, textarea {
+      background: var(--mid);
+      border: 1px solid rgba(200,133,74,0.2);
+      color: var(--cream);
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      padding: 0.85rem 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+      appearance: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--amber);
+    }
+    select option { background: var(--mid); }
+    textarea { resize: vertical; min-height: 100px; }
+    .submit-btn {
+      background: var(--amber);
+      border: none;
+      color: var(--coal);
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 1.1rem 2.5rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      align-self: flex-start;
+      margin-top: 0.5rem;
+    }
+    .submit-btn:hover { background: var(--amber-light); }
+    .form-msg {
+      font-size: 0.85rem;
+      color: var(--amber);
+      display: none;
+      margin-top: 0.5rem;
+    }
+
+    /* ── CONTACT ── */
+    #kontakt {
+      background: var(--dark);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+    .contact-item {
+      margin-bottom: 2rem;
+    }
+    .contact-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.5rem;
+    }
+    .contact-value {
+      font-size: 1rem;
+      color: var(--cream);
+      line-height: 1.6;
+    }
+    .contact-value a {
+      color: var(--cream);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .contact-value a:hover { color: var(--amber-light); }
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+    .social-link {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      border: 1px solid rgba(200,133,74,0.3);
+      color: var(--cream-dim);
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+    .social-link:hover {
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+    .map-box {
+      aspect-ratio: 4/3;
+      background: var(--mid);
+      border: 1px solid rgba(200,133,74,0.12);
+      overflow: hidden;
+      position: relative;
+    }
+    .map-box iframe {
+      width: 100%; height: 100%;
+      border: none;
+      filter: grayscale(1) invert(1) contrast(0.85) brightness(0.7);
+    }
+    .map-box::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid rgba(200,133,74,0.2);
+      pointer-events: none;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--coal);
+      border-top: 1px solid rgba(200,133,74,0.1);
+      padding: 2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer p {
+      font-size: 0.75rem;
+      color: var(--cream-dim);
+      letter-spacing: 0.05em;
+    }
+    .footer-logo {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      color: var(--cream-dim);
+    }
+    .footer-logo span { color: var(--amber); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      nav.scrolled { padding: 0.9rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(26,23,20,0.98);
+        justify-content: center;
+        align-items: center;
+        gap: 2.5rem;
+        z-index: 99;
+      }
+      .nav-links.open a { font-size: 1.2rem; }
+      .hamburger { display: flex; }
+      #hero { padding: 0 1.5rem 4rem; }
+      .hero-sub { position: static; text-align: left; max-width: 100%; margin-top: 2rem; }
+      section { padding: 5rem 1.5rem; }
+      #meist, #broneering, #kontakt {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+      .meist-visual { order: -1; }
+      .visual-corner { display: none; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .menu-item:nth-child(even) { padding-left: 0; }
+    }
+
+    /* ── FADE IN ANIMATION ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">F<span>-</span>hoone</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#meist" data-et="Meist" data-en="About">Meist</a></li>
+    <li><a href="#menu" data-et="Menüü" data-en="Menu">Menüü</a></li>
+    <li><a href="#events" data-et="Sündmused" data-en="Events">Sündmused</a></li>
+    <li><a href="#broneering" data-et="Broneering" data-en="Reserve">Broneering</a></li>
+    <li><a href="#kontakt" data-et="Kontakt" data-en="Contact">Kontakt</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="lang-btn active" id="btnET" onclick="setLang('et')">ET</button>
+    <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
+    <button class="hamburger" id="hamburger" aria-label="Menüü" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-line"></div>
+  <p class="hero-tag" data-et="Telliskivi Loomelinnak — Tallinn" data-en="Telliskivi Creative City — Tallinn">Telliskivi Loomelinnak — Tallinn</p>
+  <h1 class="hero-title">F‑<em>hoone</em></h1>
+  <div class="hero-sub">
+    <p data-et="Endine tehasehoone, mis on muutunud Tallinna kõige elujõulisemaks söögikohaks. Tule nagu oled." data-en="A former factory hall turned into Tallinn's most vibrant dining destination. Come as you are.">
+      Endine tehasehoone, mis on muutunud Tallinna kõige elujõulisemaks söögikohaks. Tule nagu oled.
+    </p>
+    <a href="#broneering" class="cta" data-et="Broneeri laud" data-en="Reserve a table">Broneeri laud</a>
+  </div>
+  <div class="scroll-hint"><span data-et="Keri" data-en="Scroll">Keri</span></div>
+</section>
+
+<!-- MEIST -->
+<section id="meist">
+  <div class="meist-text fade-in">
+    <p class="section-label" data-et="Meist" data-en="About us">Meist</p>
+    <h2 class="section-title" data-et="Rohkem kui lihtsalt restoran" data-en="More than just a restaurant">Rohkem kui lihtsalt restoran</h2>
+    <div class="divider"></div>
+    <p data-et="F-hoone on sündinud Telliskivi Loomelinnak vanas tööstushoones, kus tööstusliku arhitektuuri ilu kohtub sooja kogukondliku vaimuga. Siin on alati olnud koht, kuhu tullakse nii hommikukohvile kui ka hilisõhtustele kokteilidele." data-en="F-hoone was born in an old industrial building of Telliskivi Creative City, where the beauty of industrial architecture meets a warm community spirit. This has always been a place where people come for morning coffee and late-night cocktails alike.">
+      F-hoone on sündinud Telliskivi Loomelinnak vanas tööstushoones, kus tööstusliku arhitektuuri ilu kohtub sooja kogukondliku vaimuga. Siin on alati olnud koht, kuhu tullakse nii hommikukohvile kui ka hilisõhtustele kokteilidele.
+    </p>
+    <p data-et="Meie menüü on loominguline segu maailma köökidest — alates suitsusest burgerist kuni värskeima kalaroani. Kõik on tehtud südamega ja kohalikest koostisosadest, kus võimalik." data-en="Our menu is a creative blend of world cuisines — from a smoky burger to the freshest fish dish. Everything is made with heart and from local ingredients where possible.">
+      Meie menüü on loominguline segu maailma köökidest — alates suitsusest burgerist kuni värskeima kalaroani. Kõik on tehtud südamega ja kohalikest koostisosadest, kus võimalik.
+    </p>
+    <div class="meist-stats">
+      <div>
+        <div class="stat-num">2012</div>
+        <div class="stat-label" data-et="Asutatud" data-en="Founded">Asutatud</div>
+      </div>
+      <div>
+        <div class="stat-num">200+</div>
+        <div class="stat-label" data-et="Istekohta" data-en="Seats">Istekohta</div>
+      </div>
+      <div>
+        <div class="stat-num">7/7</div>
+        <div class="stat-label" data-et="Avatud" data-en="Open">Avatud</div>
+      </div>
+    </div>
+  </div>
+  <div class="meist-visual fade-in">
+    <div class="visual-box">
+      <span class="visual-placeholder">F</span>
+    </div>
+    <div class="visual-corner"></div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="fade-in">
+    <p class="section-label" data-et="Menüü" data-en="Menu">Menüü</p>
+    <h2 class="section-title" data-et="Mida serveerime" data-en="What we serve">Mida serveerime</h2>
+    <div class="divider"></div>
+    <div class="menu-tabs">
+      <button class="menu-tab active" onclick="showTab('eelroad')" data-et="Eelroad" data-en="Starters">Eelroad</button>
+      <button class="menu-tab" onclick="showTab('supid')" data-et="Supid" data-en="Soups">Supid</button>
+      <button class="menu-tab" onclick="showTab('hommik')" data-et="Hommik" data-en="Breakfast">Hommik</button>
+      <button class="menu-tab" onclick="showTab('pearoad')" data-et="Pearoad" data-en="Mains">Pearoad</button>
+      <button class="menu-tab" onclick="showTab('magustoidud')" data-et="Magustoidud" data-en="Desserts">Magustoidud</button>
+      <button class="menu-tab" onclick="showTab('kokteilid')" data-et="Kokteilid" data-en="Cocktails">Kokteilid</button>
+    </div>
+
+    <!-- EELROAD -->
+    <div class="menu-panel active" id="tab-eelroad">
+      <div class="menu-grid">
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Marineeritud oliivid" data-en="Marinated olives">Marineeritud oliivid</div>
+            <div class="menu-item-desc" data-et="Ürdid, sidrunikoor, küüslauk" data-en="Herbs, lemon zest, garlic">Ürdid, sidrunikoor, küüslauk</div>
+            <div class="menu-item-tags"><span class="tag" data-et="vegan" data-en="vegan">vegan</span></div>
+          </div>
+          <div class="menu-item-price">4.00€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Seesamikurgid" data-en="Sesame cucumbers">Seesamikurgid</div>
+            <div class="menu-item-desc" data-et="Värske kurk, seesami, sojakaste, ingver" data-en="Fresh cucumber, sesame, soy sauce, ginger">Värske kurk, seesami, sojakaste, ingver</div>
+            <div class="menu-item-tags"><span class="tag" data-et="vegan" data-en="vegan">vegan</span></div>
+          </div>
+          <div class="menu-item-price">4.00€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Seenekrõpsud" data-en="Mushroom chips">Seenekrõpsud</div>
+            <div class="menu-item-desc" data-et="Krõbedad metsaseened, meresoola" data-en="Crispy wild mushrooms, sea salt">Krõbedad metsaseened, meresoola</div>
+            <div class="menu-item-tags"><span class="tag" data-et="vegan" data-en="vegan">vegan</span></div>
+          </div>
+          <div class="menu-item-price">3.00€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Suitsusprotid" data-en="Smoked sprats">Suitsusprotid</div>
+            <div class="menu-item-desc" data-et="Klassikalised eesti suitsusprotid, röstsai" data-en="Classic Estonian smoked sprats, toast">Klassikalised eesti suitsusprotid, röstsai</div>
+          </div>
+          <div class="menu-item-price">3.00€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Itaalia lihavalik" data-en="Italian hams &amp; sausages">Itaalia lihavalik</div>
+            <div class="menu-item-desc" data-et="Prosciutto, salami, chorizo, oliivid, leib" data-en="Prosciutto, salami, chorizo, olives, bread">Prosciutto, salami, chorizo, oliivid, leib</div>
+          </div>
+          <div class="menu-item-price">8.00€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Snäkiplaat kahele" data-en="Snack platter for two">Snäkiplaat kahele</div>
+            <div class="menu-item-desc" data-et="Liha, juust, oliivid, kurgid, leib — täiuslik jagamiseks" data-en="Meat, cheese, olives, pickles, bread — perfect for sharing">Liha, juust, oliivid, kurgid, leib — täiuslik jagamiseks</div>
+          </div>
+          <div class="menu-item-price">18.00€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Taimetoitlane snäkiplaat" data-en="Meatless snack platter">Taimetoitlane snäkiplaat</div>
+            <div class="menu-item-desc" data-et="Juust, hummus, köögiviljad, oliivid, leib" data-en="Cheese, hummus, vegetables, olives, bread">Juust, hummus, köögiviljad, oliivid, leib</div>
+            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
+          </div>
+          <div class="menu-item-price">17.00€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Kartulisalat suitsulõhega" data-en="Potato salad with smoked salmon">Kartulisalat suitsulõhega</div>
+            <div class="menu-item-desc" data-et="Kohalik kartul, suitsulõhe, kapparid, hapukoor" data-en="Local potato, smoked salmon, capers, sour cream">Kohalik kartul, suitsulõhe, kapparid, hapukoor</div>
+          </div>
+          <div class="menu-item-price">8.60€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Burrata hooajaliste tsitruseliste ja ürtidega" data-en="Burrata with seasonal citruses">Burrata hooajaliste tsitruseliste ja ürtidega</div>
+            <div class="menu-item-desc" data-et="Värske burrata, tsitruselised, basiilik, oliiviõli" data-en="Fresh burrata, seasonal citruses, basil, olive oil">Värske burrata, tsitruselised, basiilik, oliiviõli</div>
+            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
+          </div>
+          <div class="menu-item-price">8.60€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Aurutatud bao-saiad" data-en="Steamed bao buns">Aurutatud bao-saiad</div>
+            <div class="menu-item-desc" data-et="Aurutatud bao, sealiha, kimchi, sriracha majonees" data-en="Steamed bao, pork belly, kimchi, sriracha mayo">Aurutatud bao, sealiha, kimchi, sriracha majonees</div>
+          </div>
+          <div class="menu-item-price">9.20€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Aasia kitsejuust" data-en="Asian breaded goat cheese">Aasia kitsejuust</div>
+            <div class="menu-item-desc" data-et="Praetud kitsejuust, magus-vürtsikas kaste, salat" data-en="Fried goat cheese, sweet-chili sauce, mixed greens">Praetud kitsejuust, magus-vürtsikas kaste, salat</div>
+            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
+          </div>
+          <div class="menu-item-price">9.90€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Grillitud maisiribi" data-en="Grilled corn ribs">Grillitud maisiribi</div>
+            <div class="menu-item-desc" data-et="Grillitud mais, vürtsivõi, laimimajonees, koriander" data-en="Grilled corn, spiced butter, lime mayo, coriander">Grillitud mais, vürtsivõi, laimimajonees, koriander</div>
+            <div class="menu-item-tags"><span class="tag" data-et="vegan" data-en="vegan">vegan</span></div>
+          </div>
+          <div class="menu-item-price">6.00€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Lõhe tataki" data-en="Salmon tataki">Lõhe tataki</div>
+            <div class="menu-item-desc" data-et="Pooltoore lõhe, ponzu kaste, avokaado, ingver" data-en="Seared salmon, ponzu sauce, avocado, ginger">Pooltoore lõhe, ponzu kaste, avokaado, ingver</div>
+          </div>
+          <div class="menu-item-price">11.20€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Aiaoa salat" data-en="Garden bean salad">Aiaoa salat</div>
+            <div class="menu-item-desc" data-et="Rohelised oad, feta, tomatid, sidrunivinegrett" data-en="Green beans, feta, tomatoes, lemon vinaigrette">Rohelised oad, feta, tomatid, sidrunivinegrett</div>
+            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
+          </div>
+          <div class="menu-item-price">8.90€</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPID -->
+    <div class="menu-panel" id="tab-supid">
+      <div class="menu-grid">
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Tai kookos- ja karrisupp" data-en="Thai coconut and curry soup">Tai kookos- ja karrisupp</div>
+            <div class="menu-item-desc" data-et="Meie kuulsaim roog — vürtsikas kookospiima ja karrisupp kanaga. Serveeritakse koos leivaga." data-en="Our most famous dish — spicy coconut milk and curry soup with chicken. Served with bread.">Meie kuulsaim roog — vürtsikas kookospiima ja karrisupp kanaga. Serveeritakse koos leivaga.</div>
+          </div>
+          <div class="menu-item-price">7.50€</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOMMIK -->
+    <div class="menu-panel" id="tab-hommik">
+      <div class="menu-grid">
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Krevetivõileib" data-en="Shrimp sandwich">Krevetivõileib</div>
+            <div class="menu-item-desc" data-et="Röstitud leib, krevetid, avokaado, sidrunimajonees" data-en="Toasted bread, shrimps, avocado, lemon mayo">Röstitud leib, krevetid, avokaado, sidrunimajonees</div>
+          </div>
+          <div class="menu-item-price">9.20€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Kalamaja hommikusöök" data-en="Kalamaja breakfast">Kalamaja hommikusöök</div>
+            <div class="menu-item-desc" data-et="2 muna tetsuks, peekon, salat, tomatid, röstsai" data-en="2 scrambled eggs, bacon, salad, tomatoes, toast">2 muna tetsuks, peekon, salat, tomatid, röstsai</div>
+          </div>
+          <div class="menu-item-price">14.50€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Ahjuomlett" data-en="Oven baked omelette">Ahjuomlett</div>
+            <div class="menu-item-desc" data-et="3 muna, juust, ürdid, tomatid — ahjus küpsetatud" data-en="3 eggs, cheese, herbs, tomatoes — baked in the oven">3 muna, juust, ürdid, tomatid — ahjus küpsetatud</div>
+            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
+          </div>
+          <div class="menu-item-price">6.90€</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PEAROAD -->
+    <div class="menu-panel" id="tab-pearoad">
+      <div class="menu-grid">
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="F-hoone Caesari salat" data-en="F-hoone Caesar salad">F-hoone Caesari salat</div>
+            <div class="menu-item-desc" data-et="Rooma salat, parmesaan, krutoone, Caesari kaste, kana" data-en="Romaine, parmesan, croutons, Caesar dressing, chicken">Rooma salat, parmesaan, krutoone, Caesari kaste, kana</div>
+          </div>
+          <div class="menu-item-price">10.00€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Krõbe kana" data-en="Crispy chicken">Krõbe kana</div>
+            <div class="menu-item-desc" data-et="Krõbedaks praetud kana, coleslaw, hapukaste, friikartul" data-en="Crispy fried chicken, coleslaw, dipping sauce, fries">Krõbedaks praetud kana, coleslaw, hapukaste, friikartul</div>
+          </div>
+          <div class="menu-item-price">13.30€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Smashed burger" data-en="Smashed burger">Smashed burger</div>
+            <div class="menu-item-desc" data-et="Kahekordne veiselihapatty, cheddar, hapukurk, kaste, brioche" data-en="Double beef patty, cheddar, pickles, special sauce, brioche">Kahekordne veiselihapatty, cheddar, hapukurk, kaste, brioche</div>
+          </div>
+          <div class="menu-item-price">10.50€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Taimetoitlane smashed burger" data-en="Vegetarian smashed burger">Taimetoitlane smashed burger</div>
+            <div class="menu-item-desc" data-et="Taimne kotlet, cheddar, hapukurk, kaste, brioche" data-en="Plant-based patty, cheddar, pickles, special sauce, brioche">Taimne kotlet, cheddar, hapukurk, kaste, brioche</div>
+            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
+          </div>
+          <div class="menu-item-price">10.50€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Roheline karri-kikerherne falafel" data-en="Green curry chickpea falafel">Roheline karri-kikerherne falafel</div>
+            <div class="menu-item-desc" data-et="Falafel, roheline karrikaste, riis, värske koriander" data-en="Falafel, green curry sauce, rice, fresh coriander">Falafel, roheline karrikaste, riis, värske koriander</div>
+            <div class="menu-item-tags"><span class="tag" data-et="vegan" data-en="vegan">vegan</span></div>
+          </div>
+          <div class="menu-item-price">12.80€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Pestopasta" data-en="Pesto pasta">Pestopasta</div>
+            <div class="menu-item-desc" data-et="Spaghetti, basiiliku-pesto, päikesekuivatatud tomatid, parmesaan" data-en="Spaghetti, basil pesto, sun-dried tomatoes, parmesan">Spaghetti, basiiliku-pesto, päikesekuivatatud tomatid, parmesaan</div>
+            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
+          </div>
+          <div class="menu-item-price">9.10€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Lihapelmeereid" data-en="Meat dumplings">Lihapelmeenid</div>
+            <div class="menu-item-desc" data-et="Käsitsi valmistatud pelmeenid, hapukoor, till" data-en="Hand-made dumplings, sour cream, dill">Käsitsi valmistatud pelmeenid, hapukoor, till</div>
+          </div>
+          <div class="menu-item-price">8.00–10.00€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Nasi Goreng" data-en="Nasi Goreng">Nasi Goreng</div>
+            <div class="menu-item-desc" data-et="Indoneesia praetud riis, kana, krevett, kana muna, achikar" data-en="Indonesian fried rice, chicken, shrimp, fried egg, achar">Indoneesia praetud riis, kana, krevett, kana muna, achikar</div>
+          </div>
+          <div class="menu-item-price">10.90€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Loaded fries" data-en="Loaded fries">Loaded fries</div>
+            <div class="menu-item-desc" data-et="Friikartulid, cheddar, peekon, hapukoor, roheline sibul" data-en="Fries, cheddar, bacon, sour cream, spring onion">Friikartulid, cheddar, peekon, hapukoor, roheline sibul</div>
+          </div>
+          <div class="menu-item-price">12.40€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Ahvenafilee" data-en="Perch fillet">Ahvenafilee</div>
+            <div class="menu-item-desc" data-et="Grillitud Eesti ahven, kartulipüree, ürdivõi, kapparid" data-en="Grilled Estonian perch, mashed potato, herb butter, capers">Grillitud Eesti ahven, kartulipüree, ürdivõi, kapparid</div>
+          </div>
+          <div class="menu-item-price">16.00€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Lõhefilee" data-en="Salmon fillet">Lõhefilee</div>
+            <div class="menu-item-desc" data-et="Grillitud lõhe, koorene spinat, sidrun, värske till" data-en="Grilled salmon, creamed spinach, lemon, fresh dill">Grillitud lõhe, koorene spinat, sidrun, värske till</div>
+          </div>
+          <div class="menu-item-price">16.20€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Veise entrecôte" data-en="Beef entrecote">Veise entrecôte</div>
+            <div class="menu-item-desc" data-et="300g grillitud entrecôte, röstitud kartul, salat, punase veini kaste" data-en="300g grilled entrecote, roasted potatoes, salad, red wine sauce">300g grillitud entrecôte, röstitud kartul, salat, punase veini kaste</div>
+          </div>
+          <div class="menu-item-price">36.00€</div>
+        </div>
+        <div class="menu-item" style="grid-column: 1 / -1; border-top: 1px solid rgba(200,133,74,0.2); padding-top: 1.8rem; margin-top: 0.5rem;">
+          <div class="menu-item-left">
+            <div class="menu-item-name" style="font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; color: var(--amber);" data-et="Lisandid — 3–5€" data-en="Side dishes — 3–5€">Lisandid — 3–5€</div>
+            <div class="menu-item-desc" data-et="Friikartulid / bataadifriikartulid · Krõbe roheline salat · Värsked kartulid · Kimchi · Soolakurk" data-en="Fries / sweet potato fries · Crunchy green salad · Fresh potatoes · Kimchi · Salted cucumber">Friikartulid / bataadifriikartulid · Krõbe roheline salat · Värsked kartulid · Kimchi · Soolakurk</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAGUSTOIDUD -->
+    <div class="menu-panel" id="tab-magustoidud">
+      <div class="menu-grid">
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Crème brûlée" data-en="Crème brûlée">Crème brûlée</div>
+            <div class="menu-item-desc" data-et="Klassikaline vaniljekreem karamellkoorikuga" data-en="Classic vanilla cream with caramelised crust">Klassikaline vaniljekreem karamellkoorikuga</div>
+            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
+          </div>
+          <div class="menu-item-price">6.40€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Syrniki" data-en="Syrniki">Syrniki</div>
+            <div class="menu-item-desc" data-et="Kodujuustupannkoogid, hapukoor, moos, värske puuvili" data-en="Cottage cheese pancakes, sour cream, jam, fresh fruit">Kodujuustupannkoogid, hapukoor, moos, värske puuvili</div>
+          </div>
+          <div class="menu-item-price">6.90€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Ekleer" data-en="Eclair">Ekleer</div>
+            <div class="menu-item-desc" data-et="Kohviku omatehtud ekleer päeva kreemiga" data-en="House-made eclair with daily cream filling">Kohviku omatehtud ekleer päeva kreemiga</div>
+            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
+          </div>
+          <div class="menu-item-price">4.00€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Sidrunikook" data-en="Lemon cake">Sidrunikook</div>
+            <div class="menu-item-desc" data-et="Kerge sidrunikook vaniljekreemi ja marjadega" data-en="Light lemon cake with vanilla cream and berries">Kerge sidrunikook vaniljekreemi ja marjadega</div>
+            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
+          </div>
+          <div class="menu-item-price">4.90€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Vegan mango-kašuukook" data-en="Vegan mango cashew cake">Vegan mango-kašuukook</div>
+            <div class="menu-item-desc" data-et="Toorjuustukook mangoga, kašuupõhi, kookoskreem" data-en="Raw cheesecake with mango, cashew base, coconut cream">Toorjuustukook mangoga, kašuupõhi, kookoskreem</div>
+            <div class="menu-item-tags"><span class="tag" data-et="vegan" data-en="vegan">vegan</span></div>
+          </div>
+          <div class="menu-item-price">6.00€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Šokolaadikook" data-en="Chocolate cake">Šokolaadikook</div>
+            <div class="menu-item-desc" data-et="Rikas šokolaadikook vanillijäätisega" data-en="Rich chocolate cake with vanilla ice cream">Rikas šokolaadikook vanillijäätisega</div>
+            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
+          </div>
+          <div class="menu-item-price">5.00€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Juustukook" data-en="Cheesecake">Juustukook</div>
+            <div class="menu-item-desc" data-et="New Yorgi stiilis juustukook hooajaliste marjadega" data-en="New York style cheesecake with seasonal berries">New Yorgi stiilis juustukook hooajaliste marjadega</div>
+            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
+          </div>
+          <div class="menu-item-price">5.00€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Sorbet" data-en="Sorbet">Sorbet</div>
+            <div class="menu-item-desc" data-et="Hooajaline puuviljusorbet — küsi serveerijalt" data-en="Seasonal fruit sorbet — ask your server">Hooajaline puuviljusorbet — küsi serveerijalt</div>
+            <div class="menu-item-tags"><span class="tag" data-et="vegan" data-en="vegan">vegan</span></div>
+          </div>
+          <div class="menu-item-price">2.00€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name" data-et="Soft serve jäätis" data-en="Soft serve ice cream">Soft serve jäätis</div>
+            <div class="menu-item-desc" data-et="Omatehtud soft serve, toppingud omal valikul" data-en="House-made soft serve, toppings of your choice">Omatehtud soft serve, toppingud omal valikul</div>
+            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
+          </div>
+          <div class="menu-item-price">6.00€</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KOKTEILID -->
+    <div class="menu-panel" id="tab-kokteilid">
+      <div class="menu-grid">
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name">Sharp &amp; Moody</div>
+            <div class="menu-item-desc" data-et="Meie signatuurkokteilikaart — küsi serveerijalt koostisainete kohta" data-en="Our signature cocktail — ask your server for ingredients">Meie signatuurkokteilikaart — küsi serveerijalt koostisainete kohta</div>
+          </div>
+          <div class="menu-item-price">11.90€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name">Mango Tango</div>
+            <div class="menu-item-desc" data-et="Troopilised puuviljad, rum, laimi, ingver" data-en="Tropical fruits, rum, lime, ginger">Troopilised puuviljad, rum, laimi, ingver</div>
+          </div>
+          <div class="menu-item-price">10.60€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name">Basil Smash</div>
+            <div class="menu-item-desc" data-et="Gin, värske basiilik, sidrun, suhkrusiirup" data-en="Gin, fresh basil, lemon, sugar syrup">Gin, värske basiilik, sidrun, suhkrusiirup</div>
+          </div>
+          <div class="menu-item-price">10.20€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name">Violet Fizz</div>
+            <div class="menu-item-desc" data-et="Gin, kanarbiku siirup, sidrun, vahustatud munavalge, prosecco" data-en="Gin, heather syrup, lemon, egg white foam, prosecco">Gin, kanarbiku siirup, sidrun, vahustatud munavalge, prosecco</div>
+          </div>
+          <div class="menu-item-price">10.30€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name">Passion Martini</div>
+            <div class="menu-item-desc" data-et="Viin, marakujaliköör, vanill, ananassimahl" data-en="Vodka, passion fruit liqueur, vanilla, pineapple juice">Viin, marakujaliköör, vanill, ananassimahl</div>
+          </div>
+          <div class="menu-item-price">10.70€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name">Mezcal Last Word</div>
+            <div class="menu-item-desc" data-et="Mezcal, roheline Chartreuse, maraschino, laimi" data-en="Mezcal, green Chartreuse, maraschino, lime">Mezcal, roheline Chartreuse, maraschino, laimi</div>
+          </div>
+          <div class="menu-item-price">11.90€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name">Hugo Spritz</div>
+            <div class="menu-item-desc" data-et="Elderflower liköör, prosecco, soodalvesi, piparmünt, laimi" data-en="Elderflower liqueur, prosecco, soda, mint, lime">Elderflower liköör, prosecco, soodalvesi, piparmünt, laimi</div>
+          </div>
+          <div class="menu-item-price">10.20€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name">Aperitivo Spritz</div>
+            <div class="menu-item-desc" data-et="Aperol, prosecco, soodalvesi, apelsin" data-en="Aperol, prosecco, soda, orange">Aperol, prosecco, soodalvesi, apelsin</div>
+          </div>
+          <div class="menu-item-price">10.20€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name">Limoncello Spritz</div>
+            <div class="menu-item-desc" data-et="Limoncello, prosecco, soodalvesi, sidrun, basiilik" data-en="Limoncello, prosecco, soda, lemon, basil">Limoncello, prosecco, soodalvesi, sidrun, basiilik</div>
+          </div>
+          <div class="menu-item-price">10.50€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name">Orange Black Tea Collins</div>
+            <div class="menu-item-desc" data-et="Viin, must tee, apelsinkoor, sidrun, soodalvesi" data-en="Vodka, black tea, orange zest, lemon, soda">Viin, must tee, apelsinkoor, sidrun, soodalvesi</div>
+          </div>
+          <div class="menu-item-price">10.50€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name">Hanna's Dream</div>
+            <div class="menu-item-desc" data-et="Gin, roosivesi, greibimahl, laimi, suhkrusiirup" data-en="Gin, rose water, grapefruit juice, lime, sugar syrup">Gin, roosivesi, greibimahl, laimi, suhkrusiirup</div>
+          </div>
+          <div class="menu-item-price">10.40€</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-left">
+            <div class="menu-item-name">8 PM</div>
+            <div class="menu-item-desc" data-et="Viski, mesi, sidrun, ingver, rosmariin" data-en="Whisky, honey, lemon, ginger, rosemary">Viski, mesi, sidrun, ingver, rosmariin</div>
+          </div>
+          <div class="menu-item-price">10.70€</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section id="events">
+  <div class="fade-in">
+    <p class="section-label" data-et="Sündmused" data-en="Events">Sündmused</p>
+    <h2 class="section-title" data-et="Mis toimub" data-en="What's on">Mis toimub</h2>
+    <div class="divider"></div>
+    <div class="events-grid">
+      <div class="event-card">
+        <div class="event-date-box">
+          <div class="event-day">07</div>
+          <div class="event-month" data-et="Juuni 2026" data-en="June 2026">Juuni 2026</div>
+        </div>
+        <div class="event-title" data-et="Jazz-õhtu" data-en="Jazz Evening">Jazz-õhtu</div>
+        <div class="event-desc" data-et="Live-jazz kohviku saalis. Sissepääs tasuta, lauad soovitame broneerida." data-en="Live jazz in the hall. Free entry, reservations recommended.">Live-jazz kohviku saalis. Sissepääs tasuta, lauad soovitame broneerida.</div>
+        <div class="event-time" data-et="20:00 — 23:00" data-en="8 PM — 11 PM">20:00 — 23:00</div>
+      </div>
+      <div class="event-card">
+        <div class="event-date-box">
+          <div class="event-day">14</div>
+          <div class="event-month" data-et="Juuni 2026" data-en="June 2026">Juuni 2026</div>
+        </div>
+        <div class="event-title" data-et="Veini degusteerimisõhtu" data-en="Wine Tasting Evening">Veini degusteerimisõhtu</div>
+        <div class="event-desc" data-et="Naturaalveinide tutvustus koos väikeste suupistetega. Kohtade arv piiratud." data-en="Natural wine introduction with small bites. Limited seats.">Naturaalveinide tutvustus koos väikeste suupistetega. Kohtade arv piiratud.</div>
+        <div class="event-time" data-et="19:00 — 22:00" data-en="7 PM — 10 PM">19:00 — 22:00</div>
+      </div>
+      <div class="event-card">
+        <div class="event-date-box">
+          <div class="event-day">21</div>
+          <div class="event-month" data-et="Juuni 2026" data-en="June 2026">Juuni 2026</div>
+        </div>
+        <div class="event-title" data-et="Jaanipäeva eel" data-en="Midsummer Eve Party">Jaanipäeva eel</div>
+        <div class="event-desc" data-et="Jaanilaupäeva eelne pidu DJ-muusika, kokteilide ja suvemenüüga." data-en="Midsummer eve party with DJ, cocktails and a special summer menu.">Jaanilaupäeva eelne pidu DJ-muusika, kokteilide ja suvemenüüga.</div>
+        <div class="event-time" data-et="18:00 — 02:00" data-en="6 PM — 2 AM">18:00 — 02:00</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BRONEERING -->
+<section id="broneering">
+  <div class="broneering-info fade-in">
+    <p class="section-label" data-et="Broneering" data-en="Reservation">Broneering</p>
+    <h2 class="section-title" data-et="Broneeri laud" data-en="Reserve a table">Broneeri laud</h2>
+    <div class="divider"></div>
+    <p data-et="Broneering on võimalik kuni 24 tunni ette. Suurematele gruppidele (8+) palume helistada." data-en="Reservations possible up to 24 hours in advance. For larger groups (8+) please call us.">
+      Broneering on võimalik kuni 24 tunni ette. Suurematele gruppidele (8+) palume helistada.
+    </p>
+    <div class="hours-grid">
+      <div class="hours-day" data-et="E–N" data-en="Mon–Thu">E–N</div>
+      <div class="hours-time">10:00 – 23:00</div>
+      <div class="hours-day" data-et="R–L" data-en="Fri–Sat">R–L</div>
+      <div class="hours-time">10:00 – 00:00</div>
+      <div class="hours-day" data-et="P" data-en="Sun">P</div>
+      <div class="hours-time">10:00 – 22:00</div>
+    </div>
+  </div>
+  <div class="fade-in">
+    <form id="reservationForm" onsubmit="submitForm(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label data-et="Nimi" data-en="Name">Nimi</label>
+          <input type="text" name="name" required placeholder="Sinu nimi" data-placeholder-et="Sinu nimi" data-placeholder-en="Your name" />
+        </div>
+        <div class="form-group">
+          <label data-et="Telefon" data-en="Phone">Telefon</label>
+          <input type="tel" name="phone" required placeholder="+372 XXXX XXXX" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label data-et="E-post" data-en="Email">E-post</label>
+        <input type="email" name="email" required placeholder="nimi@email.com" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label data-et="Kuupäev" data-en="Date">Kuupäev</label>
+          <input type="date" name="date" required />
+        </div>
+        <div class="form-group">
+          <label data-et="Kellaaeg" data-en="Time">Kellaaeg</label>
+          <select name="time" required>
+            <option value="" disabled selected data-et="Vali kellaaeg" data-en="Select time">Vali kellaaeg</option>
+            <option>10:00</option><option>11:00</option><option>12:00</option>
+            <option>13:00</option><option>14:00</option><option>15:00</option>
+            <option>16:00</option><option>17:00</option><option>18:00</option>
+            <option>19:00</option><option>20:00</option><option>21:00</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label data-et="Külaliste arv" data-en="Number of guests">Külaliste arv</label>
+        <select name="guests" required>
+          <option value="" disabled selected data-et="Vali arv" data-en="Select">Vali arv</option>
+          <option>1</option><option>2</option><option>3</option><option>4</option>
+          <option>5</option><option>6</option><option>7</option>
+          <option value="8+" data-et="8 või rohkem" data-en="8 or more">8 või rohkem</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label data-et="Lisasoovid (valikuline)" data-en="Special requests (optional)">Lisasoovid (valikuline)</label>
+        <textarea name="notes" placeholder="Allergeenid, eritingimused jms." data-placeholder-et="Allergeenid, eritingimused jms." data-placeholder-en="Allergies, special occasions, etc."></textarea>
+      </div>
+      <button type="submit" class="submit-btn" data-et="Saada broneering" data-en="Send reservation">Saada broneering</button>
+      <p class="form-msg" id="formMsg"></p>
+    </form>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section id="kontakt">
+  <div class="fade-in">
+    <p class="section-label" data-et="Kontakt" data-en="Contact">Kontakt</p>
+    <h2 class="section-title" data-et="Leia meid üles" data-en="Find us">Leia meid üles</h2>
+    <div class="divider"></div>
+    <div class="contact-item">
+      <div class="contact-label" data-et="Aadress" data-en="Address">Aadress</div>
+      <div class="contact-value">Telliskivi 60a<br>10412 Tallinn, Eesti</div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-label" data-et="Telefon" data-en="Phone">Telefon</div>
+      <div class="contact-value"><a href="tel:+3725322655">+372 5322 6855</a></div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-label" data-et="E-post" data-en="Email">E-post</div>
+      <div class="contact-value"><a href="mailto:info@fhoone.ee">info@fhoone.ee</a></div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-label" data-et="Lahtiolekuajad" data-en="Opening hours">Lahtiolekuajad</div>
+      <div class="contact-value">
+        <span data-et="E–N" data-en="Mon–Thu">E–N</span> 10:00–23:00<br>
+        <span data-et="R–L" data-en="Fri–Sat">R–L</span> 10:00–00:00<br>
+        <span data-et="P" data-en="Sun">P</span> 10:00–22:00
+      </div>
+    </div>
+    <div class="social-links">
+      <a href="https://www.instagram.com/fhoone/" target="_blank" class="social-link">Instagram</a>
+      <a href="https://www.facebook.com/Fhoone/" target="_blank" class="social-link">Facebook</a>
+    </div>
+  </div>
+  <div class="fade-in">
+    <div class="map-box">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2028.3!2d24.7278!3d59.4396!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x469294a2e5f31b41%3A0x4f89e3e4e2c4f4b0!2sTelliskivi%2060a%2C%2010412%20Tallinn!5e0!3m2!1set!2see!4v1700000000"
+        allowfullscreen="" loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">F<span>-</span>hoone</div>
+  <p data-et="© 2026 F-hoone. Telliskivi Loomelinnak, Tallinn." data-en="© 2026 F-hoone. Telliskivi Creative City, Tallinn.">© 2026 F-hoone. Telliskivi Loomelinnak, Tallinn.</p>
+  <p data-et="Kõik õigused kaitstud." data-en="All rights reserved.">Kõik õigused kaitstud.</p>
+</footer>
+
+<script>
+  // ── Language switcher ──
+  let currentLang = 'et';
+
+  function setLang(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.getElementById('btnET').classList.toggle('active', lang === 'et');
+    document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+
+    document.querySelectorAll('[data-et]').forEach(el => {
+      const key = lang === 'et' ? 'et' : 'en';
+      if (el.dataset[key]) el.textContent = el.dataset[key];
+    });
+
+    // placeholders
+    document.querySelectorAll('[data-placeholder-et]').forEach(el => {
+      el.placeholder = lang === 'et' ? el.dataset.placeholderEt : el.dataset.placeholderEn;
+    });
+  }
+
+  // ── Nav scroll ──
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // ── Hamburger ──
+  function toggleNav() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+  document.querySelectorAll('#navLinks a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.getElementById('navLinks').classList.remove('open');
+    });
+  });
+
+  // ── Menu tabs ──
+  function showTab(id) {
+    document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  // ── Reservation form ──
+  function submitForm(e) {
+    e.preventDefault();
+    const msg = document.getElementById('formMsg');
+    msg.style.display = 'block';
+    msg.textContent = currentLang === 'et'
+      ? 'Täname! Broneering on vastu võetud. Võtame sinuga peagi ühendust.'
+      : 'Thank you! Your reservation has been received. We will contact you shortly.';
+    e.target.reset();
+    setTimeout(() => { msg.style.display = 'none'; }, 6000);
+  }
+
+  // ── Fade in on scroll ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Set min date for reservation
+  const dateInput = document.querySelector('input[type="date"]');
+  if (dateInput) {
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.min = today;
+  }
+</script>
+</body>
+</html>
