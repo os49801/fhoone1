@@ -210,35 +210,21 @@ nav.scrolled{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop
 @keyframes dotPulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
 
 /* can stage */
-.beer-can-stage{display:flex;align-items:center;justify-content:center;height:100%;position:relative}
-.beer-can-img{max-height:min(70vh,520px);max-width:90%;object-fit:contain;filter:drop-shadow(0 24px 48px rgba(0,0,0,.55)) drop-shadow(0 0 30px rgba(200,168,75,.15));will-change:transform}
-@media(max-width:768px){.beer-can-stage{max-height:45vmax}.beer-can-img{max-height:min(42vh,320px)}}
-
-/* spring animations */
-@keyframes springUp{
-  0%{transform:translateY(90px) scale(.82);opacity:0}
-  55%{transform:translateY(-14px) scale(1.04);opacity:1}
-  72%{transform:translateY(6px) scale(.99)}
-  86%{transform:translateY(-3px) scale(1.005)}
-  100%{transform:translateY(0) scale(1);opacity:1}
+.beer-can-stage{position:relative;height:100%;overflow:hidden}
+.beer-can-scroll{
+  position:absolute;left:50%;top:50%;
+  max-height:min(68vh,500px);max-width:88%;
+  object-fit:contain;
+  transform:translate(-50%,-50%);
+  will-change:transform,opacity;
+  filter:drop-shadow(0 24px 48px rgba(0,0,0,.55)) drop-shadow(0 0 28px rgba(200,168,75,.12));
+  pointer-events:none;
 }
-@keyframes springDown{
-  0%{transform:translateY(-90px) scale(.82);opacity:0}
-  55%{transform:translateY(14px) scale(1.04);opacity:1}
-  72%{transform:translateY(-6px) scale(.99)}
-  86%{transform:translateY(3px) scale(1.005)}
-  100%{transform:translateY(0) scale(1);opacity:1}
-}
-@keyframes infoIn{0%{opacity:0;transform:translateX(20px)}100%{opacity:1;transform:translateX(0)}}
-@keyframes infoOut{0%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(-20px)}}
-.spring-up{animation:springUp .7s cubic-bezier(.25,.46,.45,.94) forwards}
-.spring-down{animation:springDown .7s cubic-bezier(.25,.46,.45,.94) forwards}
-.info-in{animation:infoIn .45s cubic-bezier(.23,1,.32,1) forwards}
-.info-out{animation:infoOut .2s ease-in forwards;pointer-events:none}
+@media(max-width:768px){.beer-can-scroll{max-height:min(40vh,300px)}}
 
-/* float idle */
-@keyframes canFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-.beer-can-img.idle{animation:canFloat 4s ease-in-out infinite}
+/* text fade */
+@keyframes textFadeIn{0%{opacity:0}100%{opacity:1}}
+.text-snap{animation:textFadeIn .18s ease forwards}
 
 /* progress bar */
 .beer-progress{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--border2);z-index:10}
@@ -422,7 +408,8 @@ footer{background:var(--bg2);padding:2.5rem clamp(1.5rem,5vw,4rem);border-top:1p
           <div class="beer-tap-pill">Kraanist · Värske</div>
         </div>
         <div class="beer-can-stage">
-          <img id="beerImg" class="beer-can-img" src="" alt="" loading="eager"/>
+          <img id="canA" class="beer-can-scroll" src="" alt="" loading="eager"/>
+          <img id="canB" class="beer-can-scroll" src="" alt="" loading="eager"/>
         </div>
       </div>
       <div class="beer-number-big" id="beerNumBig">01</div>
@@ -635,101 +622,130 @@ for(var i=0;i<22;i++){
   pc.appendChild(p);
 }
 
-/* ── STICKY BEER SCROLL ── */
-var beerWrap=document.getElementById('beerScrollWrap');
-var beerBgA=document.getElementById('beerBgA'),beerBgB=document.getElementById('beerBgB');
-var beerImg=document.getElementById('beerImg');
-var beerName=document.getElementById('beerName'),beerType=document.getElementById('beerType'),beerBry=document.getElementById('beerBry');
-var beerCounter=document.getElementById('beerCounter'),beerInfo=document.getElementById('beerInfo');
-var beerProgressFill=document.getElementById('beerProgressFill');
-var beerNumBig=document.getElementById('beerNumBig');
-var curIdx=-1,bgActive='a',switching=false;
+/* ── SCROLL-DRIVEN BEER ANIMATION ── */
+var beerWrap   = document.getElementById('beerScrollWrap');
+var bgA        = document.getElementById('beerBgA');
+var bgB        = document.getElementById('beerBgB');
+var canA       = document.getElementById('canA');
+var canB       = document.getElementById('canB');
+var elName     = document.getElementById('beerName');
+var elType     = document.getElementById('beerType');
+var elBry      = document.getElementById('beerBry');
+var elCounter  = document.getElementById('beerCounter');
+var elNumBig   = document.getElementById('beerNumBig');
+var elProgress = document.getElementById('beerProgressFill');
+var elInfo     = document.getElementById('beerInfo');
 
+var N          = beers.length;          // 24
+var ZONE_IN    = 0.18;                  // settled zone at start
+var ZONE_OUT   = 0.82;                  // settled zone at end
+var lastIdx    = -1;
+var lastTextIdx = -1;
+var rafId      = null;
+
+/* smoothstep easing */
+function ease(t){ return t*t*(3-2*t); }
+
+/* clamp 0-1 */
+function clamp(v){ return v<0?0:v>1?1:v; }
+
+/* background value for current theme */
 function getBg(idx){
-  var b=beers[idx];
-  return html.getAttribute('data-theme')==='dark'?b.dk:b.lt;
+  var b = beers[Math.max(0,Math.min(idx,N-1))];
+  return html.getAttribute('data-theme')==='dark' ? b.dk : b.lt;
 }
 
-function setBeerBg(idx,animate){
-  if(animate===false){
-    beerBgA.style.background=getBg(idx);
-    beerBgA.style.opacity='1';
-    beerBgB.style.opacity='0';
-    bgActive='a';
-    return;
-  }
-  var next=bgActive==='a'?beerBgB:beerBgA;
-  var curr=bgActive==='a'?beerBgA:beerBgB;
-  next.style.transition='none';
-  next.style.background=getBg(idx);
-  next.style.opacity='0';
-  next.style.zIndex='1';
-  curr.style.zIndex='0';
-  requestAnimationFrame(function(){
-    next.style.transition='opacity .65s ease';
-    next.style.opacity='1';
-    bgActive=bgActive==='a'?'b':'a';
-  });
+/* update text instantly (called when text-idx changes) */
+function updateText(idx){
+  idx = Math.max(0,Math.min(idx,N-1));
+  if(idx === lastTextIdx) return;
+  lastTextIdx = idx;
+  var b = beers[idx];
+  elName.textContent    = b.name;
+  elType.textContent    = b.type;
+  elBry.textContent     = b.bry;
+  elCounter.textContent = String(idx+1).padStart(2,'0')+' / '+N;
+  elNumBig.textContent  = String(idx+1).padStart(2,'0');
+  elInfo.classList.remove('text-snap');
+  void elInfo.offsetWidth;
+  elInfo.classList.add('text-snap');
 }
 
-function switchBeer(idx,dir){
-  if(switching)return;
-  switching=true;
-  var b=beers[idx];
-
-  // bg
-  setBeerBg(idx,true);
-
-  // img spring
-  beerImg.classList.remove('spring-up','spring-down','idle');
-  void beerImg.offsetWidth;
-  beerImg.src=b.img;
-  beerImg.alt=b.name+' purk';
-  beerImg.classList.add(dir==='next'?'spring-up':'spring-down');
-  setTimeout(function(){beerImg.classList.add('idle');switching=false;},700);
-
-  // text
-  beerInfo.classList.add('info-out');
-  setTimeout(function(){
-    beerName.textContent=b.name;
-    beerType.textContent=b.type;
-    beerBry.textContent=b.bry;
-    beerCounter.textContent=String(idx+1).padStart(2,'0')+' / '+beers.length;
-    beerNumBig.textContent=String(idx+1).padStart(2,'0');
-    beerInfo.classList.remove('info-out');
-    beerInfo.classList.add('info-in');
-    setTimeout(function(){beerInfo.classList.remove('info-in');},460);
-  },200);
+/* swap image sources when index changes */
+function loadImages(idx){
+  if(idx === lastIdx) return;
+  var cur  = beers[Math.max(0,Math.min(idx,   N-1))];
+  var next = beers[Math.max(0,Math.min(idx+1, N-1))];
+  canA.src = cur.img;   canA.alt = cur.name;
+  canB.src = next.img;  canB.alt = next.name;
+  bgA.style.background = getBg(idx);
+  bgB.style.background = getBg(idx+1);
+  lastIdx = idx;
 }
 
-// init first beer without animation
-(function initBeers(){
-  var b=beers[0];
-  beerBgA.style.background=getBg(0);
-  beerImg.src=b.img;beerImg.alt=b.name;
-  beerName.textContent=b.name;beerType.textContent=b.type;beerBry.textContent=b.bry;
-  beerCounter.textContent='01 / '+beers.length;beerNumBig.textContent='01';
-  curIdx=0;
-  setTimeout(function(){beerImg.classList.add('idle');},100);
+/* RAF tick — runs every frame */
+function tick(){
+  var rect     = beerWrap.getBoundingClientRect();
+  var total    = beerWrap.offsetHeight - window.innerHeight;
+  var scrolled = clamp(-rect.top / total);           // 0→1 for whole section
+  var rawFloat = scrolled * N;                        // 0→24
+  var idx      = Math.min(Math.floor(rawFloat), N-2);// 0→22 (so idx+1 is valid)
+  var rawT     = rawFloat - idx;                      // 0→1 within this beer slot
+
+  /* map rawT to transition window */
+  var t;
+  if      (rawT < ZONE_IN)  t = 0;
+  else if (rawT > ZONE_OUT) t = 1;
+  else t = (rawT - ZONE_IN) / (ZONE_OUT - ZONE_IN);
+  t = ease(clamp(t));
+
+  /* load images when slot changes */
+  loadImages(idx);
+
+  /* update text at midpoint of transition */
+  updateText(rawT > 0.5 ? idx+1 : idx);
+
+  /* ── can positions ──
+     canA = current beer: exits downward  (y: 0 → +130%)
+     canB = next beer:    enters from top (y: -130% → 0)
+     Opacity: canA fades out first half, canB fades in second half
+     so they're never both semi-transparent simultaneously            */
+  var yA  = t * 130;
+  var yB  = (t - 1) * 130;
+  /* opacity: canA 1→0 over t=0..0.55, canB 0→1 over t=0.45..1 */
+  var opA = clamp(1 - t / 0.55);
+  var opB = clamp((t - 0.45) / 0.55);
+  canA.style.transform = 'translate(-50%, calc(-50% + '+yA+'%))';
+  canA.style.opacity   = String(opA);
+  canB.style.transform = 'translate(-50%, calc(-50% + '+yB+'%))';
+  canB.style.opacity   = String(opB);
+
+  /* ── backgrounds ── same t, perfectly locked ── */
+  bgA.style.opacity = String(1 - t);
+  bgB.style.opacity = String(t);
+
+  /* ── progress bar ── */
+  elProgress.style.width = (scrolled*100)+'%';
+
+  rafId = requestAnimationFrame(tick);
+}
+
+/* init first frame */
+(function init(){
+  loadImages(0);
+  updateText(0);
+  canA.style.opacity='1'; canA.style.transform='translate(-50%,-50%)';
+  canB.style.opacity='0'; canB.style.transform='translate(-50%,calc(-50% - 110%))';
+  bgA.style.opacity='1';  bgB.style.opacity='0';
+  rafId = requestAnimationFrame(tick);
 })();
 
-// scroll handler
-function onBeerScroll(){
-  var rect=beerWrap.getBoundingClientRect();
-  var total=beerWrap.offsetHeight-window.innerHeight;
-  var scrolled=Math.max(0,-rect.top);
-  var prog=Math.min(1,scrolled/total);
-  beerProgressFill.style.width=(prog*100)+'%';
-  var fi=prog*beers.length;
-  var ni=Math.min(Math.floor(fi),beers.length-1);
-  if(ni!==curIdx){
-    var d=ni>curIdx?'next':'prev';
-    curIdx=ni;
-    switchBeer(ni,d);
-  }
-}
-
-window.addEventListener('scroll',onBeerScroll,{passive:true});
+/* re-apply bg when theme toggles */
+var _origToggle = toggleTheme;
+toggleTheme = function(){
+  _origToggle();
+  lastIdx = -1; // force reload bg colors
+};
 
 /* ── EVENTS ── */
 var evs=[
