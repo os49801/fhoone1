@@ -1,1483 +1,783 @@
 <!DOCTYPE html>
-<html lang="et">
+<html lang="et" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>F-hoone — Restoran & Kohvik Telliskivis, Tallinn</title>
-  <meta name="description" content="F-hoone on Tallinna südames asuv restoran ja kohvik Telliskivi Loomelinnakus. Avatud iga päev. Broneeri laud online." />
-  <meta name="keywords" content="F-hoone, fhoone, restoran Tallinn, kohvik Telliskivi, Telliskivi Loomelinnak, broneering, menüü" />
-  <meta name="robots" content="noindex, nofollow" />
-  <link rel="canonical" href="https://fhoone.ee" />
-
-  <!-- Open Graph (jagamine sotsiaalmeedias) -->
-  <meta property="og:title" content="F-hoone — Restoran & Kohvik Telliskivis" />
-  <meta property="og:description" content="Tallinna kõige elujõulisem restoran Telliskivi Loomelinnakus. Maitsev toit, kokteilid, sündmused." />
-  <meta property="og:type" content="restaurant" />
-  <meta property="og:url" content="https://fhoone.ee" />
-  <meta property="og:locale" content="et_EE" />
-
-  <!-- Struktureeritud andmed (Google rich results) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Restaurant",
-    "name": "F-hoone",
-    "url": "https://fhoone.ee",
-    "telephone": "+3725322685",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Telliskivi 60a",
-      "addressLocality": "Tallinn",
-      "postalCode": "10412",
-      "addressCountry": "EE"
-    },
-    "openingHours": ["Mo-Th 10:00-23:00", "Fr-Sa 10:00-00:00", "Su 10:00-22:00"],
-    "servesCuisine": ["International", "European"],
-    "priceRange": "€€",
-    "description": "Restoran ja kohvik Tallinna Telliskivi Loomelinnakus, endises tööstushoones."
-  }
-  </script>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Põhja Konn — Käsitööõlu Telliskivis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:clip}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+img{max-width:100%;display:block}
 
-    :root {
-      --coal: #1a1714;
-      --dark: #221f1b;
-      --mid: #2e2926;
-      --amber: #c8854a;
-      --amber-light: #e0a76a;
-      --cream: #f0e8da;
-      --cream-dim: #b5a899;
-      --white: #faf7f3;
-      --serif: 'Playfair Display', Georgia, serif;
-      --sans: 'Inter', system-ui, sans-serif;
-    }
+/* ── THEME VARIABLES ── */
+:root{
+  --gold:#c8a84b; --gold2:#e8c86a; --gold-a:.18;
+  --r:14px; --rl:22px;
+  --trans-col: background-color .45s cubic-bezier(.23,1,.32,1),
+               color .45s cubic-bezier(.23,1,.32,1),
+               border-color .45s cubic-bezier(.23,1,.32,1);
+}
+[data-theme="dark"]{
+  --bg:#2b2218; --bg2:#342a1e; --bg3:#3e3226;
+  --text:#ede8dc; --text2:#c8b898; --text3:#8a7a68;
+  --card:rgba(40,30,18,.82); --glass:rgba(28,20,12,.78);
+  --border:rgba(200,168,75,.15); --border2:rgba(200,168,75,.07);
+  --shadow:0 20px 60px rgba(0,0,0,.55);
+  --noise-op:.28;
+}
+[data-theme="light"]{
+  --bg:#f5f0e8; --bg2:#ede8dc; --bg3:#e4ddd0;
+  --text:#1c1610; --text2:#4a3e30; --text3:#8a7a68;
+  --card:rgba(245,240,232,.88); --glass:rgba(238,232,220,.82);
+  --border:rgba(160,120,30,.18); --border2:rgba(160,120,30,.09);
+  --shadow:0 20px 60px rgba(0,0,0,.1);
+  --noise-op:.15;
+}
 
-    html { scroll-behavior: smooth; }
+/* ── BASE ── */
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;
+  line-height:1.6;overflow-x:clip;transition:var(--trans-col);}
+h1{font-family:'Playfair Display',serif;font-size:clamp(3.2rem,11vw,8rem);font-weight:900;line-height:.92;letter-spacing:.06em}
+h2{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.8rem);font-weight:700;line-height:1.1}
+h3{font-family:'Playfair Display',serif;font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:700}
+p{font-size:clamp(.9rem,2vw,1.05rem);line-height:1.78;color:var(--text2);transition:color .4s}
+.glow-text{color:var(--gold);text-shadow:0 0 40px rgba(200,168,75,.45),0 0 80px rgba(200,168,75,.2)}
+.section-tag{font-size:.67rem;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;display:block;transition:color .4s}
+.section-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(200,168,75,.22),transparent)}
+section{padding:clamp(4rem,10vw,8rem) clamp(1.5rem,5vw,4rem)}
+.inner{max-width:1200px;margin:0 auto}
 
-    body {
-      background: var(--coal);
-      color: var(--cream);
-      font-family: var(--sans);
-      font-weight: 300;
-      overflow-x: hidden;
-    }
+/* noise */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:var(--noise-op);
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+  transition:opacity .4s}
 
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.4rem 3rem;
-      transition: background 0.4s, padding 0.4s;
-    }
-    nav.scrolled {
-      background: rgba(26,23,20,0.96);
-      backdrop-filter: blur(8px);
-      padding: 1rem 3rem;
-      border-bottom: 1px solid rgba(200,133,74,0.15);
-    }
-    .nav-logo {
-      font-family: var(--serif);
-      font-size: 1.5rem;
-      letter-spacing: 0.12em;
-      color: var(--cream);
-      text-decoration: none;
-    }
-    .nav-logo span { color: var(--amber); }
-    .nav-links {
-      display: flex;
-      gap: 2.2rem;
-      list-style: none;
-      align-items: center;
-    }
-    .nav-links a {
-      color: var(--cream-dim);
-      text-decoration: none;
-      font-size: 0.78rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--amber-light); }
-    .lang-btn {
-      background: none;
-      border: 1px solid rgba(200,133,74,0.4);
-      color: var(--cream-dim);
-      font-family: var(--sans);
-      font-size: 0.72rem;
-      letter-spacing: 0.15em;
-      padding: 0.35rem 0.8rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-transform: uppercase;
-    }
-    .lang-btn:hover, .lang-btn.active {
-      border-color: var(--amber);
-      color: var(--amber);
-    }
-    .nav-right { display: flex; align-items: center; gap: 1rem; }
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2rem;transition:background .4s}
+nav.scrolled{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Playfair Display',serif;font-size:clamp(1rem,2.5vw,1.3rem);font-weight:900;color:var(--gold);letter-spacing:.1em;text-transform:uppercase}
+.nav-logo span{color:var(--text);transition:color .4s}
+.nav-links{display:flex;gap:2rem;list-style:none;align-items:center}
+.nav-links a{font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
 
-    /* hamburger */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-    .hamburger span {
-      display: block;
-      width: 24px; height: 1.5px;
-      background: var(--cream);
-      transition: all 0.3s;
-    }
+/* theme orb – desktop */
+.theme-orb{width:34px;height:34px;border-radius:50%;background:rgba(200,168,75,.1);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;position:relative;transition:all .3s;flex-shrink:0}
+.theme-orb:hover{background:rgba(200,168,75,.2);border-color:rgba(200,168,75,.35)}
+.orb-pulse{position:absolute;inset:-5px;border-radius:50%;background:radial-gradient(circle,rgba(200,168,75,.25),transparent 70%);
+  animation:orbP 2.5s ease-in-out infinite;pointer-events:none}
+@keyframes orbP{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.9;transform:scale(1.3)}}
+.orb-icon{width:15px;height:15px;color:var(--gold);transition:all .3s}
+.orb-icon.hide{opacity:0;transform:scale(0) rotate(90deg)}
+[data-theme="dark"] .orb-sun{opacity:1;transform:scale(1) rotate(0)}
+[data-theme="dark"] .orb-moon{opacity:0;transform:scale(0) rotate(-90deg)}
+[data-theme="light"] .orb-sun{opacity:0;transform:scale(0) rotate(90deg)}
+[data-theme="light"] .orb-moon{opacity:1;transform:scale(1) rotate(0)}
+.orb-icon{position:absolute;transition:opacity .3s,transform .3s}
 
-    /* ── HERO ── */
-    #hero {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 0 3rem 5rem;
-      position: relative;
-      overflow: hidden;
-      background: var(--coal);
-    }
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 70% 60% at 60% 40%, rgba(200,133,74,0.08) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 80% at 90% 80%, rgba(200,133,74,0.05) 0%, transparent 60%);
-    }
-    .hero-line {
-      position: absolute;
-      top: 0; bottom: 0;
-      left: 38%;
-      width: 1px;
-      background: linear-gradient(to bottom, transparent, rgba(200,133,74,0.25) 30%, rgba(200,133,74,0.25) 70%, transparent);
-    }
-    .hero-tag {
-      font-size: 0.72rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--amber);
-      margin-bottom: 1.2rem;
-      position: relative;
-    }
-    .hero-title {
-      font-family: var(--serif);
-      font-size: clamp(3rem, 14vw, 10rem);
-      line-height: 0.92;
-      font-weight: 400;
-      position: relative;
-      word-break: keep-all;
-    }
-    .hero-title em {
-      font-style: italic;
-      color: var(--amber-light);
-    }
-    .hero-sub {
-      position: absolute;
-      right: 3rem;
-      bottom: 5rem;
-      text-align: right;
-      max-width: 280px;
-    }
-    .hero-sub p {
-      font-size: 0.88rem;
-      line-height: 1.7;
-      color: var(--cream-dim);
-    }
-    .hero-sub .cta {
-      display: inline-block;
-      margin-top: 1.5rem;
-      padding: 0.8rem 2rem;
-      border: 1px solid var(--amber);
-      color: var(--amber);
-      text-decoration: none;
-      font-size: 0.75rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      transition: all 0.3s;
-    }
-    .hero-sub .cta:hover {
-      background: var(--amber);
-      color: var(--coal);
-    }
-    .scroll-hint {
-      position: absolute;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-      opacity: 0.4;
-    }
-    .scroll-hint span { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; }
-    .scroll-hint::after {
-      content: '';
-      width: 1px; height: 40px;
-      background: var(--amber);
-      animation: scrollline 1.8s ease-in-out infinite;
-    }
-    @keyframes scrollline {
-      0% { transform: scaleY(0); transform-origin: top; }
-      50% { transform: scaleY(1); transform-origin: top; }
-      51% { transform: scaleY(1); transform-origin: bottom; }
-      100% { transform: scaleY(0); transform-origin: bottom; }
-    }
+/* hamburger */
+.hamburger{display:none;flex-direction:column;gap:5px;padding:8px;z-index:950}
+.hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s cubic-bezier(.23,1,.32,1)}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 
-    /* ── SECTIONS ── */
-    section { padding: clamp(4rem, 10vw, 7rem) clamp(1.2rem, 5vw, 3rem); }
-    .section-label {
-      font-size: clamp(0.62rem, 1.5vw, 0.68rem);
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--amber);
-      margin-bottom: 1rem;
-    }
-    .section-title {
-      font-family: var(--serif);
-      font-size: clamp(1.8rem, 5vw, 3.8rem);
-      font-weight: 400;
-      line-height: 1.1;
-      margin-bottom: 2rem;
-    }
-    .divider {
-      width: 60px; height: 1px;
-      background: var(--amber);
-      margin-bottom: 3rem;
-    }
+/* mobile menu */
+.mobile-menu{display:none;position:fixed;inset:0;z-index:800;background:var(--glass);backdrop-filter:blur(20px);
+  flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;opacity:0;pointer-events:none;transition:opacity .3s}
+.mobile-menu.open{opacity:1;pointer-events:all}
+.mobile-menu a{font-family:'Playfair Display',serif;font-size:clamp(2rem,8vw,3rem);font-weight:700;color:var(--text);transition:color .2s}
+.mobile-menu a:hover{color:var(--gold)}
 
-    /* ── MEIST ── */
-    #meist {
-      background: var(--dark);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6rem;
-      align-items: center;
-    }
-    .meist-text p {
-      font-size: 1rem;
-      line-height: 1.85;
-      color: var(--cream-dim);
-      margin-bottom: 1.2rem;
-    }
-    .meist-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-      margin-top: 3rem;
-      padding-top: 3rem;
-      border-top: 1px solid rgba(200,133,74,0.15);
-    }
-    .stat-num {
-      font-family: var(--serif);
-      font-size: 2.5rem;
-      color: var(--amber);
-      font-weight: 400;
-    }
-    .stat-label {
-      font-size: 0.72rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--cream-dim);
-      margin-top: 0.3rem;
-    }
-    .meist-visual {
-      position: relative;
-    }
-    .visual-box {
-      aspect-ratio: 3/4;
-      background: var(--mid);
-      border: 1px solid rgba(200,133,74,0.12);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .visual-box::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 40% 30%, rgba(200,133,74,0.15), transparent 60%);
-    }
-    .visual-placeholder {
-      font-family: var(--serif);
-      font-size: 5rem;
-      color: rgba(200,133,74,0.2);
-      font-style: italic;
-      position: relative;
-    }
-    .visual-corner {
-      position: absolute;
-      bottom: -1.5rem; right: -1.5rem;
-      width: 140px; height: 140px;
-      border: 1px solid rgba(200,133,74,0.25);
-    }
+@media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}.mobile-menu{display:flex}}
 
-    /* ── MENU ── */
-    #menu { background: var(--coal); }
-    .menu-tabs {
-      display: flex;
-      gap: 0;
-      margin-bottom: 3.5rem;
-      border-bottom: 1px solid rgba(200,133,74,0.15);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .menu-tabs::-webkit-scrollbar { display: none; }
-    .menu-tab {
-      background: none;
-      border: none;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      padding: 0.8rem clamp(0.8rem, 2.5vw, 1.8rem);
-      color: var(--cream-dim);
-      font-family: var(--sans);
-      font-size: clamp(0.65rem, 1.8vw, 0.78rem);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .menu-tab.active {
-      color: var(--amber);
-      border-bottom-color: var(--amber);
-    }
-    .menu-tab:hover { color: var(--amber-light); }
-    .menu-panel { display: none; }
-    .menu-panel.active { display: block; }
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
-      gap: 0;
-    }
-    .menu-item {
-      padding: 1.4rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 1rem;
-      min-width: 0;
-    }
-    .menu-item:nth-child(even) { padding-left: 2rem; }
-    .menu-item-left { flex: 1; }
-    .menu-item-name {
-      font-size: clamp(0.9rem, 2.2vw, 1rem);
-      color: var(--cream);
-      margin-bottom: 0.25rem;
-      overflow-wrap: break-word;
-    }
-    .menu-item-desc {
-      font-size: clamp(0.75rem, 1.8vw, 0.8rem);
-      color: var(--cream-dim);
-      line-height: 1.5;
-      overflow-wrap: break-word;
-    }
-    .menu-item-tags {
-      display: flex;
-      gap: 0.4rem;
-      margin-top: 0.5rem;
-    }
-    .tag {
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.5rem;
-      border: 1px solid rgba(200,133,74,0.3);
-      color: var(--amber);
-    }
-    .menu-item-price {
-      font-family: var(--serif);
-      font-size: 1.1rem;
-      color: var(--amber);
-      white-space: nowrap;
-    }
+/* floating pill – mobile */
+.theme-pill{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:850;
+  background:var(--card);border:1px solid var(--border);border-radius:50px;padding:4px;
+  display:flex;align-items:center;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  box-shadow:0 8px 32px rgba(0,0,0,.25);transition:background .4s,border-color .4s;gap:2px}
+.pill-btn{padding:.42rem 1rem;border-radius:50px;font-size:.72rem;font-weight:600;
+  display:flex;align-items:center;gap:.35rem;color:var(--text3);transition:all .3s;white-space:nowrap}
+.pill-btn.active{color:var(--text);background:rgba(200,168,75,.18)}
+@media(min-width:769px){.theme-pill{display:none}}
 
-    /* ── EVENTS ── */
-    #events { background: var(--dark); }
-    .events-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
-      gap: 1.5rem;
-    }
-    .event-card {
-      border: 1px solid rgba(200,133,74,0.15);
-      padding: 2rem;
-      position: relative;
-      transition: border-color 0.3s;
-      cursor: pointer;
-    }
-    .event-card:hover { border-color: rgba(200,133,74,0.4); }
-    .event-date-box {
-      display: flex;
-      align-items: baseline;
-      gap: 0.5rem;
-      margin-bottom: 1.2rem;
-    }
-    .event-day {
-      font-family: var(--serif);
-      font-size: 3rem;
-      line-height: 1;
-      color: var(--amber);
-    }
-    .event-month {
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--cream-dim);
-    }
-    .event-title {
-      font-family: var(--serif);
-      font-size: 1.3rem;
-      margin-bottom: 0.6rem;
-    }
-    .event-desc {
-      font-size: 0.85rem;
-      color: var(--cream-dim);
-      line-height: 1.6;
-    }
-    .event-time {
-      margin-top: 1.2rem;
-      font-size: 0.72rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--amber);
-    }
-    .no-events {
-      grid-column: 1/-1;
-      text-align: center;
-      padding: 4rem;
-      color: var(--cream-dim);
-      font-style: italic;
-      font-family: var(--serif);
-      font-size: 1.2rem;
-    }
+/* ── HERO ── */
+#hero{position:relative;min-height:100svh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:8rem 1.5rem 5rem;overflow:hidden}
+.hero-bg{position:absolute;inset:0;
+  background:radial-gradient(ellipse 100% 55% at 50% 110%,rgba(200,168,75,.14) 0%,transparent 55%),
+  linear-gradient(175deg,#080604 0%,#1c1208 55%,var(--bg) 100%);transition:background .4s}
+[data-theme="light"] .hero-bg{background:
+  radial-gradient(ellipse 100% 55% at 50% 110%,rgba(200,168,75,.18) 0%,transparent 55%),
+  linear-gradient(175deg,#e8dfc8 0%,#f0e8d4 55%,var(--bg) 100%)}
+.hero-grid{position:absolute;inset:0;
+  background-image:linear-gradient(var(--border2) 1px,transparent 1px),linear-gradient(90deg,var(--border2) 1px,transparent 1px);
+  background-size:55px 55px;
+  mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 15%,transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 15%,transparent 80%)}
 
-    /* ── BRONEERING ── */
-    #broneering {
-      background: var(--coal);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6rem;
-      align-items: start;
-    }
-    .broneering-info p {
-      font-size: 0.95rem;
-      line-height: 1.8;
-      color: var(--cream-dim);
-      margin-bottom: 2rem;
-    }
-    .hours-grid {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 0.6rem 2rem;
-      margin-top: 1rem;
-    }
-    .hours-day {
-      font-size: 0.78rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--cream-dim);
-    }
-    .hours-time {
-      font-size: 0.88rem;
-      color: var(--cream);
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-    label {
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--cream-dim);
-    }
-    input, select, textarea {
-      background: var(--mid);
-      border: 1px solid rgba(200,133,74,0.2);
-      color: var(--cream);
-      font-family: var(--sans);
-      font-size: 0.9rem;
-      padding: 0.85rem 1rem;
-      outline: none;
-      transition: border-color 0.2s;
-      width: 100%;
-      appearance: none;
-    }
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--amber);
-    }
-    select option { background: var(--mid); }
-    textarea { resize: vertical; min-height: 100px; }
-    .submit-btn {
-      background: var(--amber);
-      border: none;
-      color: var(--coal);
-      font-family: var(--sans);
-      font-size: 0.78rem;
-      font-weight: 500;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      padding: 1.1rem 2.5rem;
-      cursor: pointer;
-      transition: background 0.2s;
-      align-self: flex-start;
-      margin-top: 0.5rem;
-    }
-    .submit-btn:hover { background: var(--amber-light); }
-    .form-msg {
-      font-size: 0.85rem;
-      color: var(--amber);
-      display: none;
-      margin-top: 0.5rem;
-    }
+/* aurora */
+.aurora{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.aur{position:absolute;border-radius:50%;filter:blur(75px);will-change:transform,opacity;mix-blend-mode:screen}
+.aur:nth-child(1){width:65vw;height:28vh;top:8%;left:-8%;animation:aur1 14s ease-in-out infinite}
+.aur:nth-child(2){width:50vw;height:22vh;top:3%;right:-5%;animation:aur2 17s ease-in-out infinite}
+.aur:nth-child(3){width:45vw;height:18vh;top:18%;left:25%;animation:aur3 11s ease-in-out infinite}
+.aur:nth-child(4){width:35vw;height:35vh;bottom:8%;right:5%;animation:aur4 20s ease-in-out infinite}
+[data-theme="dark"] .aur:nth-child(1){background:radial-gradient(ellipse,rgba(13,148,136,.28) 0%,transparent 70%)}
+[data-theme="dark"] .aur:nth-child(2){background:radial-gradient(ellipse,rgba(34,197,94,.15) 0%,transparent 70%)}
+[data-theme="dark"] .aur:nth-child(3){background:radial-gradient(ellipse,rgba(139,92,246,.13) 0%,transparent 70%)}
+[data-theme="dark"] .aur:nth-child(4){background:radial-gradient(ellipse,rgba(200,168,75,.09) 0%,transparent 70%)}
+[data-theme="light"] .aur:nth-child(1){background:radial-gradient(ellipse,rgba(13,148,136,.14) 0%,transparent 70%)}
+[data-theme="light"] .aur:nth-child(2){background:radial-gradient(ellipse,rgba(34,197,94,.1) 0%,transparent 70%)}
+[data-theme="light"] .aur:nth-child(3){background:radial-gradient(ellipse,rgba(139,92,246,.08) 0%,transparent 70%)}
+[data-theme="light"] .aur:nth-child(4){background:radial-gradient(ellipse,rgba(200,168,75,.1) 0%,transparent 70%)}
+@keyframes aur1{0%,100%{transform:translate(0,0) rotate(-12deg) scale(1);opacity:.6}40%{transform:translate(7vw,-3vh) rotate(-6deg) scale(1.12);opacity:.9}70%{transform:translate(-4vw,2vh) rotate(-18deg) scale(.93);opacity:.45}}
+@keyframes aur2{0%,100%{transform:translate(0,0) rotate(9deg) scale(1);opacity:.5}35%{transform:translate(-5vw,4vh) rotate(14deg) scale(1.1);opacity:.8}65%{transform:translate(3vw,-2vh) rotate(4deg) scale(.9);opacity:.4}}
+@keyframes aur3{0%,100%{transform:translate(0,0) scale(1);opacity:.4}50%{transform:translate(6vw,5vh) rotate(10deg) scale(1.18);opacity:.7}}
+@keyframes aur4{0%,100%{transform:translate(0,0) scale(1);opacity:.28}45%{transform:translate(-4vw,-4vh) scale(1.25);opacity:.55}}
 
-    /* ── CONTACT ── */
-    #kontakt {
-      background: var(--dark);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6rem;
-      align-items: start;
-    }
-    .contact-item {
-      margin-bottom: 2rem;
-    }
-    .contact-label {
-      font-size: 0.68rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--amber);
-      margin-bottom: 0.5rem;
-    }
-    .contact-value {
-      font-size: 1rem;
-      color: var(--cream);
-      line-height: 1.6;
-    }
-    .contact-value a {
-      color: var(--cream);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .contact-value a:hover { color: var(--amber-light); }
-    .social-links {
-      display: flex;
-      gap: 1rem;
-      margin-top: 2.5rem;
-    }
-    .social-link {
-      display: inline-block;
-      padding: 0.6rem 1.2rem;
-      border: 1px solid rgba(200,133,74,0.3);
-      color: var(--cream-dim);
-      text-decoration: none;
-      font-size: 0.72rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      transition: all 0.2s;
-    }
-    .social-link:hover {
-      border-color: var(--amber);
-      color: var(--amber);
-    }
-    .map-box {
-      aspect-ratio: 4/3;
-      background: var(--mid);
-      border: 1px solid rgba(200,133,74,0.12);
-      overflow: hidden;
-      position: relative;
-    }
-    .map-box iframe {
-      width: 100%; height: 100%;
-      border: none;
-      filter: grayscale(1) invert(1) contrast(0.85) brightness(0.7);
-    }
-    .map-box::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border: 1px solid rgba(200,133,74,0.2);
-      pointer-events: none;
-    }
+.hero-content{position:relative;z-index:2;max-width:980px}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.8rem;font-size:.68rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;transition:color .4s}
+.hero-eyebrow::before,.hero-eyebrow::after{content:'';display:block;width:26px;height:1px;background:var(--gold);opacity:.5}
+.hero-title{margin-bottom:1.5rem}
+.hero-title .line1{display:block;color:var(--text);text-transform:uppercase;transition:color .4s}
+.hero-title .line2{display:block;font-style:italic}
+.hero-sub{font-size:clamp(.95rem,2.2vw,1.1rem);color:var(--text3);max-width:520px;margin:0 auto 2.5rem;line-height:1.75;transition:color .4s}
+.hero-ctas{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-primary{padding:.9rem 2.2rem;background:linear-gradient(135deg,rgba(200,168,75,.9),rgba(232,200,106,.9));color:#1a1208;font-weight:700;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;border-radius:50px;box-shadow:0 4px 28px rgba(200,168,75,.3);transition:transform .22s,box-shadow .22s;display:inline-flex;align-items:center;min-height:48px}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 10px 40px rgba(200,168,75,.45)}
+.btn-ghost{padding:.9rem 2.2rem;border:1px solid var(--border);color:var(--text);font-weight:500;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;border-radius:50px;transition:border-color .22s,background .22s;display:inline-flex;align-items:center;min-height:48px}
+.btn-ghost:hover{border-color:var(--gold);background:rgba(200,168,75,.1)}
+.hero-stats{display:flex;justify-content:center;flex-wrap:wrap;gap:2.5rem;margin-top:4rem;padding-top:3rem;border-top:1px solid var(--border2)}
+.stat{text-align:center}
+.stat-n{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:900;color:var(--gold);line-height:1;transition:color .4s}
+.stat-l{font-size:.7rem;color:var(--text3);letter-spacing:.12em;text-transform:uppercase;margin-top:.3rem;transition:color .4s}
+.hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;color:var(--text3);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;z-index:2;transition:color .4s}
+.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--gold),transparent);animation:spulse 2.2s ease-in-out infinite}
+@keyframes spulse{0%,100%{opacity:.2}50%{opacity:1}}
+.particles{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.particle{position:absolute;border-radius:50%;opacity:0;background:radial-gradient(circle,var(--gold),rgba(200,168,75,.3),transparent);animation:pfloat linear infinite}
+@keyframes pfloat{0%{transform:translateY(0) scale(1);opacity:0}8%{opacity:.4}92%{opacity:.04}100%{transform:translateY(-120vh) scale(.2);opacity:0}}
 
-    /* ── FOOTER ── */
-    footer {
-      background: var(--coal);
-      border-top: 1px solid rgba(200,133,74,0.1);
-      padding: 2rem 3rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    footer p {
-      font-size: 0.75rem;
-      color: var(--cream-dim);
-      letter-spacing: 0.05em;
-    }
-    .footer-logo {
-      font-family: var(--serif);
-      font-size: 1.1rem;
-      color: var(--cream-dim);
-    }
-    .footer-logo span { color: var(--amber); }
+/* ── MYTH ── */
+#myth{background:var(--bg2);position:relative;transition:background .4s}
+.myth-layout{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.myth-visual{display:flex;align-items:center;justify-content:center}
+.dragon-ring{width:clamp(200px,35vw,300px);height:clamp(200px,35vw,300px);border-radius:50%;
+  background:radial-gradient(circle at 38% 38%,rgba(200,168,75,.1),rgba(200,168,75,.04) 50%,transparent 75%);
+  border:1px solid var(--border);display:flex;align-items:center;justify-content:center;position:relative;animation:dpulse 4s ease-in-out infinite}
+@keyframes dpulse{0%,100%{box-shadow:0 0 35px rgba(200,168,75,.07),inset 0 0 35px rgba(200,168,75,.04)}50%{box-shadow:0 0 80px rgba(200,168,75,.2),inset 0 0 55px rgba(200,168,75,.09)}}
+.dragon-ring::before{content:'';position:absolute;inset:-18px;border-radius:50%;border:1px solid var(--border2);animation:dpulse 4s ease-in-out infinite reverse}
+.dragon-glyph{font-size:clamp(4.5rem,10vw,7rem);line-height:1;filter:drop-shadow(0 0 22px rgba(200,168,75,.4));user-select:none}
+.year-badge{position:absolute;bottom:-12px;right:-12px;background:linear-gradient(135deg,rgba(200,168,75,.9),rgba(232,200,106,.9));color:#1a1208;font-weight:700;font-size:.78rem;padding:.45rem 1rem;border-radius:50px;letter-spacing:.06em}
+.myth-copy h2{margin-bottom:1.4rem}
+.myth-copy p{margin-bottom:1.1rem}
+.myth-quote{margin-top:2rem;padding:1.4rem 1.5rem;border-left:3px solid var(--gold);background:rgba(200,168,75,.06);border-radius:0 var(--r) var(--r) 0}
+.myth-quote p{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(.95rem,2.2vw,1.15rem);color:var(--text);margin:0;transition:color .4s}
+@media(max-width:768px){.myth-layout{grid-template-columns:1fr;gap:3rem}.myth-visual{order:-1}}
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      nav { padding: 1rem 1.2rem; }
-      nav.scrolled { padding: 0.8rem 1.2rem; }
-      .nav-links { display: none; }
-      .nav-links.open {
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(26,23,20,0.98);
-        justify-content: center;
-        align-items: center;
-        gap: 2.5rem;
-        z-index: 99;
-        overflow-y: auto;
-      }
-      .nav-links.open a { font-size: 1.2rem; }
-      .hamburger { display: flex; }
+/* ── BEERS STICKY SCROLL ── */
+#beers{padding:0;position:relative}
+.beers-scroll-wrap{position:relative;height:calc(24 * 75vh)}
+.beers-viewport{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;flex-direction:column}
 
-      #hero {
-        padding: 0 1.2rem 4rem;
-        min-height: 100svh;
-      }
-      .hero-line { display: none; }
-      .hero-tag { font-size: 0.62rem; letter-spacing: 0.2em; }
-      .hero-sub {
-        position: static;
-        text-align: left;
-        max-width: 100%;
-        margin-top: 1.5rem;
-      }
-      .hero-sub p { font-size: 0.85rem; }
-      .scroll-hint { display: none; }
+/* bg layers for crossfade */
+.beer-bg-a,.beer-bg-b{position:absolute;inset:0;transition:opacity .7s ease}
+.beer-bg-a{z-index:0}.beer-bg-b{z-index:1;opacity:0}
 
-      #meist, #broneering, #kontakt {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-      }
-      .meist-visual { order: -1; }
-      .visual-box { aspect-ratio: 4/3; }
-      .visual-corner { display: none; }
-      .meist-stats { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-      .stat-num { font-size: clamp(1.6rem, 5vw, 2.5rem); }
+/* layout */
+.beer-scene{position:relative;z-index:2;height:100%;display:grid;grid-template-columns:1fr 1.1fr;align-items:center;padding:5rem clamp(1.5rem,5vw,4rem) 4rem;max-width:1200px;margin:0 auto;width:100%}
+@media(max-width:768px){.beer-scene{grid-template-columns:1fr;grid-template-rows:auto 1fr;padding:4.5rem 1.5rem 5rem;text-align:center}}
 
-      .menu-item:nth-child(even) { padding-left: 0; }
-      .menu-item-price { font-size: 1rem; }
+/* info panel */
+.beer-info{display:flex;flex-direction:column;gap:.5rem}
+.beer-counter-row{display:flex;align-items:center;gap:1rem;margin-bottom:.5rem}
+.beer-counter{font-size:.72rem;font-weight:600;letter-spacing:.2em;color:var(--gold);transition:color .4s}
+.beer-counter-line{flex:1;height:1px;background:var(--border2);max-width:60px}
+.beer-number-big{font-family:'Playfair Display',serif;font-size:clamp(4rem,10vw,7rem);font-weight:900;line-height:.9;color:var(--gold);opacity:.08;position:absolute;left:clamp(1.5rem,5vw,4rem);bottom:3rem;user-select:none;transition:color .4s}
+.beer-scene-name{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,4rem);font-weight:900;line-height:1;color:var(--text);transition:color .4s;margin-bottom:.5rem}
+.beer-scene-type{font-size:clamp(.85rem,2vw,.95rem);color:var(--text3);letter-spacing:.08em;text-transform:uppercase;font-weight:500;transition:color .4s}
+.beer-scene-bry{font-family:'Playfair Display',serif;font-size:clamp(1rem,2.5vw,1.3rem);color:var(--text2);font-style:italic;transition:color .4s}
+.beer-tap-pill{display:inline-flex;align-items:center;gap:.5rem;margin-top:1rem;padding:.45rem 1rem;background:rgba(200,168,75,.1);border:1px solid var(--border);border-radius:50px;font-size:.72rem;font-weight:500;color:var(--gold);width:fit-content;transition:all .4s}
+.beer-tap-pill::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);animation:dotPulse 1.5s ease-in-out infinite}
+@keyframes dotPulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
 
-      .submit-btn { width: 100%; text-align: center; }
+/* can stage */
+.beer-can-stage{display:flex;align-items:center;justify-content:center;height:100%;position:relative}
+.beer-can-img{max-height:min(70vh,520px);max-width:90%;object-fit:contain;filter:drop-shadow(0 24px 48px rgba(0,0,0,.55)) drop-shadow(0 0 30px rgba(200,168,75,.15));will-change:transform}
+@media(max-width:768px){.beer-can-stage{max-height:45vmax}.beer-can-img{max-height:min(42vh,320px)}}
 
-      .map-box { aspect-ratio: 16/9; }
+/* spring animations */
+@keyframes springUp{
+  0%{transform:translateY(90px) scale(.82);opacity:0}
+  55%{transform:translateY(-14px) scale(1.04);opacity:1}
+  72%{transform:translateY(6px) scale(.99)}
+  86%{transform:translateY(-3px) scale(1.005)}
+  100%{transform:translateY(0) scale(1);opacity:1}
+}
+@keyframes springDown{
+  0%{transform:translateY(-90px) scale(.82);opacity:0}
+  55%{transform:translateY(14px) scale(1.04);opacity:1}
+  72%{transform:translateY(-6px) scale(.99)}
+  86%{transform:translateY(3px) scale(1.005)}
+  100%{transform:translateY(0) scale(1);opacity:1}
+}
+@keyframes infoIn{0%{opacity:0;transform:translateX(20px)}100%{opacity:1;transform:translateX(0)}}
+@keyframes infoOut{0%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(-20px)}}
+.spring-up{animation:springUp .7s cubic-bezier(.25,.46,.45,.94) forwards}
+.spring-down{animation:springDown .7s cubic-bezier(.25,.46,.45,.94) forwards}
+.info-in{animation:infoIn .45s cubic-bezier(.23,1,.32,1) forwards}
+.info-out{animation:infoOut .2s ease-in forwards;pointer-events:none}
 
-      .social-links { flex-wrap: wrap; }
+/* float idle */
+@keyframes canFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.beer-can-img.idle{animation:canFloat 4s ease-in-out infinite}
 
-      footer {
-        flex-direction: column;
-        gap: 0.6rem;
-        text-align: center;
-        padding: 1.5rem 1.2rem;
-      }
-    }
+/* progress bar */
+.beer-progress{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--border2);z-index:10}
+.beer-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .1s linear;width:0}
 
-    @media (max-width: 480px) {
-      .hero-title { font-size: clamp(2.8rem, 16vw, 4.5rem); }
-      .event-card { padding: 1.4rem; }
-      .event-day { font-size: 2.2rem; }
-      .form-row { grid-template-columns: 1fr; }
-      .menu-tabs { margin-bottom: 2rem; }
-      .meist-stats { gap: 0.8rem; }
-      .stat-num { font-size: 1.5rem; }
-      .stat-label { font-size: 0.62rem; letter-spacing: 0.08em; }
-      .section-title { margin-bottom: 1.2rem; }
-      .divider { margin-bottom: 2rem; }
-    }
+/* beers section header (above sticky) */
+.beers-section-header{padding:clamp(3rem,6vw,5rem) clamp(1.5rem,5vw,4rem) 0;position:relative;z-index:1}
+.beers-foot{padding:2rem clamp(1.5rem,5vw,4rem) clamp(3rem,6vw,5rem);text-align:center}
+.beers-note{font-size:.8rem;color:var(--text3);display:flex;align-items:center;justify-content:center;gap:.75rem;transition:color .4s}
+.beers-note::before,.beers-note::after{content:'';display:block;width:36px;height:1px;background:var(--border)}
 
-    /* ── FADE IN ANIMATION ── */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+/* ── EVENTS ── */
+#events{background:var(--bg2);transition:background .4s}
+.events-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:3rem}
+@media(max-width:900px){.events-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.events-grid{grid-template-columns:1fr}}
+.event-card{background:var(--card);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--border);border-radius:var(--rl);padding:2rem 1.5rem;opacity:0;transform:translateY(32px);transition:opacity var(--anim-dur,.6s) cubic-bezier(.23,1,.32,1),transform var(--anim-dur,.6s) cubic-bezier(.23,1,.32,1),border-color .25s,box-shadow .3s,background .4s}
+.event-card.in{opacity:1;transform:translateY(0)}
+.event-card:hover{border-color:rgba(200,168,75,.28);transform:translateY(-5px);box-shadow:0 18px 50px rgba(0,0,0,.15),0 0 30px rgba(200,168,75,.05)}
+.ev-icon{font-size:2.4rem;margin-bottom:1rem;display:block}
+.ev-tag{font-size:.62rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem;display:block;transition:color .4s}
+.event-card h3{margin-bottom:.7rem;color:var(--text);transition:color .4s}
+.event-card p{font-size:.87rem;line-height:1.65;margin:0}
+.ev-freq{display:inline-flex;align-items:center;gap:.4rem;margin-top:1.2rem;font-size:.72rem;color:var(--gold);font-weight:500;transition:color .4s}
+.ev-freq::before{content:'↻'}
+
+/* ── CONTACT ── */
+#contact{background:var(--bg);transition:background .4s}
+.contact-layout{display:grid;grid-template-columns:1fr 1.2fr;gap:4rem;align-items:start}
+@media(max-width:768px){.contact-layout{grid-template-columns:1fr;gap:3rem}}
+.info-block{margin-bottom:2rem}
+.info-lbl{font-size:.62rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;transition:color .4s}
+.info-val{font-size:clamp(.88rem,2vw,1rem);color:var(--text);transition:color .4s}
+.hours-tbl{width:100%;border-collapse:collapse;margin-top:.4rem}
+.hours-tbl tr{border-bottom:1px solid var(--border2)}
+.hours-tbl tr:last-child{border-bottom:none}
+.hours-tbl td{padding:.52rem 0;font-size:.88rem;transition:color .4s}
+.hours-tbl td:first-child{color:var(--text3);width:55%}
+.hours-tbl td:last-child{color:var(--text);text-align:right;font-weight:500}
+.clinks{display:flex;gap:.75rem;margin-top:2rem;flex-wrap:wrap}
+.clink{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.2rem;border:1px solid var(--border);border-radius:50px;font-size:.78rem;font-weight:500;color:var(--text);transition:border-color .22s,background .22s,color .4s;min-height:44px}
+.clink:hover{border-color:var(--gold);background:rgba(200,168,75,.08)}
+.map-box{border-radius:var(--rl);border:1px solid var(--border);min-height:380px;
+  background:var(--bg2);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:2.5rem;text-align:center;transition:background .4s,border-color .4s}
+.map-pin{font-size:3rem;filter:drop-shadow(0 0 18px rgba(200,168,75,.4));animation:pinb 2.8s ease-in-out infinite}
+@keyframes pinb{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.map-addr{font-size:1rem;color:var(--text);font-weight:600;transition:color .4s}
+.map-sub2{font-size:.8rem;color:var(--text3);transition:color .4s}
+.map-cta{margin-top:.5rem;padding:.75rem 1.8rem;background:linear-gradient(135deg,rgba(200,168,75,.9),rgba(232,200,106,.9));color:#1a1208;font-weight:700;font-size:.83rem;border-radius:50px;display:inline-flex;align-items:center;min-height:44px;transition:transform .22s,box-shadow .22s}
+.map-cta:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(200,168,75,.3)}
+
+/* ── FOOTER ── */
+footer{background:var(--bg2);padding:2.5rem clamp(1.5rem,5vw,4rem);border-top:1px solid var(--border2);transition:background .4s,border-color .4s}
+.foot-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.foot-logo{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:900;color:var(--gold);letter-spacing:.06em;transition:color .4s}
+.foot-copy{font-size:.73rem;color:var(--text3);transition:color .4s}
+.foot-sub{font-size:.68rem;color:var(--text3);opacity:.4;letter-spacing:.05em;transition:color .4s}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.23,1,.32,1),transform .7s cubic-bezier(.23,1,.32,1)}
+.rv.in{opacity:1;transform:translateY(0)}
   </style>
 </head>
 <body>
 
 <!-- NAV -->
-<nav id="navbar">
-  <a href="#hero" class="nav-logo">F<span>-</span>hoone</a>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#meist" data-et="Meist" data-en="About">Meist</a></li>
-    <li><a href="#menu" data-et="Menüü" data-en="Menu">Menüü</a></li>
-    <li><a href="#events" data-et="Sündmused" data-en="Events">Sündmused</a></li>
-    <li><a href="#broneering" data-et="Broneering" data-en="Reserve">Broneering</a></li>
-    <li><a href="#kontakt" data-et="Kontakt" data-en="Contact">Kontakt</a></li>
+<nav id="nav">
+  <div class="nav-logo">PÕHJA<span>KONN</span></div>
+  <ul class="nav-links">
+    <li><a href="#myth">Müüt</a></li>
+    <li><a href="#beers">Kraanid</a></li>
+    <li><a href="#events">Üritused</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+    <li>
+      <button class="theme-orb" id="themeToggle" aria-label="Vaheta teemat">
+        <div class="orb-pulse"></div>
+        <svg class="orb-icon orb-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="orb-icon orb-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </li>
   </ul>
-  <div class="nav-right">
-    <button class="lang-btn active" id="btnET" onclick="setLang('et')">ET</button>
-    <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
-    <button class="hamburger" id="hamburger" aria-label="Menüü" onclick="toggleNav()">
-      <span></span><span></span><span></span>
+  <div style="display:flex;align-items:center;gap:.75rem">
+    <button class="theme-orb" id="themeToggleMob" aria-label="Vaheta teemat" style="display:none">
+      <div class="orb-pulse"></div>
+      <svg class="orb-icon orb-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="orb-icon orb-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     </button>
+    <button class="hamburger" id="ham" aria-label="Ava menüü"><span></span><span></span><span></span></button>
   </div>
 </nav>
+
+<div class="mobile-menu" id="mob">
+  <a href="#myth" class="mlink">Müüt</a>
+  <a href="#beers" class="mlink">Kraanid</a>
+  <a href="#events" class="mlink">Üritused</a>
+  <a href="#contact" class="mlink">Kontakt</a>
+</div>
+
+<!-- floating pill – mobile only -->
+<div class="theme-pill" id="themePill">
+  <button class="pill-btn" id="pillDark">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    Dark
+  </button>
+  <button class="pill-btn" id="pillLight">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+    Light
+  </button>
+</div>
 
 <!-- HERO -->
 <section id="hero">
   <div class="hero-bg"></div>
-  <div class="hero-line"></div>
-  <p class="hero-tag" data-et="Telliskivi Loomelinnak — Tallinn" data-en="Telliskivi Creative City — Tallinn">Telliskivi Loomelinnak — Tallinn</p>
-  <h1 class="hero-title">F‑<em>hoone</em></h1>
-  <div class="hero-sub">
-    <p data-et="Endine tehasehoone, mis on muutunud Tallinna kõige elujõulisemaks söögikohaks. Tule nagu oled." data-en="A former factory hall turned into Tallinn's most vibrant dining destination. Come as you are.">
-      Endine tehasehoone, mis on muutunud Tallinna kõige elujõulisemaks söögikohaks. Tule nagu oled.
-    </p>
-    <a href="#broneering" class="cta" data-et="Broneeri laud" data-en="Reserve a table">Broneeri laud</a>
+  <div class="hero-grid"></div>
+  <div class="aurora" aria-hidden="true"><div class="aur"></div><div class="aur"></div><div class="aur"></div><div class="aur"></div></div>
+  <div class="particles" id="ptcl"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span>Telliskivi Loomelinnak · Tallinn</span></div>
+    <h1 class="hero-title"><span class="line1">PÕHJA</span><span class="line2 glow-text">Konn</span></h1>
+    <p class="hero-sub">Tallinna boheemlaslikuma linnaosa käsitööõlle baas. 24 Põhjala õlut. Eesti parimate pruulikodade maitsed ühes kohas.</p>
+    <div class="hero-ctas">
+      <a href="#beers" class="btn-primary">Vaata kraane</a>
+      <a href="#contact" class="btn-ghost">Lahtiolekuajad</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n">24</div><div class="stat-l">Kraani</div></div>
+      <div class="stat"><div class="stat-n">2022</div><div class="stat-l">Asutatud</div></div>
+      <div class="stat"><div class="stat-n">60a</div><div class="stat-l">Telliskivi</div></div>
+    </div>
   </div>
-  <div class="scroll-hint"><span data-et="Keri" data-en="Scroll">Keri</span></div>
+  <div class="hero-scroll" aria-hidden="true"><div class="scroll-line"></div><span>Keri</span></div>
 </section>
 
-<!-- MEIST -->
-<section id="meist">
-  <div class="meist-text fade-in">
-    <p class="section-label" data-et="Meist" data-en="About us">Meist</p>
-    <h2 class="section-title" data-et="Rohkem kui lihtsalt restoran" data-en="More than just a restaurant">Rohkem kui lihtsalt restoran</h2>
-    <div class="divider"></div>
-    <p data-et="F-hoone on sündinud Telliskivi Loomelinnak vanas tööstushoones, kus tööstusliku arhitektuuri ilu kohtub sooja kogukondliku vaimuga. Siin on alati olnud koht, kuhu tullakse nii hommikukohvile kui ka hilisõhtustele kokteilidele." data-en="F-hoone was born in an old industrial building of Telliskivi Creative City, where the beauty of industrial architecture meets a warm community spirit. This has always been a place where people come for morning coffee and late-night cocktails alike.">
-      F-hoone on sündinud Telliskivi Loomelinnak vanas tööstushoones, kus tööstusliku arhitektuuri ilu kohtub sooja kogukondliku vaimuga. Siin on alati olnud koht, kuhu tullakse nii hommikukohvile kui ka hilisõhtustele kokteilidele.
-    </p>
-    <p data-et="Meie menüü on loominguline segu maailma köökidest — alates suitsusest burgerist kuni värskeima kalaroani. Kõik on tehtud südamega ja kohalikest koostisosadest, kus võimalik." data-en="Our menu is a creative blend of world cuisines — from a smoky burger to the freshest fish dish. Everything is made with heart and from local ingredients where possible.">
-      Meie menüü on loominguline segu maailma köökidest — alates suitsusest burgerist kuni värskeima kalaroani. Kõik on tehtud südamega ja kohalikest koostisosadest, kus võimalik.
-    </p>
-    <div class="meist-stats">
-      <div>
-        <div class="stat-num">2012</div>
-        <div class="stat-label" data-et="Asutatud" data-en="Founded">Asutatud</div>
-      </div>
-      <div>
-        <div class="stat-num">200+</div>
-        <div class="stat-label" data-et="Istekohta" data-en="Seats">Istekohta</div>
-      </div>
-      <div>
-        <div class="stat-num">7/7</div>
-        <div class="stat-label" data-et="Avatud" data-en="Open">Avatud</div>
-      </div>
-    </div>
-  </div>
-  <div class="meist-visual fade-in">
-    <div class="visual-box">
-      <span class="visual-placeholder">F</span>
-    </div>
-    <div class="visual-corner"></div>
-  </div>
-</section>
+<div class="section-divider"></div>
 
-<!-- MENU -->
-<section id="menu">
-  <div class="fade-in">
-    <p class="section-label" data-et="Menüü" data-en="Menu">Menüü</p>
-    <h2 class="section-title" data-et="Mida serveerime" data-en="What we serve">Mida serveerime</h2>
-    <div class="divider"></div>
-    <div class="menu-tabs">
-      <button class="menu-tab active" onclick="showTab('eelroad')" data-et="Eelroad" data-en="Starters">Eelroad</button>
-      <button class="menu-tab" onclick="showTab('supid')" data-et="Supid" data-en="Soups">Supid</button>
-      <button class="menu-tab" onclick="showTab('hommik')" data-et="Hommik" data-en="Breakfast">Hommik</button>
-      <button class="menu-tab" onclick="showTab('pearoad')" data-et="Pearoad" data-en="Mains">Pearoad</button>
-      <button class="menu-tab" onclick="showTab('magustoidud')" data-et="Magustoidud" data-en="Desserts">Magustoidud</button>
-      <button class="menu-tab" onclick="showTab('kokteilid')" data-et="Kokteilid" data-en="Cocktails">Kokteilid</button>
-    </div>
-
-    <!-- EELROAD -->
-    <div class="menu-panel active" id="tab-eelroad">
-      <div class="menu-grid">
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Marineeritud oliivid" data-en="Marinated olives">Marineeritud oliivid</div>
-            <div class="menu-item-desc" data-et="Ürdid, sidrunikoor, küüslauk" data-en="Herbs, lemon zest, garlic">Ürdid, sidrunikoor, küüslauk</div>
-            <div class="menu-item-tags"><span class="tag" data-et="vegan" data-en="vegan">vegan</span></div>
-          </div>
-          <div class="menu-item-price">4.00€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Seesamikurgid" data-en="Sesame cucumbers">Seesamikurgid</div>
-            <div class="menu-item-desc" data-et="Värske kurk, seesami, sojakaste, ingver" data-en="Fresh cucumber, sesame, soy sauce, ginger">Värske kurk, seesami, sojakaste, ingver</div>
-            <div class="menu-item-tags"><span class="tag" data-et="vegan" data-en="vegan">vegan</span></div>
-          </div>
-          <div class="menu-item-price">4.00€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Seenekrõpsud" data-en="Mushroom chips">Seenekrõpsud</div>
-            <div class="menu-item-desc" data-et="Krõbedad metsaseened, meresoola" data-en="Crispy wild mushrooms, sea salt">Krõbedad metsaseened, meresoola</div>
-            <div class="menu-item-tags"><span class="tag" data-et="vegan" data-en="vegan">vegan</span></div>
-          </div>
-          <div class="menu-item-price">3.00€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Suitsusprotid" data-en="Smoked sprats">Suitsusprotid</div>
-            <div class="menu-item-desc" data-et="Klassikalised eesti suitsusprotid, röstsai" data-en="Classic Estonian smoked sprats, toast">Klassikalised eesti suitsusprotid, röstsai</div>
-          </div>
-          <div class="menu-item-price">3.00€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Itaalia lihavalik" data-en="Italian hams &amp; sausages">Itaalia lihavalik</div>
-            <div class="menu-item-desc" data-et="Prosciutto, salami, chorizo, oliivid, leib" data-en="Prosciutto, salami, chorizo, olives, bread">Prosciutto, salami, chorizo, oliivid, leib</div>
-          </div>
-          <div class="menu-item-price">8.00€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Snäkiplaat kahele" data-en="Snack platter for two">Snäkiplaat kahele</div>
-            <div class="menu-item-desc" data-et="Liha, juust, oliivid, kurgid, leib — täiuslik jagamiseks" data-en="Meat, cheese, olives, pickles, bread — perfect for sharing">Liha, juust, oliivid, kurgid, leib — täiuslik jagamiseks</div>
-          </div>
-          <div class="menu-item-price">18.00€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Taimetoitlane snäkiplaat" data-en="Meatless snack platter">Taimetoitlane snäkiplaat</div>
-            <div class="menu-item-desc" data-et="Juust, hummus, köögiviljad, oliivid, leib" data-en="Cheese, hummus, vegetables, olives, bread">Juust, hummus, köögiviljad, oliivid, leib</div>
-            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
-          </div>
-          <div class="menu-item-price">17.00€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Kartulisalat suitsulõhega" data-en="Potato salad with smoked salmon">Kartulisalat suitsulõhega</div>
-            <div class="menu-item-desc" data-et="Kohalik kartul, suitsulõhe, kapparid, hapukoor" data-en="Local potato, smoked salmon, capers, sour cream">Kohalik kartul, suitsulõhe, kapparid, hapukoor</div>
-          </div>
-          <div class="menu-item-price">8.60€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Burrata hooajaliste tsitruseliste ja ürtidega" data-en="Burrata with seasonal citruses">Burrata hooajaliste tsitruseliste ja ürtidega</div>
-            <div class="menu-item-desc" data-et="Värske burrata, tsitruselised, basiilik, oliiviõli" data-en="Fresh burrata, seasonal citruses, basil, olive oil">Värske burrata, tsitruselised, basiilik, oliiviõli</div>
-            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
-          </div>
-          <div class="menu-item-price">8.60€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Aurutatud bao-saiad" data-en="Steamed bao buns">Aurutatud bao-saiad</div>
-            <div class="menu-item-desc" data-et="Aurutatud bao, sealiha, kimchi, sriracha majonees" data-en="Steamed bao, pork belly, kimchi, sriracha mayo">Aurutatud bao, sealiha, kimchi, sriracha majonees</div>
-          </div>
-          <div class="menu-item-price">9.20€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Aasia kitsejuust" data-en="Asian breaded goat cheese">Aasia kitsejuust</div>
-            <div class="menu-item-desc" data-et="Praetud kitsejuust, magus-vürtsikas kaste, salat" data-en="Fried goat cheese, sweet-chili sauce, mixed greens">Praetud kitsejuust, magus-vürtsikas kaste, salat</div>
-            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
-          </div>
-          <div class="menu-item-price">9.90€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Grillitud maisiribi" data-en="Grilled corn ribs">Grillitud maisiribi</div>
-            <div class="menu-item-desc" data-et="Grillitud mais, vürtsivõi, laimimajonees, koriander" data-en="Grilled corn, spiced butter, lime mayo, coriander">Grillitud mais, vürtsivõi, laimimajonees, koriander</div>
-            <div class="menu-item-tags"><span class="tag" data-et="vegan" data-en="vegan">vegan</span></div>
-          </div>
-          <div class="menu-item-price">6.00€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Lõhe tataki" data-en="Salmon tataki">Lõhe tataki</div>
-            <div class="menu-item-desc" data-et="Pooltoore lõhe, ponzu kaste, avokaado, ingver" data-en="Seared salmon, ponzu sauce, avocado, ginger">Pooltoore lõhe, ponzu kaste, avokaado, ingver</div>
-          </div>
-          <div class="menu-item-price">11.20€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Aiaoa salat" data-en="Garden bean salad">Aiaoa salat</div>
-            <div class="menu-item-desc" data-et="Rohelised oad, feta, tomatid, sidrunivinegrett" data-en="Green beans, feta, tomatoes, lemon vinaigrette">Rohelised oad, feta, tomatid, sidrunivinegrett</div>
-            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
-          </div>
-          <div class="menu-item-price">8.90€</div>
+<!-- MYTH -->
+<section id="myth">
+  <div class="inner">
+    <div class="myth-layout">
+      <div class="myth-visual rv">
+        <div class="dragon-ring">
+          <div class="dragon-glyph" aria-hidden="true">🐉</div>
+          <div class="year-badge">DIPA · 2015</div>
         </div>
       </div>
-    </div>
-
-    <!-- SUPID -->
-    <div class="menu-panel" id="tab-supid">
-      <div class="menu-grid">
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Tai kookos- ja karrisupp" data-en="Thai coconut and curry soup">Tai kookos- ja karrisupp</div>
-            <div class="menu-item-desc" data-et="Meie kuulsaim roog — vürtsikas kookospiima ja karrisupp kanaga. Serveeritakse koos leivaga." data-en="Our most famous dish — spicy coconut milk and curry soup with chicken. Served with bread.">Meie kuulsaim roog — vürtsikas kookospiima ja karrisupp kanaga. Serveeritakse koos leivaga.</div>
-          </div>
-          <div class="menu-item-price">7.50€</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- HOMMIK -->
-    <div class="menu-panel" id="tab-hommik">
-      <div class="menu-grid">
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Krevetivõileib" data-en="Shrimp sandwich">Krevetivõileib</div>
-            <div class="menu-item-desc" data-et="Röstitud leib, krevetid, avokaado, sidrunimajonees" data-en="Toasted bread, shrimps, avocado, lemon mayo">Röstitud leib, krevetid, avokaado, sidrunimajonees</div>
-          </div>
-          <div class="menu-item-price">9.20€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Kalamaja hommikusöök" data-en="Kalamaja breakfast">Kalamaja hommikusöök</div>
-            <div class="menu-item-desc" data-et="2 muna tetsuks, peekon, salat, tomatid, röstsai" data-en="2 scrambled eggs, bacon, salad, tomatoes, toast">2 muna tetsuks, peekon, salat, tomatid, röstsai</div>
-          </div>
-          <div class="menu-item-price">14.50€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Ahjuomlett" data-en="Oven baked omelette">Ahjuomlett</div>
-            <div class="menu-item-desc" data-et="3 muna, juust, ürdid, tomatid — ahjus küpsetatud" data-en="3 eggs, cheese, herbs, tomatoes — baked in the oven">3 muna, juust, ürdid, tomatid — ahjus küpsetatud</div>
-            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
-          </div>
-          <div class="menu-item-price">6.90€</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PEAROAD -->
-    <div class="menu-panel" id="tab-pearoad">
-      <div class="menu-grid">
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="F-hoone Caesari salat" data-en="F-hoone Caesar salad">F-hoone Caesari salat</div>
-            <div class="menu-item-desc" data-et="Rooma salat, parmesaan, krutoone, Caesari kaste, kana" data-en="Romaine, parmesan, croutons, Caesar dressing, chicken">Rooma salat, parmesaan, krutoone, Caesari kaste, kana</div>
-          </div>
-          <div class="menu-item-price">10.00€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Krõbe kana" data-en="Crispy chicken">Krõbe kana</div>
-            <div class="menu-item-desc" data-et="Krõbedaks praetud kana, coleslaw, hapukaste, friikartul" data-en="Crispy fried chicken, coleslaw, dipping sauce, fries">Krõbedaks praetud kana, coleslaw, hapukaste, friikartul</div>
-          </div>
-          <div class="menu-item-price">13.30€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Smashed burger" data-en="Smashed burger">Smashed burger</div>
-            <div class="menu-item-desc" data-et="Kahekordne veiselihapatty, cheddar, hapukurk, kaste, brioche" data-en="Double beef patty, cheddar, pickles, special sauce, brioche">Kahekordne veiselihapatty, cheddar, hapukurk, kaste, brioche</div>
-          </div>
-          <div class="menu-item-price">10.50€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Taimetoitlane smashed burger" data-en="Vegetarian smashed burger">Taimetoitlane smashed burger</div>
-            <div class="menu-item-desc" data-et="Taimne kotlet, cheddar, hapukurk, kaste, brioche" data-en="Plant-based patty, cheddar, pickles, special sauce, brioche">Taimne kotlet, cheddar, hapukurk, kaste, brioche</div>
-            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
-          </div>
-          <div class="menu-item-price">10.50€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Roheline karri-kikerherne falafel" data-en="Green curry chickpea falafel">Roheline karri-kikerherne falafel</div>
-            <div class="menu-item-desc" data-et="Falafel, roheline karrikaste, riis, värske koriander" data-en="Falafel, green curry sauce, rice, fresh coriander">Falafel, roheline karrikaste, riis, värske koriander</div>
-            <div class="menu-item-tags"><span class="tag" data-et="vegan" data-en="vegan">vegan</span></div>
-          </div>
-          <div class="menu-item-price">12.80€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Pestopasta" data-en="Pesto pasta">Pestopasta</div>
-            <div class="menu-item-desc" data-et="Spaghetti, basiiliku-pesto, päikesekuivatatud tomatid, parmesaan" data-en="Spaghetti, basil pesto, sun-dried tomatoes, parmesan">Spaghetti, basiiliku-pesto, päikesekuivatatud tomatid, parmesaan</div>
-            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
-          </div>
-          <div class="menu-item-price">9.10€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Lihapelmeereid" data-en="Meat dumplings">Lihapelmeenid</div>
-            <div class="menu-item-desc" data-et="Käsitsi valmistatud pelmeenid, hapukoor, till" data-en="Hand-made dumplings, sour cream, dill">Käsitsi valmistatud pelmeenid, hapukoor, till</div>
-          </div>
-          <div class="menu-item-price">8.00–10.00€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Nasi Goreng" data-en="Nasi Goreng">Nasi Goreng</div>
-            <div class="menu-item-desc" data-et="Indoneesia praetud riis, kana, krevett, kana muna, achikar" data-en="Indonesian fried rice, chicken, shrimp, fried egg, achar">Indoneesia praetud riis, kana, krevett, kana muna, achikar</div>
-          </div>
-          <div class="menu-item-price">10.90€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Loaded fries" data-en="Loaded fries">Loaded fries</div>
-            <div class="menu-item-desc" data-et="Friikartulid, cheddar, peekon, hapukoor, roheline sibul" data-en="Fries, cheddar, bacon, sour cream, spring onion">Friikartulid, cheddar, peekon, hapukoor, roheline sibul</div>
-          </div>
-          <div class="menu-item-price">12.40€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Ahvenafilee" data-en="Perch fillet">Ahvenafilee</div>
-            <div class="menu-item-desc" data-et="Grillitud Eesti ahven, kartulipüree, ürdivõi, kapparid" data-en="Grilled Estonian perch, mashed potato, herb butter, capers">Grillitud Eesti ahven, kartulipüree, ürdivõi, kapparid</div>
-          </div>
-          <div class="menu-item-price">16.00€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Lõhefilee" data-en="Salmon fillet">Lõhefilee</div>
-            <div class="menu-item-desc" data-et="Grillitud lõhe, koorene spinat, sidrun, värske till" data-en="Grilled salmon, creamed spinach, lemon, fresh dill">Grillitud lõhe, koorene spinat, sidrun, värske till</div>
-          </div>
-          <div class="menu-item-price">16.20€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Veise entrecôte" data-en="Beef entrecote">Veise entrecôte</div>
-            <div class="menu-item-desc" data-et="300g grillitud entrecôte, röstitud kartul, salat, punase veini kaste" data-en="300g grilled entrecote, roasted potatoes, salad, red wine sauce">300g grillitud entrecôte, röstitud kartul, salat, punase veini kaste</div>
-          </div>
-          <div class="menu-item-price">36.00€</div>
-        </div>
-        <div class="menu-item" style="grid-column: 1 / -1; border-top: 1px solid rgba(200,133,74,0.2); padding-top: 1.8rem; margin-top: 0.5rem;">
-          <div class="menu-item-left">
-            <div class="menu-item-name" style="font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; color: var(--amber);" data-et="Lisandid — 3–5€" data-en="Side dishes — 3–5€">Lisandid — 3–5€</div>
-            <div class="menu-item-desc" data-et="Friikartulid / bataadifriikartulid · Krõbe roheline salat · Värsked kartulid · Kimchi · Soolakurk" data-en="Fries / sweet potato fries · Crunchy green salad · Fresh potatoes · Kimchi · Salted cucumber">Friikartulid / bataadifriikartulid · Krõbe roheline salat · Värsked kartulid · Kimchi · Soolakurk</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- MAGUSTOIDUD -->
-    <div class="menu-panel" id="tab-magustoidud">
-      <div class="menu-grid">
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Crème brûlée" data-en="Crème brûlée">Crème brûlée</div>
-            <div class="menu-item-desc" data-et="Klassikaline vaniljekreem karamellkoorikuga" data-en="Classic vanilla cream with caramelised crust">Klassikaline vaniljekreem karamellkoorikuga</div>
-            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
-          </div>
-          <div class="menu-item-price">6.40€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Syrniki" data-en="Syrniki">Syrniki</div>
-            <div class="menu-item-desc" data-et="Kodujuustupannkoogid, hapukoor, moos, värske puuvili" data-en="Cottage cheese pancakes, sour cream, jam, fresh fruit">Kodujuustupannkoogid, hapukoor, moos, värske puuvili</div>
-          </div>
-          <div class="menu-item-price">6.90€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Ekleer" data-en="Eclair">Ekleer</div>
-            <div class="menu-item-desc" data-et="Kohviku omatehtud ekleer päeva kreemiga" data-en="House-made eclair with daily cream filling">Kohviku omatehtud ekleer päeva kreemiga</div>
-            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
-          </div>
-          <div class="menu-item-price">4.00€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Sidrunikook" data-en="Lemon cake">Sidrunikook</div>
-            <div class="menu-item-desc" data-et="Kerge sidrunikook vaniljekreemi ja marjadega" data-en="Light lemon cake with vanilla cream and berries">Kerge sidrunikook vaniljekreemi ja marjadega</div>
-            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
-          </div>
-          <div class="menu-item-price">4.90€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Vegan mango-kašuukook" data-en="Vegan mango cashew cake">Vegan mango-kašuukook</div>
-            <div class="menu-item-desc" data-et="Toorjuustukook mangoga, kašuupõhi, kookoskreem" data-en="Raw cheesecake with mango, cashew base, coconut cream">Toorjuustukook mangoga, kašuupõhi, kookoskreem</div>
-            <div class="menu-item-tags"><span class="tag" data-et="vegan" data-en="vegan">vegan</span></div>
-          </div>
-          <div class="menu-item-price">6.00€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Šokolaadikook" data-en="Chocolate cake">Šokolaadikook</div>
-            <div class="menu-item-desc" data-et="Rikas šokolaadikook vanillijäätisega" data-en="Rich chocolate cake with vanilla ice cream">Rikas šokolaadikook vanillijäätisega</div>
-            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
-          </div>
-          <div class="menu-item-price">5.00€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Juustukook" data-en="Cheesecake">Juustukook</div>
-            <div class="menu-item-desc" data-et="New Yorgi stiilis juustukook hooajaliste marjadega" data-en="New York style cheesecake with seasonal berries">New Yorgi stiilis juustukook hooajaliste marjadega</div>
-            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
-          </div>
-          <div class="menu-item-price">5.00€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Sorbet" data-en="Sorbet">Sorbet</div>
-            <div class="menu-item-desc" data-et="Hooajaline puuviljusorbet — küsi serveerijalt" data-en="Seasonal fruit sorbet — ask your server">Hooajaline puuviljusorbet — küsi serveerijalt</div>
-            <div class="menu-item-tags"><span class="tag" data-et="vegan" data-en="vegan">vegan</span></div>
-          </div>
-          <div class="menu-item-price">2.00€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name" data-et="Soft serve jäätis" data-en="Soft serve ice cream">Soft serve jäätis</div>
-            <div class="menu-item-desc" data-et="Omatehtud soft serve, toppingud omal valikul" data-en="House-made soft serve, toppings of your choice">Omatehtud soft serve, toppingud omal valikul</div>
-            <div class="menu-item-tags"><span class="tag" data-et="veget." data-en="veget.">veget.</span></div>
-          </div>
-          <div class="menu-item-price">6.00€</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- KOKTEILID -->
-    <div class="menu-panel" id="tab-kokteilid">
-      <div class="menu-grid">
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name">Sharp &amp; Moody</div>
-            <div class="menu-item-desc" data-et="Meie signatuurkokteilikaart — küsi serveerijalt koostisainete kohta" data-en="Our signature cocktail — ask your server for ingredients">Meie signatuurkokteilikaart — küsi serveerijalt koostisainete kohta</div>
-          </div>
-          <div class="menu-item-price">11.90€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name">Mango Tango</div>
-            <div class="menu-item-desc" data-et="Troopilised puuviljad, rum, laimi, ingver" data-en="Tropical fruits, rum, lime, ginger">Troopilised puuviljad, rum, laimi, ingver</div>
-          </div>
-          <div class="menu-item-price">10.60€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name">Basil Smash</div>
-            <div class="menu-item-desc" data-et="Gin, värske basiilik, sidrun, suhkrusiirup" data-en="Gin, fresh basil, lemon, sugar syrup">Gin, värske basiilik, sidrun, suhkrusiirup</div>
-          </div>
-          <div class="menu-item-price">10.20€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name">Violet Fizz</div>
-            <div class="menu-item-desc" data-et="Gin, kanarbiku siirup, sidrun, vahustatud munavalge, prosecco" data-en="Gin, heather syrup, lemon, egg white foam, prosecco">Gin, kanarbiku siirup, sidrun, vahustatud munavalge, prosecco</div>
-          </div>
-          <div class="menu-item-price">10.30€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name">Passion Martini</div>
-            <div class="menu-item-desc" data-et="Viin, marakujaliköör, vanill, ananassimahl" data-en="Vodka, passion fruit liqueur, vanilla, pineapple juice">Viin, marakujaliköör, vanill, ananassimahl</div>
-          </div>
-          <div class="menu-item-price">10.70€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name">Mezcal Last Word</div>
-            <div class="menu-item-desc" data-et="Mezcal, roheline Chartreuse, maraschino, laimi" data-en="Mezcal, green Chartreuse, maraschino, lime">Mezcal, roheline Chartreuse, maraschino, laimi</div>
-          </div>
-          <div class="menu-item-price">11.90€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name">Hugo Spritz</div>
-            <div class="menu-item-desc" data-et="Elderflower liköör, prosecco, soodalvesi, piparmünt, laimi" data-en="Elderflower liqueur, prosecco, soda, mint, lime">Elderflower liköör, prosecco, soodalvesi, piparmünt, laimi</div>
-          </div>
-          <div class="menu-item-price">10.20€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name">Aperitivo Spritz</div>
-            <div class="menu-item-desc" data-et="Aperol, prosecco, soodalvesi, apelsin" data-en="Aperol, prosecco, soda, orange">Aperol, prosecco, soodalvesi, apelsin</div>
-          </div>
-          <div class="menu-item-price">10.20€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name">Limoncello Spritz</div>
-            <div class="menu-item-desc" data-et="Limoncello, prosecco, soodalvesi, sidrun, basiilik" data-en="Limoncello, prosecco, soda, lemon, basil">Limoncello, prosecco, soodalvesi, sidrun, basiilik</div>
-          </div>
-          <div class="menu-item-price">10.50€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name">Orange Black Tea Collins</div>
-            <div class="menu-item-desc" data-et="Viin, must tee, apelsinkoor, sidrun, soodalvesi" data-en="Vodka, black tea, orange zest, lemon, soda">Viin, must tee, apelsinkoor, sidrun, soodalvesi</div>
-          </div>
-          <div class="menu-item-price">10.50€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name">Hanna's Dream</div>
-            <div class="menu-item-desc" data-et="Gin, roosivesi, greibimahl, laimi, suhkrusiirup" data-en="Gin, rose water, grapefruit juice, lime, sugar syrup">Gin, roosivesi, greibimahl, laimi, suhkrusiirup</div>
-          </div>
-          <div class="menu-item-price">10.40€</div>
-        </div>
-        <div class="menu-item">
-          <div class="menu-item-left">
-            <div class="menu-item-name">8 PM</div>
-            <div class="menu-item-desc" data-et="Viski, mesi, sidrun, ingver, rosmariin" data-en="Whisky, honey, lemon, ginger, rosemary">Viski, mesi, sidrun, ingver, rosmariin</div>
-          </div>
-          <div class="menu-item-price">10.70€</div>
-        </div>
+      <div class="myth-copy">
+        <span class="section-tag">Müüt ja Maagia</span>
+        <h2 class="rv">Põhjadraakon<br/><em class="glow-text">ärkab ellu</em></h2>
+        <p class="rv">Põhja Konn — eesti rahvajutust pärit <strong>põhjadraakon</strong>. 2015. aastal pruulis Põhjala selle nime kandev DIPA: tugev, kompleksne, ununematu. Nimest sai legend.</p>
+        <p class="rv">2022. aastal avati Telliskivi Loomелиннаku südames baar, mis kannab sama vaimsust. Siin kohtuvad <strong>Põhjala parimad pruulid</strong>, loominguline kultuur ja Kalamaja boheemlaslik hingus.</p>
+        <div class="myth-quote rv"><p>„Vibrant ambassador for the Estonian craft beer scene in Tallinn's most bohemian quarter."</p></div>
       </div>
     </div>
   </div>
 </section>
+
+<div class="section-divider"></div>
+
+<!-- BEERS -->
+<section id="beers">
+  <div class="beers-section-header inner">
+    <span class="section-tag">Kraanid &amp; Purgid</span>
+    <h2 class="rv">Põhjala <em class="glow-text">kogu</em><br/>kollektsioon</h2>
+    <p class="rv" style="max-width:480px;margin-top:.75rem;margin-bottom:0">Keri läbi 24 Põhjala pruuli. Iga õlu on oma maailm.</p>
+  </div>
+
+  <div class="beers-scroll-wrap" id="beerScrollWrap">
+    <div class="beers-viewport" id="beerViewport">
+      <div class="beer-bg-a" id="beerBgA"></div>
+      <div class="beer-bg-b" id="beerBgB"></div>
+      <div class="beer-scene">
+        <div class="beer-info" id="beerInfo">
+          <div class="beer-counter-row">
+            <span class="beer-counter" id="beerCounter">01 / 24</span>
+            <div class="beer-counter-line"></div>
+          </div>
+          <div class="beer-scene-name" id="beerName">Kaja</div>
+          <div class="beer-scene-type" id="beerType">BA Imperial Porter</div>
+          <div class="beer-scene-bry" id="beerBry">Põhjala</div>
+          <div class="beer-tap-pill">Kraanist · Värske</div>
+        </div>
+        <div class="beer-can-stage">
+          <img id="beerImg" class="beer-can-img" src="" alt="" loading="eager"/>
+        </div>
+      </div>
+      <div class="beer-number-big" id="beerNumBig">01</div>
+      <div class="beer-progress"><div class="beer-progress-fill" id="beerProgressFill"></div></div>
+    </div>
+  </div>
+
+  <div class="beers-foot inner"><p class="beers-note">Kraanikaart uueneb regulaarselt · Jälgi @pohjakonnbar</p></div>
+</section>
+
+<div class="section-divider"></div>
 
 <!-- EVENTS -->
 <section id="events">
-  <div class="fade-in">
-    <p class="section-label" data-et="Sündmused" data-en="Events">Sündmused</p>
-    <h2 class="section-title" data-et="Mis toimub" data-en="What's on">Mis toimub</h2>
-    <div class="divider"></div>
-    <div class="events-grid">
-      <div class="event-card">
-        <div class="event-date-box">
-          <div class="event-day">07</div>
-          <div class="event-month" data-et="Juuni 2026" data-en="June 2026">Juuni 2026</div>
+  <div class="inner">
+    <span class="section-tag">Sündmused</span>
+    <h2 class="rv">Alati midagi<br/><em class="glow-text">toimumas</em></h2>
+    <p class="rv" style="max-width:500px;margin-top:1rem">Elav programm aasta ringi — DJ-õhtutest live muusikani.</p>
+    <div class="events-grid" id="evGrid"></div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="inner">
+    <div class="contact-layout">
+      <div>
+        <span class="section-tag">Kontakt &amp; Info</span>
+        <h2 class="rv">Leia meid<br/><em class="glow-text">Telliskivist</em></h2>
+        <p class="rv" style="margin-top:1rem;margin-bottom:2.5rem">Telliskivi Loomelinnak — endine tööstuskvartaal, Tallinna loovuse süda. Terrass suvel, hubane siseõhkkond talvel.</p>
+        <div class="info-block rv">
+          <div class="info-lbl">Aadress</div>
+          <div class="info-val">Telliskivi 60a/5, 10412 Tallinn<br/><span style="color:var(--text3);font-size:.83rem">Telliskivi Loomelinnak · Kalamaja</span></div>
         </div>
-        <div class="event-title" data-et="Jazz-õhtu" data-en="Jazz Evening">Jazz-õhtu</div>
-        <div class="event-desc" data-et="Live-jazz kohviku saalis. Sissepääs tasuta, lauad soovitame broneerida." data-en="Live jazz in the hall. Free entry, reservations recommended.">Live-jazz kohviku saalis. Sissepääs tasuta, lauad soovitame broneerida.</div>
-        <div class="event-time" data-et="20:00 — 23:00" data-en="8 PM — 11 PM">20:00 — 23:00</div>
+        <div class="info-block rv">
+          <div class="info-lbl">Lahtiolekuajad</div>
+          <table class="hours-tbl">
+            <tr><td>Esmaspäev</td><td>16:00 – 22:00</td></tr>
+            <tr><td>Teisipäev – neljapäev</td><td>16:00 – 00:00</td></tr>
+            <tr><td>Reede – laupäev</td><td>14:00 – 02:00</td></tr>
+            <tr><td>Pühapäev</td><td>14:00 – 00:00</td></tr>
+          </table>
+        </div>
+        <div class="info-block rv">
+          <div class="info-lbl">Kontakt</div>
+          <div class="info-val"><a href="tel:+37254450510" style="color:var(--text)">+372 54 45 05 10</a><br/><a href="mailto:pohjakonn@pohjalabeer.com" style="color:var(--text3);font-size:.86rem">pohjakonn@pohjalabeer.com</a></div>
+        </div>
+        <div class="clinks rv">
+          <a href="https://www.instagram.com/pohjakonnbar/" target="_blank" rel="noopener" class="clink">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/></svg>Instagram
+          </a>
+          <a href="https://www.facebook.com/pohjakonnbar/" target="_blank" rel="noopener" class="clink">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>Facebook
+          </a>
+          <a href="https://untappd.com/v/pohja-konn/11318726" target="_blank" rel="noopener" class="clink">🍺 Untappd</a>
+        </div>
       </div>
-      <div class="event-card">
-        <div class="event-date-box">
-          <div class="event-day">14</div>
-          <div class="event-month" data-et="Juuni 2026" data-en="June 2026">Juuni 2026</div>
-        </div>
-        <div class="event-title" data-et="Veini degusteerimisõhtu" data-en="Wine Tasting Evening">Veini degusteerimisõhtu</div>
-        <div class="event-desc" data-et="Naturaalveinide tutvustus koos väikeste suupistetega. Kohtade arv piiratud." data-en="Natural wine introduction with small bites. Limited seats.">Naturaalveinide tutvustus koos väikeste suupistetega. Kohtade arv piiratud.</div>
-        <div class="event-time" data-et="19:00 — 22:00" data-en="7 PM — 10 PM">19:00 — 22:00</div>
-      </div>
-      <div class="event-card">
-        <div class="event-date-box">
-          <div class="event-day">21</div>
-          <div class="event-month" data-et="Juuni 2026" data-en="June 2026">Juuni 2026</div>
-        </div>
-        <div class="event-title" data-et="Jaanipäeva eel" data-en="Midsummer Eve Party">Jaanipäeva eel</div>
-        <div class="event-desc" data-et="Jaanilaupäeva eelne pidu DJ-muusika, kokteilide ja suvemenüüga." data-en="Midsummer eve party with DJ, cocktails and a special summer menu.">Jaanilaupäeva eelne pidu DJ-muusika, kokteilide ja suvemenüüga.</div>
-        <div class="event-time" data-et="18:00 — 02:00" data-en="6 PM — 2 AM">18:00 — 02:00</div>
+      <div class="map-box rv">
+        <div class="map-pin" aria-hidden="true">📍</div>
+        <div class="map-addr">Telliskivi 60a/5</div>
+        <div class="map-sub2">Telliskivi Loomelinnak · Tallinn</div>
+        <a href="https://maps.google.com/?q=Telliskivi+60a,+Tallinn,+Estonia" target="_blank" rel="noopener" class="map-cta">Ava Google Maps →</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- BRONEERING -->
-<section id="broneering">
-  <div class="broneering-info fade-in">
-    <p class="section-label" data-et="Broneering" data-en="Reservation">Broneering</p>
-    <h2 class="section-title" data-et="Broneeri laud" data-en="Reserve a table">Broneeri laud</h2>
-    <div class="divider"></div>
-    <p data-et="Broneering on võimalik kuni 24 tunni ette. Suurematele gruppidele (8+) palume helistada." data-en="Reservations possible up to 24 hours in advance. For larger groups (8+) please call us.">
-      Broneering on võimalik kuni 24 tunni ette. Suurematele gruppidele (8+) palume helistada.
-    </p>
-    <div class="hours-grid">
-      <div class="hours-day" data-et="E–N" data-en="Mon–Thu">E–N</div>
-      <div class="hours-time">10:00 – 23:00</div>
-      <div class="hours-day" data-et="R–L" data-en="Fri–Sat">R–L</div>
-      <div class="hours-time">10:00 – 00:00</div>
-      <div class="hours-day" data-et="P" data-en="Sun">P</div>
-      <div class="hours-time">10:00 – 22:00</div>
-    </div>
-  </div>
-  <div class="fade-in">
-    <form id="reservationForm" onsubmit="submitForm(event)">
-      <div class="form-row">
-        <div class="form-group">
-          <label data-et="Nimi" data-en="Name">Nimi</label>
-          <input type="text" name="name" required placeholder="Sinu nimi" data-placeholder-et="Sinu nimi" data-placeholder-en="Your name" />
-        </div>
-        <div class="form-group">
-          <label data-et="Telefon" data-en="Phone">Telefon</label>
-          <input type="tel" name="phone" required placeholder="+372 XXXX XXXX" />
-        </div>
-      </div>
-      <div class="form-group">
-        <label data-et="E-post" data-en="Email">E-post</label>
-        <input type="email" name="email" required placeholder="nimi@email.com" />
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label data-et="Kuupäev" data-en="Date">Kuupäev</label>
-          <input type="date" name="date" required />
-        </div>
-        <div class="form-group">
-          <label data-et="Kellaaeg" data-en="Time">Kellaaeg</label>
-          <select name="time" required>
-            <option value="" disabled selected data-et="Vali kellaaeg" data-en="Select time">Vali kellaaeg</option>
-            <option>10:00</option><option>11:00</option><option>12:00</option>
-            <option>13:00</option><option>14:00</option><option>15:00</option>
-            <option>16:00</option><option>17:00</option><option>18:00</option>
-            <option>19:00</option><option>20:00</option><option>21:00</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label data-et="Külaliste arv" data-en="Number of guests">Külaliste arv</label>
-        <select name="guests" required>
-          <option value="" disabled selected data-et="Vali arv" data-en="Select">Vali arv</option>
-          <option>1</option><option>2</option><option>3</option><option>4</option>
-          <option>5</option><option>6</option><option>7</option>
-          <option value="8+" data-et="8 või rohkem" data-en="8 or more">8 või rohkem</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label data-et="Lisasoovid (valikuline)" data-en="Special requests (optional)">Lisasoovid (valikuline)</label>
-        <textarea name="notes" placeholder="Allergeenid, eritingimused jms." data-placeholder-et="Allergeenid, eritingimused jms." data-placeholder-en="Allergies, special occasions, etc."></textarea>
-      </div>
-      <button type="submit" class="submit-btn" data-et="Saada broneering" data-en="Send reservation">Saada broneering</button>
-      <p class="form-msg" id="formMsg"></p>
-    </form>
-  </div>
-</section>
-
-<!-- KONTAKT -->
-<section id="kontakt">
-  <div class="fade-in">
-    <p class="section-label" data-et="Kontakt" data-en="Contact">Kontakt</p>
-    <h2 class="section-title" data-et="Leia meid üles" data-en="Find us">Leia meid üles</h2>
-    <div class="divider"></div>
-    <div class="contact-item">
-      <div class="contact-label" data-et="Aadress" data-en="Address">Aadress</div>
-      <div class="contact-value">Telliskivi 60a<br>10412 Tallinn, Eesti</div>
-    </div>
-    <div class="contact-item">
-      <div class="contact-label" data-et="Telefon" data-en="Phone">Telefon</div>
-      <div class="contact-value"><a href="tel:+3725322655">+372 5322 6855</a></div>
-    </div>
-    <div class="contact-item">
-      <div class="contact-label" data-et="E-post" data-en="Email">E-post</div>
-      <div class="contact-value"><a href="mailto:info@fhoone.ee">info@fhoone.ee</a></div>
-    </div>
-    <div class="contact-item">
-      <div class="contact-label" data-et="Lahtiolekuajad" data-en="Opening hours">Lahtiolekuajad</div>
-      <div class="contact-value">
-        <span data-et="E–N" data-en="Mon–Thu">E–N</span> 10:00–23:00<br>
-        <span data-et="R–L" data-en="Fri–Sat">R–L</span> 10:00–00:00<br>
-        <span data-et="P" data-en="Sun">P</span> 10:00–22:00
-      </div>
-    </div>
-    <div class="social-links">
-      <a href="https://www.instagram.com/fhoone/" target="_blank" class="social-link">Instagram</a>
-      <a href="https://www.facebook.com/Fhoone/" target="_blank" class="social-link">Facebook</a>
-    </div>
-  </div>
-  <div class="fade-in">
-    <div class="map-box">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2028.3!2d24.7278!3d59.4396!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x469294a2e5f31b41%3A0x4f89e3e4e2c4f4b0!2sTelliskivi%2060a%2C%2010412%20Tallinn!5e0!3m2!1set!2see!4v1700000000"
-        allowfullscreen="" loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
 <footer>
-  <div class="footer-logo">F<span>-</span>hoone</div>
-  <p data-et="© 2026 F-hoone. Telliskivi Loomelinnak, Tallinn." data-en="© 2026 F-hoone. Telliskivi Creative City, Tallinn.">© 2026 F-hoone. Telliskivi Loomelinnak, Tallinn.</p>
-  <p data-et="Kõik õigused kaitstud." data-en="All rights reserved.">Kõik õigused kaitstud.</p>
+  <div class="foot-inner">
+    <div class="foot-logo">Põhja Konn</div>
+    <div class="foot-copy">© 2024 Põhja Konn · Telliskivi Loomelinnak, Tallinn</div>
+    <div class="foot-sub">Part of Põhjala Brewery</div>
+  </div>
 </footer>
 
 <script>
-  // ── Language switcher ──
-  let currentLang = 'et';
+(function(){
+'use strict';
+var F='https://framerusercontent.com/images/';
 
-  function setLang(lang) {
-    currentLang = lang;
-    document.documentElement.lang = lang;
-    document.getElementById('btnET').classList.toggle('active', lang === 'et');
-    document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+/* ── BEERS DATA ── */
+var beers=[
+  {name:'Kaja',type:'BA Imperial Porter',bry:'Põhjala',img:F+'MnoNxFtQRvtLbeHJG7pSi9FE.png',
+   dk:'radial-gradient(ellipse at 35% 55%,#0d2535 0%,#05121c 100%)',
+   lt:'radial-gradient(ellipse at 35% 55%,#b5d8ee 0%,#d5ebf8 100%)'},
+  {name:'GF',type:'Humalane Pale Ale greibiga',bry:'Põhjala',img:F+'36Z9JMp1kq6Mys47U0yVUG2HM.png',
+   dk:'radial-gradient(ellipse at 50% 40%,#2a0c18 0%,#180810 100%)',
+   lt:'radial-gradient(ellipse at 50% 40%,#f5c8d5 0%,#fde5ee 100%)'},
+  {name:'Limoncello IPA',type:'IPA',bry:'Põhjala',img:F+'TYCGKCBQEGzeKC0AxwV35GFoZk.png',
+   dk:'radial-gradient(ellipse at 50% 40%,#1c1c05 0%,#0e0e03 100%)',
+   lt:'radial-gradient(ellipse at 50% 40%,#f5f0a0 0%,#fafad0 100%)'},
+  {name:'Bonfire Bänger',type:'Imperial Stout',bry:'Põhjala',img:F+'KOAJknxeDdyK3Mdm40yJs0Wdxc.png',
+   dk:'radial-gradient(ellipse at 40% 60%,#201005 0%,#100802 100%)',
+   lt:'radial-gradient(ellipse at 40% 60%,#e8d098 0%,#f5e8c8 100%)'},
+  {name:'Sun City',type:'Troopiliste puuviljadega hapu õlu',bry:'Põhjala',img:F+'xOehhRlCXs1vfDMdnPqKuupDAs.png',
+   dk:'radial-gradient(ellipse at 60% 40%,#051f14 0%,#021009 100%)',
+   lt:'radial-gradient(ellipse at 60% 40%,#a5e8ce 0%,#d0f5e8 100%)'},
+  {name:'Coffee Culture',type:'Imperial Stout',bry:'Põhjala',img:F+'EesdzqnWCPhiGBGUY2D2Ucbqc.png',
+   dk:'radial-gradient(ellipse at 50% 50%,#1c0f07 0%,#0f0804 100%)',
+   lt:'radial-gradient(ellipse at 50% 50%,#dab898 0%,#eeddd0 100%)'},
+  {name:'Öö Raspberry',type:'Balti porter',bry:'Põhjala',img:F+'XOHxfZ00P6EirfBMhvc4VgpY8dA.png',
+   dk:'radial-gradient(ellipse at 42% 42%,#20091a 0%,#100410 100%)',
+   lt:'radial-gradient(ellipse at 42% 42%,#f0c0d8 0%,#f8dce8 100%)'},
+  {name:'Baltic Porter Day 2026',type:'Balti porter',bry:'Põhjala',img:F+'BeHsf6GtnuyLZDOQBayr6q4xBPA.png',
+   dk:'radial-gradient(ellipse at 50% 30%,#0a0820 0%,#050412 100%)',
+   lt:'radial-gradient(ellipse at 50% 30%,#c5c0e8 0%,#e0ddf8 100%)'},
+  {name:'Jõuluporter',type:'Imperial Porter',bry:'Põhjala',img:F+'EjATSL4CtFx3in6TWHO8PhO6gNU.png',
+   dk:'radial-gradient(ellipse at 45% 55%,#13062c 0%,#09031c 100%)',
+   lt:'radial-gradient(ellipse at 45% 55%,#d5c0f0 0%,#e8d8f8 100%)'},
+  {name:'Roggenwolf',type:'Rukkivein',bry:'Põhjala',img:F+'eMPU5f9yqBr1qg0fu9ZkuOJI4.png',
+   dk:'radial-gradient(ellipse at 50% 60%,#221205 0%,#140a03 100%)',
+   lt:'radial-gradient(ellipse at 50% 60%,#e8d0a5 0%,#f5e8cc 100%)'},
+  {name:'Emberwood',type:'Porter',bry:'Põhjala',img:F+'A0THxa8yN8fKgyOGWDjPxE5eBGQ.png',
+   dk:'radial-gradient(ellipse at 60% 50%,#200b00 0%,#130600 100%)',
+   lt:'radial-gradient(ellipse at 60% 50%,#f0c888 0%,#f8e0b8 100%)'},
+  {name:'Pime Öö PX',type:'Pedro Ximenez sherryvaadis laagerdatud Imperial Stout',bry:'Põhjala',img:F+'AMUFBXzzguhaACqBEpYEpct6Q1A.png',
+   dk:'radial-gradient(ellipse at 50% 50%,#0b0912 0%,#060408 100%)',
+   lt:'radial-gradient(ellipse at 50% 50%,#c0b8d5 0%,#dcd8ed 100%)'},
+  {name:'Värske 2025',type:'Wet Hop Lager',bry:'Põhjala',img:F+'pNn1FoZKBmQTumYiMJfLXM8baGs.png',
+   dk:'radial-gradient(ellipse at 40% 40%,#0b1c09 0%,#051006 100%)',
+   lt:'radial-gradient(ellipse at 40% 40%,#b8d8a5 0%,#d8eec5 100%)'},
+  {name:'Mandarina',type:'Festive IPA',bry:'Põhjala',img:F+'7owL5wYMO9seh4BdfUlzvuwD2kQ.png',
+   dk:'radial-gradient(ellipse at 50% 40%,#200b12 0%,#130608 100%)',
+   lt:'radial-gradient(ellipse at 50% 40%,#f5c8c0 0%,#fce0da 100%)'},
+  {name:'Barrique Noire',type:'BA Imperial Baltic Porter',bry:'Põhjala',img:F+'q8BnFtWRQ3MRugZLgM9Ss0jiio.png',
+   dk:'radial-gradient(ellipse at 50% 50%,#0b0d12 0%,#060608 100%)',
+   lt:'radial-gradient(ellipse at 50% 50%,#c0c8d2 0%,#dde2ea 100%)'},
+  {name:'Tiramisu Bänger',type:'Imperial Stout',bry:'Põhjala',img:F+'DdvG5g3X3ZBgnKnyQvFguNxSbqI.png',
+   dk:'radial-gradient(ellipse at 50% 60%,#1a0d05 0%,#110804 100%)',
+   lt:'radial-gradient(ellipse at 50% 60%,#e8d8c0 0%,#f5ecd8 100%)'},
+  {name:'Topeltnelson',type:'DIPA',bry:'Põhjala',img:F+'Vv0t39d5uzTD7eLCn2ikIdZ70g.png',
+   dk:'radial-gradient(ellipse at 50% 40%,#0b1122 0%,#060a15 100%)',
+   lt:'radial-gradient(ellipse at 50% 40%,#c0c8e8 0%,#d8ddf5 100%)'},
+  {name:'Nova Lux',type:'West Coast IPA',bry:'Põhjala',img:F+'GkZiGUxJfAbns311id6YmZ6kx0.png',
+   dk:'radial-gradient(ellipse at 50% 50%,#09150b 0%,#040c06 100%)',
+   lt:'radial-gradient(ellipse at 50% 50%,#b0d8c0 0%,#d0eed8 100%)'},
+  {name:'Northern Decadence',type:'BA Imperial Stout',bry:'Põhjala',img:F+'V9gZpaxSo8rypXNOIXIZ4BPx6Fo.png',
+   dk:'radial-gradient(ellipse at 40% 40%,#080c22 0%,#040812 100%)',
+   lt:'radial-gradient(ellipse at 40% 40%,#b8c2e0 0%,#d8dff5 100%)'},
+  {name:'Harbour Hopping',type:'DDH IPA',bry:'Põhjala',img:F+'jeY2KNIsRrO5MBdKc6T3e0Ss.png',
+   dk:'radial-gradient(ellipse at 60% 40%,#080f22 0%,#040a15 100%)',
+   lt:'radial-gradient(ellipse at 60% 40%,#b0bcd8 0%,#ccd5f0 100%)'},
+  {name:'Surf City',type:'Tropical Fruit Sour',bry:'Põhjala',img:F+'vaD41GuMUHRKRxH1EI4zkSbTtzM.png',
+   dk:'radial-gradient(ellipse at 50% 40%,#200915 0%,#130609 100%)',
+   lt:'radial-gradient(ellipse at 50% 40%,#f5b8d0 0%,#fcd8e8 100%)'},
+  {name:'Coastline Cruiser',type:'Pale Ale',bry:'Põhjala',img:F+'joxsRQotnKqqY2UJZToh8X5zMwg.png',
+   dk:'radial-gradient(ellipse at 40% 50%,#081522 0%,#040c15 100%)',
+   lt:'radial-gradient(ellipse at 40% 50%,#a8cce0 0%,#c8e4f5 100%)'},
+  {name:'Treeninglaager Tsitrus',type:'Hüpotooniline alkoholivaba laagriõlu',bry:'Põhjala',img:F+'IJ42FOPbGzXTHCqew4YWYPf7I.png',
+   dk:'radial-gradient(ellipse at 50% 40%,#18190a 0%,#0e1005 100%)',
+   lt:'radial-gradient(ellipse at 50% 40%,#e8e8b0 0%,#f5f5d0 100%)'},
+  {name:'Taevas',type:'Nisuõlu',bry:'Põhjala',img:F+'fC0JULex9BbdEP7JpRlbpwdv0.png',
+   dk:'radial-gradient(ellipse at 50% 30%,#08151a 0%,#040c10 100%)',
+   lt:'radial-gradient(ellipse at 50% 30%,#a8c8e2 0%,#c8e2f5 100%)'}
+];
 
-    document.querySelectorAll('[data-et]').forEach(el => {
-      const key = lang === 'et' ? 'et' : 'en';
-      if (el.dataset[key]) el.textContent = el.dataset[key];
-    });
+/* ── THEME ── */
+var html=document.documentElement;
+var storedTheme=localStorage.getItem('pkTheme')||'dark';
+html.setAttribute('data-theme',storedTheme);
+updatePill();
 
-    // placeholders
-    document.querySelectorAll('[data-placeholder-et]').forEach(el => {
-      el.placeholder = lang === 'et' ? el.dataset.placeholderEt : el.dataset.placeholderEn;
-    });
+function toggleTheme(){
+  var t=html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',t);
+  localStorage.setItem('pkTheme',t);
+  updatePill();
+  setBeerBg(curIdx,false);
+}
+function updatePill(){
+  var t=html.getAttribute('data-theme');
+  var pd=document.getElementById('pillDark'),pl=document.getElementById('pillLight');
+  if(pd){pd.classList.toggle('active',t==='dark');pl.classList.toggle('active',t==='light')}
+}
+['themeToggle','themeToggleMob'].forEach(function(id){
+  var el=document.getElementById(id);if(el)el.addEventListener('click',toggleTheme);
+});
+document.getElementById('pillDark').addEventListener('click',function(){if(html.getAttribute('data-theme')!=='dark'){toggleTheme();}});
+document.getElementById('pillLight').addEventListener('click',function(){if(html.getAttribute('data-theme')!=='light'){toggleTheme();}});
+
+/* show mobile orb */
+if(window.innerWidth<=768){
+  var mob_orb=document.getElementById('themeToggleMob');
+  if(mob_orb)mob_orb.style.display='flex';
+}
+
+/* ── NAV ── */
+var nav=document.getElementById('nav');
+window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>55);},{passive:true});
+
+/* ── HAMBURGER ── */
+var ham=document.getElementById('ham'),mob=document.getElementById('mob');
+ham.addEventListener('click',function(){
+  var o=ham.classList.toggle('open');
+  mob.classList.toggle('open',o);
+  document.body.style.overflow=o?'hidden':'';
+});
+mob.querySelectorAll('.mlink').forEach(function(l){
+  l.addEventListener('click',function(){ham.classList.remove('open');mob.classList.remove('open');document.body.style.overflow='';});
+});
+
+/* ── PARTICLES ── */
+var pc=document.getElementById('ptcl');
+for(var i=0;i<22;i++){
+  var p=document.createElement('div');p.className='particle';
+  var s=Math.random()*4+2;
+  p.style.cssText='width:'+s+'px;height:'+s+'px;left:'+Math.random()*100+'%;bottom:'+Math.random()*25+'%;animation-duration:'+(Math.random()*7+5)+'s;animation-delay:'+Math.random()*9+'s;';
+  pc.appendChild(p);
+}
+
+/* ── STICKY BEER SCROLL ── */
+var beerWrap=document.getElementById('beerScrollWrap');
+var beerBgA=document.getElementById('beerBgA'),beerBgB=document.getElementById('beerBgB');
+var beerImg=document.getElementById('beerImg');
+var beerName=document.getElementById('beerName'),beerType=document.getElementById('beerType'),beerBry=document.getElementById('beerBry');
+var beerCounter=document.getElementById('beerCounter'),beerInfo=document.getElementById('beerInfo');
+var beerProgressFill=document.getElementById('beerProgressFill');
+var beerNumBig=document.getElementById('beerNumBig');
+var curIdx=-1,bgActive='a',switching=false;
+
+function getBg(idx){
+  var b=beers[idx];
+  return html.getAttribute('data-theme')==='dark'?b.dk:b.lt;
+}
+
+function setBeerBg(idx,animate){
+  if(animate===false){
+    beerBgA.style.background=getBg(idx);
+    beerBgA.style.opacity='1';
+    beerBgB.style.opacity='0';
+    bgActive='a';
+    return;
   }
-
-  // ── Nav scroll ──
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  var next=bgActive==='a'?beerBgB:beerBgA;
+  var curr=bgActive==='a'?beerBgA:beerBgB;
+  next.style.transition='none';
+  next.style.background=getBg(idx);
+  next.style.opacity='0';
+  next.style.zIndex='1';
+  curr.style.zIndex='0';
+  requestAnimationFrame(function(){
+    next.style.transition='opacity .65s ease';
+    next.style.opacity='1';
+    bgActive=bgActive==='a'?'b':'a';
   });
+}
 
-  // ── Hamburger ──
-  function toggleNav() {
-    document.getElementById('navLinks').classList.toggle('open');
+function switchBeer(idx,dir){
+  if(switching)return;
+  switching=true;
+  var b=beers[idx];
+
+  // bg
+  setBeerBg(idx,true);
+
+  // img spring
+  beerImg.classList.remove('spring-up','spring-down','idle');
+  void beerImg.offsetWidth;
+  beerImg.src=b.img;
+  beerImg.alt=b.name+' purk';
+  beerImg.classList.add(dir==='next'?'spring-up':'spring-down');
+  setTimeout(function(){beerImg.classList.add('idle');switching=false;},700);
+
+  // text
+  beerInfo.classList.add('info-out');
+  setTimeout(function(){
+    beerName.textContent=b.name;
+    beerType.textContent=b.type;
+    beerBry.textContent=b.bry;
+    beerCounter.textContent=String(idx+1).padStart(2,'0')+' / '+beers.length;
+    beerNumBig.textContent=String(idx+1).padStart(2,'0');
+    beerInfo.classList.remove('info-out');
+    beerInfo.classList.add('info-in');
+    setTimeout(function(){beerInfo.classList.remove('info-in');},460);
+  },200);
+}
+
+// init first beer without animation
+(function initBeers(){
+  var b=beers[0];
+  beerBgA.style.background=getBg(0);
+  beerImg.src=b.img;beerImg.alt=b.name;
+  beerName.textContent=b.name;beerType.textContent=b.type;beerBry.textContent=b.bry;
+  beerCounter.textContent='01 / '+beers.length;beerNumBig.textContent='01';
+  curIdx=0;
+  setTimeout(function(){beerImg.classList.add('idle');},100);
+})();
+
+// scroll handler
+function onBeerScroll(){
+  var rect=beerWrap.getBoundingClientRect();
+  var total=beerWrap.offsetHeight-window.innerHeight;
+  var scrolled=Math.max(0,-rect.top);
+  var prog=Math.min(1,scrolled/total);
+  beerProgressFill.style.width=(prog*100)+'%';
+  var fi=prog*beers.length;
+  var ni=Math.min(Math.floor(fi),beers.length-1);
+  if(ni!==curIdx){
+    var d=ni>curIdx?'next':'prev';
+    curIdx=ni;
+    switchBeer(ni,d);
   }
-  document.querySelectorAll('#navLinks a').forEach(a => {
-    a.addEventListener('click', () => {
-      document.getElementById('navLinks').classList.remove('open');
-    });
+}
+
+window.addEventListener('scroll',onBeerScroll,{passive:true});
+
+/* ── EVENTS ── */
+var evs=[
+  {icon:'🎧',tag:'Igal nädalavahetusel',title:'DJ Õhtud',desc:'Kohalikud ja külalis-DJ-d toovad tänava energia baari. Elektrooniline, indie, alternatiiv.'},
+  {icon:'🎸',tag:'Regulaarselt',title:'Live Muusika',desc:'Eesti artistid ja bändid astuvad otse baari südamesse. Intiimsed kontserdid käsitööõlle saatel.'},
+  {icon:'🍺',tag:'Hooajaliselt',title:'Õlledegusteerimised',desc:'Põhjala meeskond tutvustab uusi pruule — maitsed, lood ja pruulimisteadus klaasis.'},
+  {icon:'🎨',tag:'Kuuüritused',title:'Kunstiõhtud',desc:'Telliskivi loominguline vaim jõuab baari — installatsioonid, illustratsioonid, kohalikud kunstnikud.'},
+  {icon:'📻',tag:'Eriüritused',title:'Tallinn Music Week',desc:'Põhja Konn on üks TMW partnervenues — muusikafestivali energia Telliskivis.'},
+  {icon:'🌿',tag:'Suvisel hooajal',title:'Terrassiõhtud',desc:'Loomelinnak avaneb — terrass täitub ja suve parim õhtu algab lihtsalt.'},
+];
+var eg=document.getElementById('evGrid');
+evs.forEach(function(e,i){
+  var c=document.createElement('article');c.className='event-card';
+  c.style.transitionDelay=(i%3*90)+'ms';
+  c.innerHTML='<span class="ev-icon" aria-hidden="true">'+e.icon+'</span><span class="ev-tag">'+e.tag+'</span><h3>'+e.title+'</h3><p>'+e.desc+'</p><span class="ev-freq">Korduv üritus</span>';
+  eg.appendChild(c);
+});
+
+/* ── INTERSECTION OBSERVER ── */
+var vel=0,lastY=window.scrollY,lastT=Date.now(),vTimer;
+window.addEventListener('scroll',function(){
+  var now=Date.now(),dt=Math.max(now-lastT,1);
+  vel=Math.abs(window.scrollY-lastY)/dt*100;
+  lastY=window.scrollY;lastT=now;
+  clearTimeout(vTimer);vTimer=setTimeout(function(){vel=0;},160);
+},{passive:true});
+function animDur(){return Math.max(.28,.78-vel*.0045)+'s';}
+
+var io=new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if(entry.isIntersecting){
+      entry.target.style.setProperty('--anim-dur',animDur());
+      entry.target.classList.add('in');
+      io.unobserve(entry.target);
+    }
   });
+},{threshold:.08,rootMargin:'0px 0px -45px 0px'});
+document.querySelectorAll('.rv,.event-card').forEach(function(el){io.observe(el);});
 
-  // ── Menu tabs ──
-  function showTab(id) {
-    document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('tab-' + id).classList.add('active');
-    event.currentTarget.classList.add('active');
-  }
+/* ── SMOOTH SCROLL ── */
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    var t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();window.scrollTo({top:t.getBoundingClientRect().top+window.scrollY-68,behavior:'smooth'});}
+  });
+});
 
-  // ── Reservation form ──
-  function submitForm(e) {
-    e.preventDefault();
-    const msg = document.getElementById('formMsg');
-    msg.style.display = 'block';
-    msg.textContent = currentLang === 'et'
-      ? 'Täname! Broneering on vastu võetud. Võtame sinuga peagi ühendust.'
-      : 'Thank you! Your reservation has been received. We will contact you shortly.';
-    e.target.reset();
-    setTimeout(() => { msg.style.display = 'none'; }, 6000);
-  }
-
-  // ── Fade in on scroll ──
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-  // Set min date for reservation
-  const dateInput = document.querySelector('input[type="date"]');
-  if (dateInput) {
-    const today = new Date().toISOString().split('T')[0];
-    dateInput.min = today;
-  }
+}());
 </script>
 </body>
 </html>
