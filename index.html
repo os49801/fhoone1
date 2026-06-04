@@ -183,10 +183,77 @@ nav.scrolled{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop
 .myth-quote p{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(.95rem,2.2vw,1.15rem);color:var(--text);margin:0;transition:color .4s}
 @media(max-width:768px){.myth-layout{grid-template-columns:1fr;gap:3rem}.myth-visual{order:-1}}
 
-/* ── BEERS STICKY SCROLL ── */
+/* ── BEERS ── */
 #beers{padding:0;position:relative}
+
+/* ── DESKTOP: sticky scroll ── */
 .beers-scroll-wrap{position:relative;height:calc(24 * 75vh)}
 .beers-viewport{position:sticky;top:0;height:100svh;overflow:hidden;display:flex;flex-direction:column}
+
+/* skip button */
+.beer-skip-btn{
+  position:absolute;top:4.8rem;right:clamp(1.5rem,5vw,4rem);z-index:20;
+  display:inline-flex;align-items:center;gap:.45rem;
+  padding:.5rem 1rem;border-radius:50px;
+  border:1px solid var(--border);background:var(--glass);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text2);cursor:pointer;
+  transition:border-color .22s,background .22s,color .22s;
+}
+.beer-skip-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,168,75,.08)}
+.beer-skip-btn svg{width:12px;height:12px;flex-shrink:0}
+
+/* ── MOBILE: snap scroll ── */
+.beers-mobile{display:none}
+@media(max-width:768px){
+  .beers-scroll-wrap{display:none}
+  .beers-section-header{display:none}
+  .beers-mobile{
+    display:block;height:100svh;
+    overflow-y:scroll;overflow-x:hidden;
+    scroll-snap-type:y mandatory;
+    -webkit-overflow-scrolling:touch;
+    position:relative;
+  }
+  .beer-slide{
+    height:100svh;scroll-snap-align:start;
+    position:relative;overflow:hidden;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:flex-end;
+    padding:0 1.5rem 5rem;
+  }
+  .slide-bg{position:absolute;inset:0;z-index:0;transition:opacity .3s}
+  .slide-can{
+    position:absolute;top:50%;left:50%;
+    transform:translate(-50%,-58%);
+    max-height:min(44vh,320px);max-width:80%;
+    object-fit:contain;z-index:1;
+    filter:drop-shadow(0 18px 36px rgba(0,0,0,.6));
+  }
+  .slide-info{
+    position:relative;z-index:2;width:100%;
+    display:flex;flex-direction:column;gap:.3rem;
+  }
+  .slide-counter{font-size:.65rem;font-weight:600;letter-spacing:.2em;color:var(--gold)}
+  .slide-name{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,7vw,2.4rem);font-weight:900;color:var(--text);line-height:1}
+  .slide-type{font-size:.75rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
+  .slide-bry{font-family:'Playfair Display',serif;font-style:italic;color:var(--text2);font-size:.95rem}
+  .slide-tap{display:inline-flex;align-items:center;gap:.4rem;margin-top:.6rem;padding:.38rem .85rem;background:rgba(200,168,75,.1);border:1px solid var(--border);border-radius:50px;font-size:.68rem;font-weight:500;color:var(--gold);width:fit-content}
+  .slide-tap::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold)}
+  .slide-prog-wrap{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--border2);z-index:3}
+  .slide-prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+  .slide-skip{
+    position:absolute;top:4.5rem;right:1.2rem;z-index:4;
+    display:inline-flex;align-items:center;gap:.35rem;
+    padding:.42rem .85rem;border-radius:50px;
+    border:1px solid var(--border);background:var(--glass);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    font-size:.65rem;font-weight:600;letter-spacing:.06em;color:var(--text2);cursor:pointer;
+    transition:border-color .2s,color .2s
+  }
+  .slide-skip:hover{border-color:var(--gold);color:var(--gold)}
+}
 
 /* bg layers for crossfade */
 .beer-bg-a,.beer-bg-b{position:absolute;inset:0;transition:opacity .7s ease}
@@ -413,9 +480,16 @@ footer{background:var(--bg2);padding:2.5rem clamp(1.5rem,5vw,4rem);border-top:1p
         </div>
       </div>
       <div class="beer-number-big" id="beerNumBig">01</div>
+      <button class="beer-skip-btn" id="beerSkipDesktop" aria-label="Jäta vahele">
+        Üritused
+        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="1" x2="6" y2="11"/><polyline points="2,7 6,11 10,7"/></svg>
+      </button>
       <div class="beer-progress"><div class="beer-progress-fill" id="beerProgressFill"></div></div>
     </div>
   </div>
+
+  <!-- MOBILE SNAP SCROLL -->
+  <div class="beers-mobile" id="beersMobile"></div>
 
   <div class="beers-foot inner"><p class="beers-note">Kraanikaart uueneb regulaarselt · Jälgi @pohjakonnbar</p></div>
 </section>
@@ -706,12 +780,11 @@ function tick(){
   updateText(rawT > 0.5 ? idx+1 : idx);
 
   /* ── can positions ──
-     canA = current beer: exits downward  (y: 0 → +130%)
-     canB = next beer:    enters from top (y: -130% → 0)
-     Opacity: canA fades out first half, canB fades in second half
-     so they're never both semi-transparent simultaneously            */
-  var yA  = t * 130;
-  var yB  = (t - 1) * 130;
+     canA = current beer: exits UPWARD    (y: 0 → -130%)
+     canB = next beer:    enters from BOTTOM (y: +130% → 0)
+     Scroll down = current rises away, new comes from below            */
+  var yA  = t * -130;
+  var yB  = (1 - t) * 130;
   /* opacity: canA 1→0 over t=0..0.55, canB 0→1 over t=0.45..1 */
   var opA = clamp(1 - t / 0.55);
   var opB = clamp((t - 0.45) / 0.55);
@@ -730,21 +803,91 @@ function tick(){
   rafId = requestAnimationFrame(tick);
 }
 
-/* init first frame */
-(function init(){
-  loadImages(0);
-  updateText(0);
-  canA.style.opacity='1'; canA.style.transform='translate(-50%,-50%)';
-  canB.style.opacity='0'; canB.style.transform='translate(-50%,calc(-50% - 110%))';
-  bgA.style.opacity='1';  bgB.style.opacity='0';
-  rafId = requestAnimationFrame(tick);
-})();
+/* ── skip button ── */
+var skipBtn = document.getElementById('beerSkipDesktop');
+if(skipBtn){
+  skipBtn.addEventListener('click', function(){
+    var ev = document.getElementById('events');
+    if(ev) window.scrollTo({top: ev.getBoundingClientRect().top + window.scrollY - 68, behavior:'smooth'});
+  });
+}
+
+/* ── mobile snap slides ── */
+var isMobile = window.matchMedia('(max-width:768px)').matches;
+var mobileWrap = document.getElementById('beersMobile');
+
+if(isMobile && mobileWrap){
+  beers.forEach(function(b, i){
+    var slide = document.createElement('div');
+    slide.className = 'beer-slide';
+
+    var bg = document.createElement('div');
+    bg.className = 'slide-bg';
+    bg.style.background = html.getAttribute('data-theme')==='dark' ? b.dk : b.lt;
+
+    var can = document.createElement('img');
+    can.className = 'slide-can'; can.src = b.img; can.alt = b.name; can.loading = 'lazy';
+
+    var info = document.createElement('div');
+    info.className = 'slide-info';
+    info.innerHTML =
+      '<span class="slide-counter">'+String(i+1).padStart(2,'0')+' / '+beers.length+'</span>'+
+      '<div class="slide-name">'+b.name+'</div>'+
+      '<div class="slide-type">'+b.type+'</div>'+
+      '<div class="slide-bry">'+b.bry+'</div>'+
+      '<div class="slide-tap">Kraanist · Värske</div>';
+
+    /* skip button on first slide only */
+    var skipWrap = '';
+    if(i === 0){
+      var sk = document.createElement('button');
+      sk.className = 'slide-skip';
+      sk.innerHTML = 'Üritused <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="1" x2="6" y2="11"/><polyline points="2,7 6,11 10,7"/></svg>';
+      sk.addEventListener('click', function(e){
+        e.stopPropagation();
+        var ev = document.getElementById('events');
+        if(ev) window.scrollTo({top: ev.getBoundingClientRect().top + window.scrollY - 68, behavior:'smooth'});
+      });
+      slide.appendChild(sk);
+    }
+
+    var progWrap = document.createElement('div'); progWrap.className = 'slide-prog-wrap';
+    var progFill = document.createElement('div'); progFill.className = 'slide-prog-fill';
+    progFill.style.width = ((i+1)/beers.length*100)+'%';
+    progWrap.appendChild(progFill);
+
+    slide.appendChild(bg);
+    slide.appendChild(can);
+    slide.appendChild(info);
+    slide.appendChild(progWrap);
+    mobileWrap.appendChild(slide);
+  });
+}
+
+/* ── desktop RAF init ── */
+if(!isMobile){
+  (function init(){
+    loadImages(0);
+    updateText(0);
+    canA.style.opacity='1'; canA.style.transform='translate(-50%,-50%)';
+    canB.style.opacity='0'; canB.style.transform='translate(-50%,calc(-50% + 130%))';
+    bgA.style.opacity='1';  bgB.style.opacity='0';
+    rafId = requestAnimationFrame(tick);
+  })();
+}
 
 /* re-apply bg when theme toggles */
 var _origToggle = toggleTheme;
 toggleTheme = function(){
   _origToggle();
-  lastIdx = -1; // force reload bg colors
+  lastIdx = -1;
+  /* update mobile slide backgrounds */
+  if(isMobile){
+    var slides = mobileWrap ? mobileWrap.querySelectorAll('.slide-bg') : [];
+    slides.forEach(function(el, i){
+      el.style.background = html.getAttribute('data-theme')==='dark' ? beers[i].dk : beers[i].lt;
+    });
+  }
 };
 
 /* ── EVENTS ── */
