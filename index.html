@@ -313,9 +313,13 @@ nav.scrolled{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop
   .slide-back:active{border-color:var(--gold);color:var(--gold)}
 }
 
-/* bg layers for crossfade */
+/* bg layers — use CSS vars so theme toggle is instant, no JS needed */
 .beer-bg-a,.beer-bg-b{position:absolute;inset:0;transition:opacity .7s ease}
 .beer-bg-a{z-index:0}.beer-bg-b{z-index:1;opacity:0}
+[data-theme="dark"]  .beer-bg-a{background:var(--bbg-a-dk,#0b0908)}
+[data-theme="light"] .beer-bg-a{background:var(--bbg-a-lt,#f5f0e8)}
+[data-theme="dark"]  .beer-bg-b{background:var(--bbg-b-dk,#0b0908)}
+[data-theme="light"] .beer-bg-b{background:var(--bbg-b-lt,#f5f0e8)}
 
 /* layout */
 .beer-scene{position:relative;z-index:2;height:100%;display:grid;grid-template-columns:1fr 1.1fr;align-items:center;padding:5rem clamp(1.5rem,5vw,4rem) 4rem;max-width:1200px;margin:0 auto;width:100%}
@@ -834,16 +838,20 @@ function updateText(idx){
   elInfo.classList.add('text-snap');
 }
 
-/* swap image sources when index changes */
+/* swap image sources + set CSS vars (theme-independent) */
+var root = document.documentElement;
 function loadImages(idx){
-  curBeerIdx = idx; /* always track current */
+  curBeerIdx = idx;
   if(idx === lastIdx) return;
-  var cur  = beers[Math.max(0,Math.min(idx,   N-1))];
-  var next = beers[Math.max(0,Math.min(idx+1, N-1))];
-  canA.src = cur.img;   canA.alt = cur.name;
-  canB.src = next.img;  canB.alt = next.name;
-  bgA.style.background = getBg(idx);
-  bgB.style.background = getBg(idx+1);
+  var ci = Math.max(0, Math.min(idx,   N-1));
+  var ni = Math.max(0, Math.min(idx+1, N-1));
+  canA.src = beers[ci].img; canA.alt = beers[ci].name;
+  canB.src = beers[ni].img; canB.alt = beers[ni].name;
+  /* set BOTH dark+light vars — CSS picks correct one via data-theme */
+  root.style.setProperty('--bbg-a-dk', beers[ci].dk);
+  root.style.setProperty('--bbg-a-lt', beers[ci].lt);
+  root.style.setProperty('--bbg-b-dk', beers[ni].dk);
+  root.style.setProperty('--bbg-b-lt', beers[ni].lt);
   lastIdx = idx;
 }
 
@@ -1135,19 +1143,10 @@ if(!isMobile){
 /* re-apply bg when theme toggles */
 var _origToggle = toggleTheme;
 toggleTheme = function(){
-  _origToggle();
+  _origToggle(); /* updates data-theme → CSS vars on bgA/bgB switch instantly */
   var isDk = html.getAttribute('data-theme') === 'dark';
 
-  /* ── Desktop: use curBeerIdx (always up-to-date from tick) ── */
-  if(bgA && bgB){
-    var ci = Math.max(0, Math.min(curBeerIdx,   N-1));
-    var ni = Math.max(0, Math.min(curBeerIdx+1, N-1));
-    bgA.style.background = isDk ? beers[ci].dk : beers[ci].lt;
-    bgB.style.background = isDk ? beers[ni].dk : beers[ni].lt;
-    lastIdx = -1; /* force tick to re-run loadImages */
-  }
-
-  /* ── Mobile: update all slide backgrounds ── */
+  /* mobile slide backgrounds still need JS update */
   document.querySelectorAll('#slidesTrack .slide-bg').forEach(function(el, i){
     if(beers[i]) el.style.background = isDk ? beers[i].dk : beers[i].lt;
   });
