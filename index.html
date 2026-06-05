@@ -185,6 +185,7 @@ nav.scrolled{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop
 
 /* ── BEERS ── */
 #beers{padding:0;position:relative}
+.beers-mobile{display:none} /* globally hidden; JS adds .mob-active on mobile */
 
 /* ── DESKTOP: sticky scroll ── */
 .beers-scroll-wrap{position:relative;height:calc(24 * 75vh)}
@@ -281,13 +282,12 @@ nav.scrolled{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop
   .slide-prog-wrap{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--border2);z-index:5}
   .slide-prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2))}
 
-  /* skip button — always top right inside overlay */
+  /* skip to events — top right */
   .slide-skip{
     position:fixed;top:4.6rem;right:1rem;z-index:600;
     display:inline-flex;align-items:center;gap:.35rem;
     padding:.4rem .85rem;border-radius:50px;
-    border:1px solid var(--border);
-    background:var(--glass);
+    border:1px solid var(--border);background:var(--glass);
     backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
     font-size:.63rem;font-weight:600;letter-spacing:.06em;
     color:var(--text2);cursor:pointer;
@@ -295,6 +295,22 @@ nav.scrolled{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop
     pointer-events:auto;
   }
   .slide-skip:active{border-color:var(--gold);color:var(--gold)}
+
+  /* back to top — top left */
+  .slide-back{
+    position:fixed;top:4.6rem;left:1rem;z-index:600;
+    display:none; /* hidden on first slide, shown from slide 2+ */
+    align-items:center;gap:.3rem;
+    padding:.4rem .8rem;border-radius:50px;
+    border:1px solid var(--border);background:var(--glass);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    font-size:.63rem;font-weight:600;letter-spacing:.06em;
+    color:var(--text2);cursor:pointer;
+    transition:border-color .2s,color .2s;
+    pointer-events:auto;
+  }
+  .slide-back.visible{display:inline-flex}
+  .slide-back:active{border-color:var(--gold);color:var(--gold)}
 }
 
 /* bg layers for crossfade */
@@ -536,6 +552,10 @@ footer{background:var(--bg2);padding:2.5rem clamp(1.5rem,5vw,4rem);border-top:1p
     <button class="slide-skip" id="mobSkipBtn" aria-label="Jäta vahele">
       Üritused
       <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="1" x2="6" y2="11"/><polyline points="2,7 6,11 10,7"/></svg>
+    </button>
+    <button class="slide-back" id="mobBackBtn" aria-label="Tagasi algusesse">
+      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="11" x2="6" y2="1"/><polyline points="2,5 6,1 10,5"/></svg>
+      01
     </button>
   </div>
 
@@ -807,8 +827,9 @@ function loadImages(idx){
 
 /* RAF tick — runs every frame */
 function tick(){
-  var rect     = beerWrap.getBoundingClientRect();
-  var total    = beerWrap.offsetHeight - window.innerHeight;
+  var rect  = beerWrap.getBoundingClientRect();
+  var total = beerWrap.offsetHeight - window.innerHeight;
+  if(total <= 0){ rafId = requestAnimationFrame(tick); return; } /* guard: avoid div/0 */
   var scrolled = clamp(-rect.top / total);           // 0→1 for whole section
   var rawFloat = scrolled * N;                        // 0→24
   var idx      = Math.min(Math.floor(rawFloat), N-2);// 0→22 (so idx+1 is valid)
@@ -1013,22 +1034,61 @@ if(isMobile){
   /* ── activate overlay when #beers comes into view ── */
   setPos(0, false); /* init position */
 
+  /* ── back to top button ── */
+  var backBtn = document.getElementById('mobBackBtn');
+  function updateBackBtn(){
+    if(!backBtn) return;
+    backBtn.classList.toggle('visible', curSlide > 0);
+    backBtn.querySelector && (backBtn.textContent = '');
+    /* rebuild content */
+    backBtn.innerHTML =
+      '<svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="11" x2="6" y2="1"/><polyline points="2,5 6,1 10,5"/></svg>'+
+      ' '+String(curSlide+1).padStart(2,'0');
+  }
+  if(backBtn){
+    backBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      goTo(0);
+    });
+  }
+
+  /* patch goTo to update back button */
+  var _goTo = goTo;
+  goTo = function(idx){
+    _goTo(idx);
+    setTimeout(updateBackBtn, 50);
+  };
+
+  /* ── IntersectionObserver — lower threshold, fallback scroll check ── */
+  function activateOverlay(){
+    if(overlayActive) return;
+    overlayActive = true;
+    curSlide = 0;
+    setPos(0, false);
+    updateBackBtn();
+    mobileWrap.classList.add('mob-active');
+    document.body.style.overflow = 'hidden';
+  }
+
   var beerObs = new IntersectionObserver(function(entries){
     var e = entries[0];
     if(e.isIntersecting && !overlayActive){
-      overlayActive = true;
-      curSlide = 0;
-      setPos(0, false);
-      mobileWrap.classList.add('mob-active');
-      document.body.style.overflow = 'hidden';
+      activateOverlay();
     } else if(!e.isIntersecting && overlayActive && !locked){
-      /* scrolled past naturally (e.g. back button) — deactivate */
       mobileWrap.classList.remove('mob-active');
       overlayActive = false;
       document.body.style.overflow = '';
     }
-  }, {threshold: 0.6});
+  }, {threshold: 0.35}); /* lower threshold = activates sooner */
   if(beersSection) beerObs.observe(beersSection);
+
+  /* fallback: also check on scroll in case observer misses */
+  window.addEventListener('scroll', function(){
+    if(overlayActive || !beersSection) return;
+    var r = beersSection.getBoundingClientRect();
+    var visibleFraction = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0);
+    if(visibleFraction / window.innerHeight > 0.3) activateOverlay();
+  }, {passive:true});
 
   /* resize */
   window.addEventListener('resize', function(){
