@@ -207,57 +207,94 @@ nav.scrolled{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop
 /* ── MOBILE: snap scroll ── */
 .beers-mobile{display:none}
 @media(max-width:768px){
+  /* hide desktop elements */
   .beers-scroll-wrap{display:none}
   .beers-section-header{display:none}
+
+  /* trigger block in page flow — page scrolls here, then overlay activates */
+  #beers{height:100svh}
+
+  /* ── FIXED FULL-SCREEN OVERLAY ── */
   .beers-mobile{
-    display:block;
-    height:100svh;
+    display:none;           /* JS shows/hides */
+    position:fixed;
+    inset:0;
+    z-index:500;
     overflow:hidden;
-    position:relative;
     touch-action:none;
+    background:var(--bg);
   }
-  .slides-track{
-    height:100%;
-    will-change:transform;
-  }
+  .beers-mobile.mob-active{display:block}
+
+  /* slides track — moved by JS transform */
+  .slides-track{will-change:transform}
+
+  /* each slide = full screen */
   .beer-slide{
     height:100svh;
     position:relative;
     overflow:hidden;
-    display:flex;flex-direction:column;
-    align-items:center;justify-content:flex-end;
-    padding:0 1.5rem 5.5rem;
+    display:grid;
+    grid-template-rows:1fr auto;  /* can area grows, info area fixed */
   }
+
+  /* background */
   .slide-bg{position:absolute;inset:0;z-index:0}
+
+  /* can — fills the top area, vertically centred */
+  .slide-can-area{
+    position:relative;
+    z-index:1;
+    padding-top:56px; /* clear nav */
+  }
   .slide-can{
-    position:absolute;top:50%;left:50%;
-    transform:translate(-50%,-58%);
-    max-height:min(44vh,320px);max-width:80%;
-    object-fit:contain;z-index:1;
-    filter:drop-shadow(0 18px 36px rgba(0,0,0,.6));
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    max-height:52vh;max-width:80%;
+    object-fit:contain;
+    filter:drop-shadow(0 16px 32px rgba(0,0,0,.6));
   }
-  .slide-info{
-    position:relative;z-index:2;width:100%;
-    display:flex;flex-direction:column;gap:.3rem;
+
+  /* info strip pinned to bottom — gradient overlay for readability */
+  .slide-info-strip{
+    position:relative;z-index:2;
+    padding:1.5rem 1.5rem 2.8rem;
+    background:linear-gradient(to top,rgba(0,0,0,.55) 0%,rgba(0,0,0,.2) 60%,transparent 100%);
   }
-  .slide-counter{font-size:.65rem;font-weight:600;letter-spacing:.2em;color:var(--gold)}
-  .slide-name{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,7vw,2.4rem);font-weight:900;color:var(--text);line-height:1}
-  .slide-type{font-size:.75rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
-  .slide-bry{font-family:'Playfair Display',serif;font-style:italic;color:var(--text2);font-size:.95rem}
-  .slide-tap{display:inline-flex;align-items:center;gap:.4rem;margin-top:.6rem;padding:.38rem .85rem;background:rgba(200,168,75,.1);border:1px solid var(--border);border-radius:50px;font-size:.68rem;font-weight:500;color:var(--gold);width:fit-content}
+  [data-theme="light"] .slide-info-strip{
+    background:linear-gradient(to top,rgba(255,255,255,.65) 0%,rgba(255,255,255,.2) 60%,transparent 100%);
+  }
+  .slide-counter{font-size:.62rem;font-weight:600;letter-spacing:.2em;color:var(--gold);display:block;margin-bottom:.4rem}
+  .slide-name{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,7vw,2.6rem);font-weight:900;color:var(--text);line-height:1;margin-bottom:.3rem}
+  .slide-type{font-size:.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em}
+  .slide-bry{font-family:'Playfair Display',serif;font-style:italic;color:var(--text2);font-size:.9rem;margin-top:.15rem}
+  .slide-tap{
+    display:inline-flex;align-items:center;gap:.4rem;
+    margin-top:.7rem;padding:.35rem .8rem;
+    background:rgba(200,168,75,.12);border:1px solid rgba(200,168,75,.3);
+    border-radius:50px;font-size:.66rem;font-weight:500;color:var(--gold);
+  }
   .slide-tap::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--gold)}
-  .slide-prog-wrap{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--border2);z-index:3}
+
+  /* progress bar */
+  .slide-prog-wrap{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--border2);z-index:5}
   .slide-prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+
+  /* skip button — always top right inside overlay */
   .slide-skip{
-    position:absolute;top:4.5rem;right:1.2rem;z-index:4;
+    position:fixed;top:4.6rem;right:1rem;z-index:600;
     display:inline-flex;align-items:center;gap:.35rem;
-    padding:.42rem .85rem;border-radius:50px;
-    border:1px solid var(--border);background:var(--glass);
-    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-    font-size:.65rem;font-weight:600;letter-spacing:.06em;color:var(--text2);cursor:pointer;
-    transition:border-color .2s,color .2s
+    padding:.4rem .85rem;border-radius:50px;
+    border:1px solid var(--border);
+    background:var(--glass);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    font-size:.63rem;font-weight:600;letter-spacing:.06em;
+    color:var(--text2);cursor:pointer;
+    transition:border-color .2s,color .2s;
+    pointer-events:auto;
   }
-  .slide-skip:hover{border-color:var(--gold);color:var(--gold)}
+  .slide-skip:active{border-color:var(--gold);color:var(--gold)}
 }
 
 /* bg layers for crossfade */
@@ -493,9 +530,13 @@ footer{background:var(--bg2);padding:2.5rem clamp(1.5rem,5vw,4rem);border-top:1p
     </div>
   </div>
 
-  <!-- MOBILE SWIPE -->
+  <!-- MOBILE SWIPE OVERLAY -->
   <div class="beers-mobile" id="beersMobile">
     <div class="slides-track" id="slidesTrack"></div>
+    <button class="slide-skip" id="mobSkipBtn" aria-label="Jäta vahele">
+      Üritused
+      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="1" x2="6" y2="11"/><polyline points="2,7 6,11 10,7"/></svg>
+    </button>
   </div>
 
   <div class="beers-foot inner"><p class="beers-note">Kraanikaart uueneb regulaarselt · Jälgi @pohjakonnbar</p></div>
@@ -824,8 +865,20 @@ var isMobile = window.matchMedia('(max-width:768px)').matches;
 var mobileWrap = document.getElementById('beersMobile');
 
 if(isMobile){
-  var track = document.getElementById('slidesTrack');
-  if(!track) track = mobileWrap; // fallback
+  var track    = document.getElementById('slidesTrack');
+  var skipBtn  = document.getElementById('mobSkipBtn');
+  var beersSection = document.getElementById('beers');
+  var overlayActive = false;
+  var curSlide = 0;
+  var total    = beers.length;
+  var startY   = 0;
+  var lastY    = 0;
+  var startTime= 0;
+  var dragging = false;
+  var locked   = false; /* snap in progress — always completes */
+  var vh       = window.innerHeight;
+  var THRESHOLD = 0.26; /* fraction of vh needed to trigger */
+  var VEL_MIN   = 0.38; /* px/ms for flick */
 
   /* ── build slides ── */
   beers.forEach(function(b, i){
@@ -836,83 +889,81 @@ if(isMobile){
     bg.className = 'slide-bg';
     bg.style.background = html.getAttribute('data-theme')==='dark' ? b.dk : b.lt;
 
+    var canArea = document.createElement('div');
+    canArea.className = 'slide-can-area';
     var can = document.createElement('img');
     can.className = 'slide-can';
-    can.src = b.img; can.alt = b.name; can.loading = i < 3 ? 'eager' : 'lazy';
+    can.src = b.img; can.alt = b.name; can.loading = i < 2 ? 'eager' : 'lazy';
+    canArea.appendChild(can);
 
-    var info = document.createElement('div');
-    info.className = 'slide-info';
-    info.innerHTML =
-      '<span class="slide-counter">'+String(i+1).padStart(2,'0')+' / '+beers.length+'</span>'+
+    var strip = document.createElement('div');
+    strip.className = 'slide-info-strip';
+    strip.innerHTML =
+      '<span class="slide-counter">'+String(i+1).padStart(2,'0')+' / '+total+'</span>'+
       '<div class="slide-name">'+b.name+'</div>'+
       '<div class="slide-type">'+b.type+'</div>'+
       '<div class="slide-bry">'+b.bry+'</div>'+
       '<div class="slide-tap">Kraanist · Värske</div>';
 
-    /* skip button on every slide — top right */
-    var sk = document.createElement('button');
-    sk.className = 'slide-skip';
-    sk.innerHTML = 'Üritused <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="1" x2="6" y2="11"/><polyline points="2,7 6,11 10,7"/></svg>';
-    sk.addEventListener('click', function(e){
-      e.stopPropagation();
-      var ev = document.getElementById('events');
-      if(ev) window.scrollTo({top: ev.getBoundingClientRect().top + window.scrollY - 68, behavior:'smooth'});
-    });
-
-    var progWrap = document.createElement('div'); progWrap.className = 'slide-prog-wrap';
-    var progFill = document.createElement('div'); progFill.className = 'slide-prog-fill';
-    progFill.style.width = ((i+1)/beers.length*100)+'%';
-    progWrap.appendChild(progFill);
+    var pw = document.createElement('div'); pw.className = 'slide-prog-wrap';
+    var pf = document.createElement('div'); pf.className = 'slide-prog-fill';
+    pf.style.width = ((i+1)/total*100)+'%';
+    pw.appendChild(pf);
+    strip.appendChild(pw);
 
     slide.appendChild(bg);
-    slide.appendChild(can);
-    slide.appendChild(info);
-    slide.appendChild(sk);
-    slide.appendChild(progWrap);
+    slide.appendChild(canArea);
+    slide.appendChild(strip);
     track.appendChild(slide);
   });
 
-  /* ── TikTok/Reels style touch handler ── */
-  var curSlide   = 0;
-  var total      = beers.length;
-  var startY     = 0;
-  var startTime  = 0;
-  var lastY      = 0;
-  var dragging   = false;
-  var animating  = false;
-  var vh         = window.innerHeight;
-  var THRESHOLD  = vh * 0.28;   /* 28% screen drag to trigger */
-  var VEL_THRESH = 0.45;        /* px/ms fast flick */
-
-  function trackY(y, anim){
-    if(anim){
-      track.style.transition = 'transform .42s cubic-bezier(.25,.46,.45,.94)';
-    } else {
-      track.style.transition = 'none';
-    }
+  /* ── position helper ── */
+  function setPos(y, animate){
+    track.style.transition = animate
+      ? 'transform .4s cubic-bezier(.25,.46,.45,.94)'
+      : 'none';
     track.style.transform = 'translateY('+y+'px)';
   }
 
+  /* ── exit overlay → scroll to events ── */
+  function exitOverlay(){
+    mobileWrap.classList.remove('mob-active');
+    overlayActive = false;
+    document.body.style.overflow = '';
+    var ev = document.getElementById('events');
+    if(ev) setTimeout(function(){
+      ev.scrollIntoView({behavior:'smooth'});
+    }, 80);
+  }
+
+  /* ── skip button ── */
+  if(skipBtn){
+    skipBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      exitOverlay();
+    });
+  }
+
+  /* ── go to slide ── */
   function goTo(idx){
+    /* past end → exit */
+    if(idx >= total){ exitOverlay(); locked=false; return; }
     if(idx < 0) idx = 0;
-    if(idx >= total) idx = total - 1;
-    animating = true;
-    curSlide  = idx;
-    trackY(-idx * vh, true);
-    setTimeout(function(){ animating = false; }, 450);
+    locked   = true;
+    curSlide = idx;
+    setPos(-idx * vh, true);
+    setTimeout(function(){ locked = false; }, 430);
   }
 
   function snapBack(){
-    animating = true;
-    trackY(-curSlide * vh, true);
-    setTimeout(function(){ animating = false; }, 380);
+    locked = true;
+    setPos(-curSlide * vh, true);
+    setTimeout(function(){ locked = false; }, 380);
   }
 
-  /* init position */
-  trackY(0, false);
-
+  /* ── touch handlers ── */
   mobileWrap.addEventListener('touchstart', function(e){
-    if(animating) return;
+    if(locked) return; /* let snap finish */
     startY    = e.touches[0].clientY;
     lastY     = startY;
     startTime = Date.now();
@@ -921,36 +972,53 @@ if(isMobile){
   }, {passive:true});
 
   mobileWrap.addEventListener('touchmove', function(e){
-    if(!dragging || animating) return;
+    if(!dragging) return;
     e.preventDefault();
-    var dy    = e.touches[0].clientY - startY;
-    lastY     = e.touches[0].clientY;
-    var base  = -curSlide * vh;
-    /* rubber-band at edges */
-    if((curSlide === 0 && dy > 0) || (curSlide === total-1 && dy < 0)){
-      dy = dy * 0.25;
+    lastY    = e.touches[0].clientY;
+    var dy   = lastY - startY;
+    var base = -curSlide * vh;
+    /* rubber-band past first / last */
+    if((curSlide === 0 && dy > 0) || (curSlide >= total-1 && dy < 0)){
+      dy *= 0.22;
     }
-    trackY(base + dy, false);
+    setPos(base + dy, false);
   }, {passive:false});
 
   mobileWrap.addEventListener('touchend', function(){
     if(!dragging) return;
     dragging = false;
-    var dy       = lastY - startY;
-    var duration = Math.max(Date.now() - startTime, 1);
-    var vel      = Math.abs(dy) / duration;
-    var isFlick  = vel > VEL_THRESH;
-    var isFar    = Math.abs(dy) > THRESHOLD;
-
-    if((isFar || isFlick) && dy < 0){ goTo(curSlide + 1); }
-    else if((isFar || isFlick) && dy > 0){ goTo(curSlide - 1); }
+    /* always decide — never leave between slides */
+    var dy  = lastY - startY;
+    var vel = Math.abs(dy) / Math.max(Date.now()-startTime, 1);
+    if(dy < -(vh*THRESHOLD) || (vel > VEL_MIN && dy < 0)){ goTo(curSlide+1); }
+    else if(dy >  (vh*THRESHOLD) || (vel > VEL_MIN && dy > 0)){ goTo(curSlide-1); }
     else { snapBack(); }
   }, {passive:true});
 
-  /* handle resize */
+  /* ── activate overlay when #beers comes into view ── */
+  setPos(0, false); /* init position */
+
+  var beerObs = new IntersectionObserver(function(entries){
+    var e = entries[0];
+    if(e.isIntersecting && !overlayActive){
+      overlayActive = true;
+      curSlide = 0;
+      setPos(0, false);
+      mobileWrap.classList.add('mob-active');
+      document.body.style.overflow = 'hidden';
+    } else if(!e.isIntersecting && overlayActive && !locked){
+      /* scrolled past naturally (e.g. back button) — deactivate */
+      mobileWrap.classList.remove('mob-active');
+      overlayActive = false;
+      document.body.style.overflow = '';
+    }
+  }, {threshold: 0.6});
+  if(beersSection) beerObs.observe(beersSection);
+
+  /* resize */
   window.addEventListener('resize', function(){
     vh = window.innerHeight;
-    trackY(-curSlide * vh, false);
+    setPos(-curSlide*vh, false);
   }, {passive:true});
 }
 
