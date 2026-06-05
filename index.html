@@ -412,6 +412,21 @@ footer{background:var(--bg2);padding:2.5rem clamp(1.5rem,5vw,4rem);border-top:1p
 /* reveal */
 .rv{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.23,1,.32,1),transform .7s cubic-bezier(.23,1,.32,1)}
 .rv.in{opacity:1;transform:translateY(0)}
+
+/* desktop back-to-top */
+.back-to-top{
+  position:fixed;bottom:2rem;right:2rem;z-index:800;
+  width:44px;height:44px;border-radius:50%;
+  background:var(--bg2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .2s,transform .2s,background .15s,border-color .15s;
+  box-shadow:0 4px 20px rgba(0,0,0,.25);
+}
+.back-to-top.visible{opacity:1;pointer-events:auto}
+.back-to-top:hover{transform:translateY(-3px);border-color:var(--gold)}
+.back-to-top svg{color:var(--gold)}
+@media(max-width:768px){.back-to-top{display:none}}
   </style>
 </head>
 <body>
@@ -621,6 +636,10 @@ footer{background:var(--bg2);padding:2.5rem clamp(1.5rem,5vw,4rem);border-top:1p
   </div>
 </section>
 
+<button class="back-to-top" id="backToTop" aria-label="Tagasi üles">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="13" x2="8" y2="3"/><polyline points="4,7 8,3 12,7"/></svg>
+</button>
+
 <footer>
   <div class="foot-inner">
     <div class="foot-logo">Põhja Konn</div>
@@ -779,11 +798,12 @@ var elNumBig   = document.getElementById('beerNumBig');
 var elProgress = document.getElementById('beerProgressFill');
 var elInfo     = document.getElementById('beerInfo');
 
-var N          = beers.length;          // 24
-var ZONE_IN    = 0.18;                  // settled zone at start
-var ZONE_OUT   = 0.82;                  // settled zone at end
-var lastIdx    = -1;
+var N           = beers.length;          // 24
+var ZONE_IN     = 0.18;
+var ZONE_OUT    = 0.82;
+var lastIdx     = -1;
 var lastTextIdx = -1;
+var curBeerIdx  = 0; /* always tracks currently displayed beer */
 var rafId      = null;
 
 /* smoothstep easing */
@@ -816,6 +836,7 @@ function updateText(idx){
 
 /* swap image sources when index changes */
 function loadImages(idx){
+  curBeerIdx = idx; /* always track current */
   if(idx === lastIdx) return;
   var cur  = beers[Math.max(0,Math.min(idx,   N-1))];
   var next = beers[Math.max(0,Math.min(idx+1, N-1))];
@@ -1117,20 +1138,13 @@ toggleTheme = function(){
   _origToggle();
   var isDk = html.getAttribute('data-theme') === 'dark';
 
-  /* ── Desktop: force immediate bgA/bgB update ── */
-  if(bgA && bgB && beerWrap){
-    try{
-      var r   = beerWrap.getBoundingClientRect();
-      var tot = beerWrap.offsetHeight - window.innerHeight;
-      if(tot > 0){
-        var sc   = Math.max(0, Math.min(1, -r.top / tot));
-        var fi   = sc * N;
-        var ci   = Math.min(Math.floor(fi), N - 2);
-        bgA.style.background = isDk ? beers[Math.max(0,ci)].dk   : beers[Math.max(0,ci)].lt;
-        bgB.style.background = isDk ? beers[Math.min(ci+1,N-1)].dk : beers[Math.min(ci+1,N-1)].lt;
-      }
-    }catch(e2){}
-    lastIdx = -1; /* also force tick reload */
+  /* ── Desktop: use curBeerIdx (always up-to-date from tick) ── */
+  if(bgA && bgB){
+    var ci = Math.max(0, Math.min(curBeerIdx,   N-1));
+    var ni = Math.max(0, Math.min(curBeerIdx+1, N-1));
+    bgA.style.background = isDk ? beers[ci].dk : beers[ci].lt;
+    bgB.style.background = isDk ? beers[ni].dk : beers[ni].lt;
+    lastIdx = -1; /* force tick to re-run loadImages */
   }
 
   /* ── Mobile: update all slide backgrounds ── */
@@ -1176,6 +1190,17 @@ var io=new IntersectionObserver(function(entries){
   });
 },{threshold:.08,rootMargin:'0px 0px -45px 0px'});
 document.querySelectorAll('.rv,.event-card').forEach(function(el){io.observe(el);});
+
+/* ── BACK TO TOP (desktop) ── */
+var bttBtn = document.getElementById('backToTop');
+if(bttBtn){
+  window.addEventListener('scroll', function(){
+    bttBtn.classList.toggle('visible', window.scrollY > 400);
+  }, {passive:true});
+  bttBtn.addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+}
 
 /* ── SMOOTH SCROLL ── */
 document.querySelectorAll('a[href^="#"]').forEach(function(a){
