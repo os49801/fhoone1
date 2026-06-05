@@ -944,26 +944,38 @@ if(isMobile){
     });
   }
 
+  var lockTimer = null;
+
   /* ── go to slide ── */
   function goTo(idx){
-    /* past end → exit */
-    if(idx >= total){ exitOverlay(); locked=false; return; }
+    if(idx >= total){ exitOverlay(); locked=false; dragging=false; return; }
     if(idx < 0) idx = 0;
     locked   = true;
+    dragging = false;
     curSlide = idx;
     setPos(-idx * vh, true);
-    setTimeout(function(){ locked = false; }, 430);
+    clearTimeout(lockTimer);
+    lockTimer = setTimeout(function(){ locked = false; }, 480); /* safety release */
   }
 
   function snapBack(){
-    locked = true;
+    locked   = true;
+    dragging = false;
     setPos(-curSlide * vh, true);
-    setTimeout(function(){ locked = false; }, 380);
+    clearTimeout(lockTimer);
+    lockTimer = setTimeout(function(){ locked = false; }, 420);
+  }
+
+  function resetTouch(){
+    dragging = false;
+    if(!locked) setPos(-curSlide * vh, true); /* snap to nearest if mid-drag */
   }
 
   /* ── touch handlers ── */
   mobileWrap.addEventListener('touchstart', function(e){
-    if(locked) return; /* let snap finish */
+    /* let buttons/links handle their own taps */
+    if(e.target.closest('button,a')) return;
+    if(locked){ dragging = false; return; }
     startY    = e.touches[0].clientY;
     lastY     = startY;
     startTime = Date.now();
@@ -972,28 +984,31 @@ if(isMobile){
   }, {passive:true});
 
   mobileWrap.addEventListener('touchmove', function(e){
-    if(!dragging) return;
+    if(!dragging || locked) return;
     e.preventDefault();
     lastY    = e.touches[0].clientY;
     var dy   = lastY - startY;
     var base = -curSlide * vh;
-    /* rubber-band past first / last */
+    /* rubber-band at edges */
     if((curSlide === 0 && dy > 0) || (curSlide >= total-1 && dy < 0)){
-      dy *= 0.22;
+      dy *= 0.2;
     }
     setPos(base + dy, false);
   }, {passive:false});
 
-  mobileWrap.addEventListener('touchend', function(){
+  mobileWrap.addEventListener('touchend', function(e){
     if(!dragging) return;
-    dragging = false;
-    /* always decide — never leave between slides */
+    /* let button taps through */
+    if(e.target.closest('button,a')){ dragging=false; return; }
     var dy  = lastY - startY;
     var vel = Math.abs(dy) / Math.max(Date.now()-startTime, 1);
-    if(dy < -(vh*THRESHOLD) || (vel > VEL_MIN && dy < 0)){ goTo(curSlide+1); }
-    else if(dy >  (vh*THRESHOLD) || (vel > VEL_MIN && dy > 0)){ goTo(curSlide-1); }
-    else { snapBack(); }
+    if(dy < -(vh*THRESHOLD) || (vel > VEL_MIN && dy < 0))     { goTo(curSlide+1); }
+    else if(dy > (vh*THRESHOLD) || (vel > VEL_MIN && dy > 0)) { goTo(curSlide-1); }
+    else                                                        { snapBack(); }
   }, {passive:true});
+
+  /* touchcancel — e.g. system notification, incoming call */
+  mobileWrap.addEventListener('touchcancel', function(){ resetTouch(); }, {passive:true});
 
   /* ── activate overlay when #beers comes into view ── */
   setPos(0, false); /* init position */
@@ -1038,14 +1053,13 @@ if(!isMobile){
 var _origToggle = toggleTheme;
 toggleTheme = function(){
   _origToggle();
-  lastIdx = -1;
-  /* update mobile slide backgrounds */
-  if(isMobile){
-    var slides = mobileWrap ? mobileWrap.querySelectorAll('.slide-bg') : [];
-    slides.forEach(function(el, i){
-      el.style.background = html.getAttribute('data-theme')==='dark' ? beers[i].dk : beers[i].lt;
-    });
-  }
+  lastIdx = -1; /* force desktop bg reload */
+  /* update ALL mobile slide backgrounds */
+  var slides = document.querySelectorAll('#slidesTrack .slide-bg');
+  var isDk   = html.getAttribute('data-theme') === 'dark';
+  slides.forEach(function(el, i){
+    if(beers[i]) el.style.background = isDk ? beers[i].dk : beers[i].lt;
+  });
 };
 
 /* ── EVENTS ── */
