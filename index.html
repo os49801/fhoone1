@@ -728,8 +728,9 @@ function updatePill(){
   var pd=document.getElementById('pillDark'),pl=document.getElementById('pillLight');
   if(pd){pd.classList.toggle('active',t==='dark');pl.classList.toggle('active',t==='light')}
 }
+/* runtime lookup — always calls current (wrapped) toggleTheme */
 ['themeToggle','themeToggleMob'].forEach(function(id){
-  var el=document.getElementById(id);if(el)el.addEventListener('click',toggleTheme);
+  var el=document.getElementById(id);if(el)el.addEventListener('click',function(){toggleTheme();});
 });
 document.getElementById('pillDark').addEventListener('click',function(){if(html.getAttribute('data-theme')!=='dark'){toggleTheme();}});
 document.getElementById('pillLight').addEventListener('click',function(){if(html.getAttribute('data-theme')!=='light'){toggleTheme();}});
@@ -1048,7 +1049,8 @@ if(isMobile){
   if(backBtn){
     backBtn.addEventListener('click', function(e){
       e.stopPropagation();
-      goTo(0);
+      exitOverlay();                          /* close beer overlay */
+      window.scrollTo({top:0,behavior:'smooth'}); /* go to page top */
     });
   }
 
@@ -1113,11 +1115,26 @@ if(!isMobile){
 var _origToggle = toggleTheme;
 toggleTheme = function(){
   _origToggle();
-  lastIdx = -1; /* force desktop bg reload */
-  /* update ALL mobile slide backgrounds */
-  var slides = document.querySelectorAll('#slidesTrack .slide-bg');
-  var isDk   = html.getAttribute('data-theme') === 'dark';
-  slides.forEach(function(el, i){
+  var isDk = html.getAttribute('data-theme') === 'dark';
+
+  /* ── Desktop: force immediate bgA/bgB update ── */
+  if(bgA && bgB && beerWrap){
+    try{
+      var r   = beerWrap.getBoundingClientRect();
+      var tot = beerWrap.offsetHeight - window.innerHeight;
+      if(tot > 0){
+        var sc   = Math.max(0, Math.min(1, -r.top / tot));
+        var fi   = sc * N;
+        var ci   = Math.min(Math.floor(fi), N - 2);
+        bgA.style.background = isDk ? beers[Math.max(0,ci)].dk   : beers[Math.max(0,ci)].lt;
+        bgB.style.background = isDk ? beers[Math.min(ci+1,N-1)].dk : beers[Math.min(ci+1,N-1)].lt;
+      }
+    }catch(e2){}
+    lastIdx = -1; /* also force tick reload */
+  }
+
+  /* ── Mobile: update all slide backgrounds ── */
+  document.querySelectorAll('#slidesTrack .slide-bg').forEach(function(el, i){
     if(beers[i]) el.style.background = isDk ? beers[i].dk : beers[i].lt;
   });
 };
