@@ -210,20 +210,29 @@ nav.scrolled{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop
   .beers-scroll-wrap{display:none}
   .beers-section-header{display:none}
   .beers-mobile{
-    display:block;height:100svh;
+    display:block;
     overflow-y:scroll;overflow-x:hidden;
     scroll-snap-type:y mandatory;
     -webkit-overflow-scrolling:touch;
     position:relative;
+    /* hide scrollbar */
+    scrollbar-width:none;
   }
+  .beers-mobile::-webkit-scrollbar{display:none}
   .beer-slide{
-    height:100svh;scroll-snap-align:start;
-    position:relative;overflow:hidden;
+    /* 155svh = need to scroll 77vh before snap fires — social media feel */
+    height:155svh;
+    scroll-snap-align:start;
+    position:relative;
+  }
+  .beer-slide-inner{
+    position:sticky;top:0;
+    height:100svh;overflow:hidden;
     display:flex;flex-direction:column;
     align-items:center;justify-content:flex-end;
     padding:0 1.5rem 5rem;
   }
-  .slide-bg{position:absolute;inset:0;z-index:0;transition:opacity .3s}
+  .slide-bg{position:absolute;inset:0;z-index:0}
   .slide-can{
     position:absolute;top:50%;left:50%;
     transform:translate(-50%,-58%);
@@ -821,12 +830,17 @@ if(isMobile && mobileWrap){
     var slide = document.createElement('div');
     slide.className = 'beer-slide';
 
+    /* sticky inner — visual area stays at 100svh while slide is 155svh */
+    var inner = document.createElement('div');
+    inner.className = 'beer-slide-inner';
+
     var bg = document.createElement('div');
     bg.className = 'slide-bg';
     bg.style.background = html.getAttribute('data-theme')==='dark' ? b.dk : b.lt;
 
     var can = document.createElement('img');
-    can.className = 'slide-can'; can.src = b.img; can.alt = b.name; can.loading = 'lazy';
+    can.className = 'slide-can';
+    can.src = b.img; can.alt = b.name; can.loading = 'lazy';
 
     var info = document.createElement('div');
     info.className = 'slide-info';
@@ -837,8 +851,7 @@ if(isMobile && mobileWrap){
       '<div class="slide-bry">'+b.bry+'</div>'+
       '<div class="slide-tap">Kraanist · Värske</div>';
 
-    /* skip button on first slide only */
-    var skipWrap = '';
+    /* skip button on first slide */
     if(i === 0){
       var sk = document.createElement('button');
       sk.className = 'slide-skip';
@@ -848,7 +861,7 @@ if(isMobile && mobileWrap){
         var ev = document.getElementById('events');
         if(ev) window.scrollTo({top: ev.getBoundingClientRect().top + window.scrollY - 68, behavior:'smooth'});
       });
-      slide.appendChild(sk);
+      inner.appendChild(sk);
     }
 
     var progWrap = document.createElement('div'); progWrap.className = 'slide-prog-wrap';
@@ -856,10 +869,11 @@ if(isMobile && mobileWrap){
     progFill.style.width = ((i+1)/beers.length*100)+'%';
     progWrap.appendChild(progFill);
 
-    slide.appendChild(bg);
-    slide.appendChild(can);
-    slide.appendChild(info);
-    slide.appendChild(progWrap);
+    inner.appendChild(bg);
+    inner.appendChild(can);
+    inner.appendChild(info);
+    inner.appendChild(progWrap);
+    slide.appendChild(inner);
     mobileWrap.appendChild(slide);
   });
 }
