@@ -211,26 +211,22 @@ nav.scrolled{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop
   .beers-section-header{display:none}
   .beers-mobile{
     display:block;
-    overflow-y:scroll;overflow-x:hidden;
-    scroll-snap-type:y mandatory;
-    -webkit-overflow-scrolling:touch;
+    height:100svh;
+    overflow:hidden;
     position:relative;
-    /* hide scrollbar */
-    scrollbar-width:none;
+    touch-action:none;
   }
-  .beers-mobile::-webkit-scrollbar{display:none}
+  .slides-track{
+    height:100%;
+    will-change:transform;
+  }
   .beer-slide{
-    /* 155svh = need to scroll 77vh before snap fires — social media feel */
-    height:155svh;
-    scroll-snap-align:start;
+    height:100svh;
     position:relative;
-  }
-  .beer-slide-inner{
-    position:sticky;top:0;
-    height:100svh;overflow:hidden;
+    overflow:hidden;
     display:flex;flex-direction:column;
     align-items:center;justify-content:flex-end;
-    padding:0 1.5rem 5rem;
+    padding:0 1.5rem 5.5rem;
   }
   .slide-bg{position:absolute;inset:0;z-index:0}
   .slide-can{
@@ -497,8 +493,10 @@ footer{background:var(--bg2);padding:2.5rem clamp(1.5rem,5vw,4rem);border-top:1p
     </div>
   </div>
 
-  <!-- MOBILE SNAP SCROLL -->
-  <div class="beers-mobile" id="beersMobile"></div>
+  <!-- MOBILE SWIPE -->
+  <div class="beers-mobile" id="beersMobile">
+    <div class="slides-track" id="slidesTrack"></div>
+  </div>
 
   <div class="beers-foot inner"><p class="beers-note">Kraanikaart uueneb regulaarselt · Jälgi @pohjakonnbar</p></div>
 </section>
@@ -825,14 +823,14 @@ if(skipBtn){
 var isMobile = window.matchMedia('(max-width:768px)').matches;
 var mobileWrap = document.getElementById('beersMobile');
 
-if(isMobile && mobileWrap){
+if(isMobile){
+  var track = document.getElementById('slidesTrack');
+  if(!track) track = mobileWrap; // fallback
+
+  /* ── build slides ── */
   beers.forEach(function(b, i){
     var slide = document.createElement('div');
     slide.className = 'beer-slide';
-
-    /* sticky inner — visual area stays at 100svh while slide is 155svh */
-    var inner = document.createElement('div');
-    inner.className = 'beer-slide-inner';
 
     var bg = document.createElement('div');
     bg.className = 'slide-bg';
@@ -840,7 +838,7 @@ if(isMobile && mobileWrap){
 
     var can = document.createElement('img');
     can.className = 'slide-can';
-    can.src = b.img; can.alt = b.name; can.loading = 'lazy';
+    can.src = b.img; can.alt = b.name; can.loading = i < 3 ? 'eager' : 'lazy';
 
     var info = document.createElement('div');
     info.className = 'slide-info';
@@ -851,31 +849,109 @@ if(isMobile && mobileWrap){
       '<div class="slide-bry">'+b.bry+'</div>'+
       '<div class="slide-tap">Kraanist · Värske</div>';
 
-    /* skip button on first slide */
-    if(i === 0){
-      var sk = document.createElement('button');
-      sk.className = 'slide-skip';
-      sk.innerHTML = 'Üritused <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="1" x2="6" y2="11"/><polyline points="2,7 6,11 10,7"/></svg>';
-      sk.addEventListener('click', function(e){
-        e.stopPropagation();
-        var ev = document.getElementById('events');
-        if(ev) window.scrollTo({top: ev.getBoundingClientRect().top + window.scrollY - 68, behavior:'smooth'});
-      });
-      inner.appendChild(sk);
-    }
+    /* skip button on every slide — top right */
+    var sk = document.createElement('button');
+    sk.className = 'slide-skip';
+    sk.innerHTML = 'Üritused <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="1" x2="6" y2="11"/><polyline points="2,7 6,11 10,7"/></svg>';
+    sk.addEventListener('click', function(e){
+      e.stopPropagation();
+      var ev = document.getElementById('events');
+      if(ev) window.scrollTo({top: ev.getBoundingClientRect().top + window.scrollY - 68, behavior:'smooth'});
+    });
 
     var progWrap = document.createElement('div'); progWrap.className = 'slide-prog-wrap';
     var progFill = document.createElement('div'); progFill.className = 'slide-prog-fill';
     progFill.style.width = ((i+1)/beers.length*100)+'%';
     progWrap.appendChild(progFill);
 
-    inner.appendChild(bg);
-    inner.appendChild(can);
-    inner.appendChild(info);
-    inner.appendChild(progWrap);
-    slide.appendChild(inner);
-    mobileWrap.appendChild(slide);
+    slide.appendChild(bg);
+    slide.appendChild(can);
+    slide.appendChild(info);
+    slide.appendChild(sk);
+    slide.appendChild(progWrap);
+    track.appendChild(slide);
   });
+
+  /* ── TikTok/Reels style touch handler ── */
+  var curSlide   = 0;
+  var total      = beers.length;
+  var startY     = 0;
+  var startTime  = 0;
+  var lastY      = 0;
+  var dragging   = false;
+  var animating  = false;
+  var vh         = window.innerHeight;
+  var THRESHOLD  = vh * 0.28;   /* 28% screen drag to trigger */
+  var VEL_THRESH = 0.45;        /* px/ms fast flick */
+
+  function trackY(y, anim){
+    if(anim){
+      track.style.transition = 'transform .42s cubic-bezier(.25,.46,.45,.94)';
+    } else {
+      track.style.transition = 'none';
+    }
+    track.style.transform = 'translateY('+y+'px)';
+  }
+
+  function goTo(idx){
+    if(idx < 0) idx = 0;
+    if(idx >= total) idx = total - 1;
+    animating = true;
+    curSlide  = idx;
+    trackY(-idx * vh, true);
+    setTimeout(function(){ animating = false; }, 450);
+  }
+
+  function snapBack(){
+    animating = true;
+    trackY(-curSlide * vh, true);
+    setTimeout(function(){ animating = false; }, 380);
+  }
+
+  /* init position */
+  trackY(0, false);
+
+  mobileWrap.addEventListener('touchstart', function(e){
+    if(animating) return;
+    startY    = e.touches[0].clientY;
+    lastY     = startY;
+    startTime = Date.now();
+    dragging  = true;
+    track.style.transition = 'none';
+  }, {passive:true});
+
+  mobileWrap.addEventListener('touchmove', function(e){
+    if(!dragging || animating) return;
+    e.preventDefault();
+    var dy    = e.touches[0].clientY - startY;
+    lastY     = e.touches[0].clientY;
+    var base  = -curSlide * vh;
+    /* rubber-band at edges */
+    if((curSlide === 0 && dy > 0) || (curSlide === total-1 && dy < 0)){
+      dy = dy * 0.25;
+    }
+    trackY(base + dy, false);
+  }, {passive:false});
+
+  mobileWrap.addEventListener('touchend', function(){
+    if(!dragging) return;
+    dragging = false;
+    var dy       = lastY - startY;
+    var duration = Math.max(Date.now() - startTime, 1);
+    var vel      = Math.abs(dy) / duration;
+    var isFlick  = vel > VEL_THRESH;
+    var isFar    = Math.abs(dy) > THRESHOLD;
+
+    if((isFar || isFlick) && dy < 0){ goTo(curSlide + 1); }
+    else if((isFar || isFlick) && dy > 0){ goTo(curSlide - 1); }
+    else { snapBack(); }
+  }, {passive:true});
+
+  /* handle resize */
+  window.addEventListener('resize', function(){
+    vh = window.innerHeight;
+    trackY(-curSlide * vh, false);
+  }, {passive:true});
 }
 
 /* ── desktop RAF init ── */
