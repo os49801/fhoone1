@@ -220,15 +220,17 @@ nav.scrolled{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop
 
   /* ── FIXED FULL-SCREEN OVERLAY ── */
   .beers-mobile{
-    display:none;           /* JS shows/hides */
     position:fixed;
     inset:0;
     z-index:500;
     overflow:hidden;
     touch-action:none;
     background:var(--bg);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease;
   }
-  .beers-mobile.mob-active{display:block}
+  .beers-mobile.mob-active{opacity:1;pointer-events:auto}
 
   /* slides track — GPU layer */
   .slides-track{
@@ -986,7 +988,7 @@ var mobileWrap = document.getElementById('beersMobile');
 
 if(isMobile){
   var track = document.getElementById('slidesTrack');
-  var skipBtn = document.getElementById('mobSkipBtn');
+  var mobSkip = document.getElementById('mobSkipBtn');
   var backBtn = document.getElementById('mobBackBtn');
   var beersSection = document.getElementById('beers');
   var overlayActive = false;
@@ -1132,7 +1134,7 @@ if(isMobile){
     backBtn.style.display=cur>0?'inline-flex':'none';
     backBtn.innerHTML='<svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="11" x2="6" y2="1"/><polyline points="2,5 6,1 10,5"/></svg> '+String(cur+1).padStart(2,'0');
   }
-  if(skipBtn) skipBtn.addEventListener('click',function(e){e.stopPropagation();closeOverlay('menu');});
+  if(mobSkip) mobSkip.addEventListener('click',function(e){e.stopPropagation();closeOverlay('menu');});
   if(backBtn) backBtn.addEventListener('click',function(e){
     e.stopPropagation();
     closeOverlay();
