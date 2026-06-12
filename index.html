@@ -1156,15 +1156,10 @@ if(isMobile){
     document.body.style.overflow='hidden';
   }
 
+  /* observer only activates — deactivation is user-driven (skip/back/last slide) */
   var beerObs=new IntersectionObserver(function(entries){
-    var e=entries[0];
-    if(e.isIntersecting&&!overlayActive){activateOverlay();}
-    else if(!e.isIntersecting&&overlayActive&&!locked){
-      mobileWrap.classList.remove('mob-active');
-      overlayActive=false;
-      document.body.style.overflow='';
-    }
-  },{threshold:0.3});
+    if(entries[0].isIntersecting&&!overlayActive) activateOverlay();
+  },{threshold:0.25});
   if(beersSection) beerObs.observe(beersSection);
 
   /* resize */
