@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="color-scheme" content="light dark"/>
   <title>Põhja Konn — Käsitööõlu Telliskivis</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -24,6 +25,7 @@ img{max-width:100%;display:block}
                border-color .15s ease;
 }
 [data-theme="dark"]{
+  color-scheme:dark;
   --bg:#2b2218; --bg2:#342a1e; --bg3:#3e3226;
   --text:#ede8dc; --text2:#c8b898; --text3:#8a7a68;
   --card:rgba(40,30,18,.82); --glass:rgba(28,20,12,.78);
@@ -32,6 +34,7 @@ img{max-width:100%;display:block}
   --noise-op:.28;
 }
 [data-theme="light"]{
+  color-scheme:light;
   --bg:#f5f0e8; --bg2:#ede8dc; --bg3:#e4ddd0;
   --text:#1c1610; --text2:#4a3e30; --text3:#8a7a68;
   --card:rgba(245,240,232,.88); --glass:rgba(238,232,220,.82);
@@ -241,12 +244,14 @@ nav.scrolled{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop
 
   /* background */
   .slide-bg{position:absolute;inset:0;z-index:0}
+  [data-theme="dark"]  .slide-bg{background:var(--slide-dk)!important}
+  [data-theme="light"] .slide-bg{background:var(--slide-lt)!important}
 
   /* can — fills the top area, vertically centred */
   .slide-can-area{
     position:relative;
     z-index:1;
-    padding-top:56px; /* clear nav */
+    padding-top:90px; /* clear nav + breathe */
   }
   .slide-can{
     position:absolute;
@@ -737,12 +742,16 @@ var beers=[
 var html=document.documentElement;
 var storedTheme=localStorage.getItem('pkTheme')||'light';
 html.setAttribute('data-theme',storedTheme);
+var csMeta=document.querySelector('meta[name="color-scheme"]');
+if(csMeta) csMeta.setAttribute('content',storedTheme);
 updatePill();
 
 function toggleTheme(){
   var t=html.getAttribute('data-theme')==='dark'?'light':'dark';
   html.setAttribute('data-theme',t);
   localStorage.setItem('pkTheme',t);
+  var cs=document.querySelector('meta[name="color-scheme"]');
+  if(cs) cs.setAttribute('content',t);
   updatePill();
   setBeerBg(curIdx,false);
 }
@@ -938,7 +947,8 @@ if(isMobile){
 
     var bg = document.createElement('div');
     bg.className = 'slide-bg';
-    bg.style.background = html.getAttribute('data-theme')==='dark' ? b.dk : b.lt;
+    bg.style.setProperty('--slide-dk', b.dk);
+    bg.style.setProperty('--slide-lt', b.lt);
 
     var canArea = document.createElement('div');
     canArea.className = 'slide-can-area';
@@ -1078,8 +1088,11 @@ if(isMobile){
   if(backBtn){
     backBtn.addEventListener('click', function(e){
       e.stopPropagation();
-      exitOverlay();                          /* close beer overlay */
-      window.scrollTo({top:0,behavior:'smooth'}); /* go to page top */
+      mobileWrap.classList.remove('mob-active');
+      overlayActive = false;
+      document.body.style.overflow = '';
+      /* wait for overlay removal, then scroll to true top */
+      setTimeout(function(){ window.scrollTo({top:0,behavior:'smooth'}); }, 60);
     });
   }
 
@@ -1140,17 +1153,7 @@ if(!isMobile){
   })();
 }
 
-/* re-apply bg when theme toggles */
-var _origToggle = toggleTheme;
-toggleTheme = function(){
-  _origToggle(); /* updates data-theme → CSS vars on bgA/bgB switch instantly */
-  var isDk = html.getAttribute('data-theme') === 'dark';
-
-  /* mobile slide backgrounds still need JS update */
-  document.querySelectorAll('#slidesTrack .slide-bg').forEach(function(el, i){
-    if(beers[i]) el.style.background = isDk ? beers[i].dk : beers[i].lt;
-  });
-};
+/* mobile slide backgrounds now use CSS vars (--slide-dk/--slide-lt) — no JS wrapper needed */
 
 /* ── EVENTS ── */
 var evs=[
