@@ -998,6 +998,7 @@ if(isMobile){
   var startY=0, lastY=0, startTime=0, dragging=false, locked=false;
   var lockTimer=null;
   var slidePool = []; /* 3 reusable slide elements */
+  var savedScrollY=0; /* saved scroll pos when overlay opens */
 
   /* ── build a single slide DOM node ── */
   function mkSlide(){
@@ -1059,11 +1060,21 @@ if(isMobile){
     });
   }
 
+  /* ── restore body scroll ── */
+  function unfreezeBody(){
+    document.body.style.position='';
+    document.body.style.top='';
+    document.body.style.left='';
+    document.body.style.right='';
+    document.body.style.overflow='';
+    window.scrollTo(0,savedScrollY);
+  }
+
   /* ── exit overlay ── */
   function exitOverlay(){
     mobileWrap.classList.remove('mob-active');
     overlayActive=false;
-    document.body.style.overflow='';
+    unfreezeBody();
     var mn=document.getElementById('menu');
     if(mn)setTimeout(function(){mn.scrollIntoView({behavior:'smooth'});},80);
   }
@@ -1140,20 +1151,25 @@ if(isMobile){
       e.stopPropagation();
       mobileWrap.classList.remove('mob-active');
       overlayActive=false;
-      document.body.style.overflow='';
+      unfreezeBody();
       setTimeout(function(){window.scrollTo({top:0,behavior:'smooth'});},60);
     });
   }
 
-  /* ── activate overlay ── */
+  /* ── activate overlay (freeze body in place) ── */
   function activateOverlay(){
     if(overlayActive)return;
     overlayActive=true;
     curSlide=0;
     layoutSlides();
     updateBackBtn();
-    mobileWrap.classList.add('mob-active');
+    savedScrollY=window.scrollY;
+    document.body.style.position='fixed';
+    document.body.style.top=(-savedScrollY)+'px';
+    document.body.style.left='0';
+    document.body.style.right='0';
     document.body.style.overflow='hidden';
+    mobileWrap.classList.add('mob-active');
   }
 
   /* observer only activates — deactivation is user-driven (skip/back/last slide) */
