@@ -220,17 +220,16 @@ nav.scrolled{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop
 
   /* ── FIXED FULL-SCREEN OVERLAY ── */
   .beers-mobile{
+    display:none;
     position:fixed;
     inset:0;
     z-index:500;
     overflow:hidden;
     touch-action:none;
     background:var(--bg);
-    opacity:0;
-    pointer-events:none;
-    transition:opacity .25s ease;
   }
-  .beers-mobile.mob-active{opacity:1;pointer-events:auto}
+  .beers-mobile.mob-active{display:block;animation:mobFadeIn .2s ease}
+  @keyframes mobFadeIn{from{opacity:0}to{opacity:1}}
 
   /* slides track — GPU layer */
   .slides-track{
