@@ -224,11 +224,12 @@ nav.scrolled{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop
   .mob-first-info{position:relative;z-index:2;padding:1rem 1.5rem 1.2rem;background:linear-gradient(to top,rgba(0,0,0,.5) 0%,transparent 100%)}
   [data-theme="light"] .mob-first-info{background:linear-gradient(to top,rgba(255,255,255,.6) 0%,transparent 100%)}
   .mob-browse-btn{
-    display:block;width:fit-content;margin:0 auto 1.5rem;
-    padding:.6rem 1.6rem;border-radius:50px;
-    border:1px solid var(--gold);background:rgba(200,168,75,.12);
-    color:var(--gold);font-size:.8rem;font-weight:600;letter-spacing:.04em;
+    display:block;width:fit-content;margin:0 auto;
+    padding:.65rem 1.8rem;border-radius:50px;
+    border:1px solid var(--gold);background:rgba(200,168,75,.18);
+    color:var(--gold);font-size:.85rem;font-weight:600;letter-spacing:.04em;
     cursor:pointer;position:relative;z-index:3;
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
   }
 
   /* ── FIXED FULL-SCREEN OVERLAY ── */
@@ -862,12 +863,7 @@ mob.querySelectorAll('.mlink').forEach(function(l){
 
 /* ── LOGO CLICK → TOP ── */
 document.getElementById('navLogo').addEventListener('click',function(){
-  /* close mobile overlay if open */
-  var mw=document.getElementById('beersMobile');
-  if(mw&&mw.classList.contains('mob-active')){
-    mw.classList.remove('mob-active');
-    document.body.style.cssText='';
-  }
+  if(window._closeMobileOverlay)window._closeMobileOverlay();
   window.scrollTo({top:0,behavior:'smooth'});
 });
 
@@ -1171,9 +1167,15 @@ if(isMobile){
     var browseBtn=document.createElement('button');
     browseBtn.className='mob-browse-btn';
     browseBtn.textContent='Vaata kõiki kraane ↓';
-    firstWrap.parentElement.appendChild(browseBtn);
-    browseBtn.addEventListener('click',function(){openOverlay();});
+    firstWrap.appendChild(browseBtn);
+    browseBtn.addEventListener('click',function(e){e.stopPropagation();openOverlay();});
   }
+
+  /* expose for logo/nav handlers outside IIFE */
+  window._closeMobileOverlay=function(){
+    if(!overlayActive)return;
+    closeOverlay();
+  };
 
   window.addEventListener('resize',function(){vh=window.innerHeight;if(overlayActive)layout();},{passive:true});
 }
@@ -1448,12 +1450,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
     var t=document.querySelector(a.getAttribute('href'));
     if(!t)return;
     e.preventDefault();
-    /* close mobile overlay if open */
-    var mw=document.getElementById('beersMobile');
-    if(mw&&mw.classList.contains('mob-active')){
-      mw.classList.remove('mob-active');
-      document.body.style.cssText='';
-    }
+    if(window._closeMobileOverlay)window._closeMobileOverlay();
     window.scrollTo({top:t.getBoundingClientRect().top+window.scrollY-68,behavior:'smooth'});
   });
 });
