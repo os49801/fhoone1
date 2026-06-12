@@ -213,10 +213,23 @@ nav.scrolled{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop
 @media(max-width:768px){
   /* hide desktop elements */
   .beers-scroll-wrap{display:none}
-  .beers-section-header{display:none}
 
-  /* trigger block in page flow — page scrolls here, then overlay activates */
-  #beers{height:100svh}
+  /* first beer shown inline in page flow */
+  #beers{min-height:100svh;position:relative;overflow:hidden;display:flex;flex-direction:column}
+  .beers-section-header{position:relative;z-index:2}
+  .mob-first-beer{flex:1;position:relative;display:flex;flex-direction:column}
+  .mob-first-bg{position:absolute;inset:0;z-index:0}
+  .mob-first-can{position:relative;z-index:1;flex:1;display:flex;align-items:center;justify-content:center;padding-top:20px}
+  .mob-first-can img{max-height:48vh;max-width:75%;object-fit:contain;filter:drop-shadow(0 12px 24px rgba(0,0,0,.5))}
+  .mob-first-info{position:relative;z-index:2;padding:1rem 1.5rem 1.2rem;background:linear-gradient(to top,rgba(0,0,0,.5) 0%,transparent 100%)}
+  [data-theme="light"] .mob-first-info{background:linear-gradient(to top,rgba(255,255,255,.6) 0%,transparent 100%)}
+  .mob-browse-btn{
+    display:block;width:fit-content;margin:0 auto 1.5rem;
+    padding:.6rem 1.6rem;border-radius:50px;
+    border:1px solid var(--gold);background:rgba(200,168,75,.12);
+    color:var(--gold);font-size:.8rem;font-weight:600;letter-spacing:.04em;
+    cursor:pointer;position:relative;z-index:3;
+  }
 
   /* ── FIXED FULL-SCREEN OVERLAY ── */
   .beers-mobile{
@@ -610,7 +623,10 @@ footer{background:var(--bg2);padding:2.5rem clamp(1.5rem,5vw,4rem);border-top:1p
     </div>
   </div>
 
-  <!-- MOBILE SWIPE OVERLAY -->
+  <!-- MOBILE: first beer inline + browse button -->
+  <div class="mob-first-beer" id="mobFirstBeer"></div>
+
+  <!-- MOBILE SWIPE OVERLAY (opens from browse button) -->
   <div class="beers-mobile" id="beersMobile">
     <div class="slides-track" id="slidesTrack"></div>
     <button class="slide-skip" id="mobSkipBtn" aria-label="Jäta vahele">
@@ -846,6 +862,12 @@ mob.querySelectorAll('.mlink').forEach(function(l){
 
 /* ── LOGO CLICK → TOP ── */
 document.getElementById('navLogo').addEventListener('click',function(){
+  /* close mobile overlay if open */
+  var mw=document.getElementById('beersMobile');
+  if(mw&&mw.classList.contains('mob-active')){
+    mw.classList.remove('mob-active');
+    document.body.style.cssText='';
+  }
   window.scrollTo({top:0,behavior:'smooth'});
 });
 
@@ -1140,11 +1162,18 @@ if(isMobile){
     setTimeout(function(){window.scrollTo({top:0,behavior:'smooth'});},60);
   });
 
-  /* ── IntersectionObserver — only opens ── */
-  var obs=new IntersectionObserver(function(ents){
-    if(ents[0].isIntersecting&&!overlayActive)openOverlay();
-  },{threshold:0.25});
-  if(beersSection)obs.observe(beersSection);
+  /* ── build inline first beer ── */
+  var firstWrap=document.getElementById('mobFirstBeer');
+  if(firstWrap&&beers.length>0){
+    var b0=beers[0];
+    firstWrap.innerHTML='<div class="mob-first-bg" style="--slide-dk:'+b0.dk+';--slide-lt:'+b0.lt+'"></div><div class="mob-first-can"><img src="'+b0.img+'" alt="'+b0.name+'"></div><div class="mob-first-info"><span class="slide-counter">01 / '+total+'</span><div class="slide-name">'+b0.name+'</div><div class="slide-type">'+b0.type+'</div><div class="slide-bry">'+b0.bry+'</div></div>';
+    firstWrap.querySelector('.mob-first-bg').className+=' slide-bg';
+    var browseBtn=document.createElement('button');
+    browseBtn.className='mob-browse-btn';
+    browseBtn.textContent='Vaata kõiki kraane ↓';
+    firstWrap.parentElement.appendChild(browseBtn);
+    browseBtn.addEventListener('click',function(){openOverlay();});
+  }
 
   window.addEventListener('resize',function(){vh=window.innerHeight;if(overlayActive)layout();},{passive:true});
 }
@@ -1417,7 +1446,15 @@ if(bttBtn){
 document.querySelectorAll('a[href^="#"]').forEach(function(a){
   a.addEventListener('click',function(e){
     var t=document.querySelector(a.getAttribute('href'));
-    if(t){e.preventDefault();window.scrollTo({top:t.getBoundingClientRect().top+window.scrollY-68,behavior:'smooth'});}
+    if(!t)return;
+    e.preventDefault();
+    /* close mobile overlay if open */
+    var mw=document.getElementById('beersMobile');
+    if(mw&&mw.classList.contains('mob-active')){
+      mw.classList.remove('mob-active');
+      document.body.style.cssText='';
+    }
+    window.scrollTo({top:t.getBoundingClientRect().top+window.scrollY-68,behavior:'smooth'});
   });
 });
 
